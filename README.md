@@ -4,12 +4,8 @@
 ### Component Diagram
 
 
-
-
-
 ### Sequence Diagram
-
-
+![image](assets/SequenceDiagram.png)
 
 ### AI Algorithms/Models
 
