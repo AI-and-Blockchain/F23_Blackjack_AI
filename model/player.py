@@ -33,4 +33,5 @@ class LocalPlayer:
     def place_bet(self):
         self.bet = self.player.place_bet()
 
-    
+    def get_bet(self) -> float:
+        return float(self.bet)

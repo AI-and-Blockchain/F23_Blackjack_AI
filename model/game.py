@@ -4,9 +4,8 @@ from time import sleep
 from random import shuffle, randint
 import numpy as np
 
-from .player import Agent, User
+from .player import Agent, User, LocalPlayer
 import blockchain
-from .localplayer import LocalPlayer
 
 class BlackjackGame:
     def __init__(self, players: List[Union[Type[Agent], User]], decks = 8):
@@ -20,7 +19,7 @@ class BlackjackGame:
         sleep(60)
         if any([t.is_alive() for t in threads]):
             raise Exception("One of the users timed out")
-        blockchain.place_bets(self.players, [p.get_bet() for p in self.players])
+        blockchain.place_bets(self.players)
 
 
     def run(self):
