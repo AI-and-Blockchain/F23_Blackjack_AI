@@ -35,3 +35,6 @@ class LocalPlayer:
 
     def get_bet(self) -> float:
         return float(self.bet)
+    
+    def deal(self, card: int):
+        self.cards.append(card)
