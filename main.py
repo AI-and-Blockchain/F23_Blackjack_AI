@@ -1,5 +1,5 @@
 from model.game import BlackjackGame
-from model.player import DeepQAgent, ProbAgent, User
+from model.player import QAgent, ProbAgent, User
 
 
 # u1 = User()

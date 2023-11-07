@@ -1,3 +1,7 @@
+import numpy as np
+import pandas as pd
+import gym
+
 from typing import List, Union, Type
 from . import utils
 
@@ -18,10 +22,17 @@ class Agent: # Abstract Agent class
         """
         pass
 
-class DeepQAgent(Agent):
+class QAgent(Agent):
     def __init__(self):
         super().__init__()
+
+        # self.Q = np.zeros(shape=(self.env.observation_space.shape, self.env.action_space.shape))
+        # print(self.Q)
         self.id = 1
+        
+        
+        
+    
     
 class ProbAgent(Agent):
     def __init__(self):
@@ -120,3 +131,4 @@ if __name__ == "__main__":
             case "H":
                 p.hit(randint(1,13))
     print(p.status())
+    pablo = QAgent()
