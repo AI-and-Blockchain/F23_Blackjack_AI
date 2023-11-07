@@ -2,8 +2,8 @@
 *Ryan Karch (karchr), Dominic Beyer (beyerd), Angelica Loshak (loshaka), Michael Dong (dongm2)*
 
 ### Running Instructions
-The Solidity code for the blockchain is hosted through Remix, but is provided in the blockchain directory.
-Any code from the model directory must be imported and run through a .py file in the main directory.
+The Solidity code for the blockchain is hosted through Remix, but is provided in the blockchain directory.\
+Any code from the model directory must be imported and run through a .py file in the main directory.\
 See main.py for an example.
 
 ### Component Diagram
