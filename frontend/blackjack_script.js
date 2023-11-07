@@ -27,9 +27,15 @@ cardSuits = ["spades", "hearts", "clubs", "diamonds"];
 numSuits = 4;
 cardValues = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"];
 numValues = 13;
-decklocation = [1000, 250]
-userlocation = [810, 610]
-card_backside = "/assets/Cards/backside.png"
+decklocation = [1000, 250];
+userlocation = [810, 610];
+card_backside = "/assets/Cards/backside.png";
+num_cards_dealt = 0;
+
+deal_active = false;
+bet_active = true;
+hit_active = false;
+stand_active = false;
 
 
 //class
@@ -53,8 +59,12 @@ document.addEventListener("click", flipcard);
 
 
 function deal(){
-  deal_user_card();
-  setTimeout(function(){deal_dealer_card()}, 200);
+  if(deal_active){
+    setTimeout(function(){deal_user_card()}, 20);
+    setTimeout(function(){deal_user_card()}, 200);
+    setTimeout(function(){deal_dealer_card()}, 200);
+    deal_active = false;
+  }
 }
 
 function paintcard(card){
@@ -87,8 +97,8 @@ function init_dealer_deck(){
 function deal_user_card(){
   ctx.beginPath();
   var id = 0;
-  var x=userlocation[0];
-  var y=userlocation[1];
+  var x=userlocation[0] + (30*num_cards_dealt);
+  var y=userlocation[1] + (10*num_cards_dealt);
   var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
   var cardValue = cardValues[Math.ceil(Math.random()*100)%numValues];
   const card = new Card(x, y, id, cardSuit, cardValue);
@@ -96,6 +106,7 @@ function deal_user_card(){
   cardList.push(card);
   cardCount +=1;
   paintcard(card);
+  num_cards_dealt += 1;
 }
 
 function deal_dealer_card(){
