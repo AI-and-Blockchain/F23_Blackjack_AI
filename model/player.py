@@ -131,4 +131,5 @@ if __name__ == "__main__":
             case "H":
                 p.hit(randint(1,13))
     print(p.status())
+    
     pablo = QAgent()

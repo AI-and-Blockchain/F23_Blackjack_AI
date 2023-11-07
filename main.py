@@ -2,12 +2,8 @@ from model.game import BlackjackGame
 from model.player import QAgent, ProbAgent, User
 
 
+dq = QAgent()
 # u1 = User()
-# dq = DeepQAgent()
-# p = ProbAgent()
-
-# b = BlackjackGame(players=[u1, dq, p])
-# dq = DeepQAgent()
 # p = ProbAgent()
 
 g = BlackjackGame([User()])
