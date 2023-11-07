@@ -2,7 +2,7 @@
 //global vars
 //colors
 const backgroundcolor =  'rgb(217, 222, 200)';
-const backgroundimage =  "assets\ClassicBackground.png";
+const backgroundimage =  "assets\Blackjack_table.png";
 const greycolor = "rgb(77, 79, 102)";
 const redcolor = "rgb(178,51,81)";
 const greencolor = "rgb(136,178,51)";
@@ -28,7 +28,7 @@ numSuits = 4;
 cardValues = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"];
 numValues = 13;
 decklocation = [1000, 250]
-userlocation = [810, 610]
+userlocation = [710, 560]
 card_backside = "/assets/Cards/backside.png"
 
 
@@ -45,7 +45,9 @@ class Card{
   }
 }
 
-
+// function setButtoncolors(){
+//   background-color: var(--btncolor);
+// }
 
 //call funcitons
 init_dealer_deck();
@@ -53,7 +55,8 @@ document.addEventListener("click", flipcard);
 
 
 function deal(){
-  deal_user_card();
+  setTimeout(function(){deal_user_card()}, 20);
+  setTimeout(function(){deal_user_card()}, 200);
   setTimeout(function(){deal_dealer_card()}, 200);
 }
 
@@ -87,8 +90,8 @@ function init_dealer_deck(){
 function deal_user_card(){
   ctx.beginPath();
   var id = 0;
-  var x=userlocation[0];
-  var y=userlocation[1];
+  var x=userlocation[0] + (50*cardCount);
+  var y=userlocation[1] + (10*cardCount);
   var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
   var cardValue = cardValues[Math.ceil(Math.random()*100)%numValues];
   const card = new Card(x, y, id, cardSuit, cardValue);
