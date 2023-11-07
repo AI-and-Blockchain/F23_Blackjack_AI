@@ -29,3 +29,10 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+
+
+function login() {
+    document.getElementById("login_doc").innerHTML = "logging in...";
+    location.href = "Blackjack.html";
+  }
