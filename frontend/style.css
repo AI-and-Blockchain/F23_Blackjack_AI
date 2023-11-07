@@ -49,3 +49,11 @@ code {
   background-color: var(--btncolor);
 }
 
+#dealbtn {
+    position:absolute;
+    left:70%;
+    top:30%;
+    border-radius: 15px;
+    background-color: var(--btncolor);
+  }
+  
