@@ -1,0 +1,51 @@
+canvas { 
+    /* border: 32px solid rgb(16, 50, 33); */
+    background:url(/assets/blackjack_table.jpg);
+    background-size: 100%;
+}
+
+:root {
+  --btncolor: rgb(203, 209, 180);
+  --btncolor2: rgb(108, 120, 106);
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position:absolute;
+
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#standbtn {
+  position:absolute;
+  left:70%;
+  top:40%;
+  border-radius: 15px;
+  background-color: var(--btncolor);
+}
+
+#hitbtn {
+  position:absolute;
+  left:70%;
+  top:45%;
+  border-radius: 15px;
+  background-color: var(--btncolor);
+}
+
+#betbtn {
+  position:absolute;
+  left:70%;
+  top:35%;
+  border-radius: 15px;
+  background-color: var(--btncolor);
+}
+
