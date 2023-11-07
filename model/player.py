@@ -21,6 +21,8 @@ class Agent: # Abstract Agent class
         Returns "S" for stand and "H" for hit
         """
         pass
+    def start_new(self):
+        pass
 
 class QAgent(Agent):
     def __init__(self):
@@ -49,9 +51,9 @@ class User(Agent):
     def place_bet(self) -> float:
         return float(input("Enter how much you would like to bet: "))
 
-    def add_card(self, card):
+    def add_card(self, card, total):
         self.cards.append(card)
-        self.total = utils.compute_total(self.cards)
+        self.total = total
         print(f"You have been dealt a {card}. Your cards are: {', '.join(map(str, self.cards))}. Your hand total is {self.total}.")
 
     def decision(self):
@@ -59,6 +61,33 @@ class User(Agent):
         while dec not in ["H","S"]:
             dec = input("Choose H for hit, or S for stand: ").upper()
         return dec
+    
+    def start_new(self):
+        self.cards = []
+        self.total = 0
+        
+class Dealer(Agent):
+    def __init__(self):
+        self.id = "Dealer"
+        self.cards = []
+        self.total = 0
+    
+    def __repr__(self):
+        return f"{self.id}"
+    
+    def place_bet(self) -> float:
+        return 0.0
+
+    def add_card(self, card, total):
+        self.cards.append(card)
+        self.total = total
+
+    def decision(self):
+        return "H" if self.total < 17 else "S"
+    
+    def start_new(self):
+        self.cards = []
+        self.total = 0
 
     
 
@@ -94,9 +123,9 @@ class LocalPlayer:
         return float(self.bet)
     
     def deal(self, card: int):
-        self.player.add_card(card)
         self.cards.append(card)
         self.total = utils.compute_total(self.cards)
+        self.player.add_card(card, self.total)
         if len(self.cards) == 2 and self.total == 21:
             self.done = 1
 
@@ -106,9 +135,9 @@ class LocalPlayer:
         return d
     
     def hit(self, card: int):
-        self.player.add_card(card)
         self.cards.append(card)
         self.total = utils.compute_total(self.cards)
+        self.player.add_card(card, self.total)
         if self.total == 21:
             self.done = 2
         elif self.total > 21:
@@ -116,6 +145,13 @@ class LocalPlayer:
 
     def status(self):
         return self.done
+    
+    def start_new(self):
+        self.player.start_new()
+        self.cards = []
+        self.total = 0
+        self.done = 0
+        self.bet = 0
 
 if __name__ == "__main__":
     from random import randint
