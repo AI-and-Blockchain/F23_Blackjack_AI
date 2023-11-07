@@ -1,4 +1,10 @@
+import numpy as np
+import pandas as pd
+import gym
+
 from typing import List, Union, Type
+
+
 
 
 class Agent: # Abstract Agent class
@@ -7,10 +13,17 @@ class Agent: # Abstract Agent class
     def __repr__(self):
         return f"{self.id}"
 
-class DeepQAgent(Agent):
+class QAgent(Agent):
     def __init__(self):
         super().__init__()
+
+        # self.Q = np.zeros(shape=(self.env.observation_space.shape, self.env.action_space.shape))
+        # print(self.Q)
         self.id = 1
+        
+        
+        
+    
     
 class ProbAgent(Agent):
     def __init__(self):
@@ -38,3 +51,7 @@ class LocalPlayer:
     
     def deal(self, card: int):
         self.cards.append(card)
+        
+        
+if __name__ == "__main__":
+    pablo = QAgent()
