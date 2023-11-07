@@ -7,7 +7,8 @@ dq = QAgent()
 # p = ProbAgent()
 
 g = BlackjackGame([User()])
-try:
-    g.run()
-except TimeoutError:
-    print("User timed out")
+while True:
+    try:
+        g.run()
+    except TimeoutError:
+        print("User timed out")
