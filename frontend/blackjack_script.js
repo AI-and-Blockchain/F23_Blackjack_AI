@@ -21,15 +21,24 @@ ctx.background = backgroundimage;
 
 //card vars
 var cardsize = [80, 120];
-cardList = [];
-cardCount = 0;
-cardSuits = ["spades", "hearts", "clubs", "diamonds"];
-numSuits = 4;
-cardValues = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"];
-numValues = 13;
-decklocation = [1000, 250]
-userlocation = [710, 560]
-card_backside = "/assets/Cards/backside.png"
+var cardSuits = ["spades", "hearts", "clubs", "diamonds"];
+var numSuits = 4;
+var cardValues = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"];
+var numValues = 13;
+var decklocation = [1000, 230]
+var userlocation = [710, 560]
+var card_backside = "/assets/Cards/backside.png"
+
+var id = 0;
+var bet_amount = 0;
+var numDealerCards = 0;
+var numPlayerCards = 0;
+var cardList = [];
+var cardCount = 0;
+var hit_active = false;
+var stand_active = false;
+var bet_active = true;
+var deal_active = false;
 
 
 //class
@@ -39,6 +48,7 @@ class Card{
     this.y = y;
     this.id;
     this.sideup = -1; //1=front -1=back
+    this.fliplocked = 0
     this.suit =suit;
     this.value=value;
 
@@ -51,14 +61,24 @@ class Card{
 
 //call funcitons
 init_dealer_deck();
+new_game();
 document.addEventListener("click", flipcard);
 
 
 function deal(){
-  setTimeout(function(){deal_user_card()}, 20);
-  setTimeout(function(){deal_user_card()}, 200);
-  setTimeout(function(){deal_dealer_card()}, 200);
+  if(deal_active){
+    setTimeout(function(){deal_user_card()}, 20);
+    setTimeout(function(){deal_user_card()}, 200);
+    setTimeout(function(){deal_dealer_card()},700);
+    setTimeout(function(){deal_dealer_card()}, 900);
+    deal_active = false;
+    bet_active = false;
+    hit_active = true;
+    stand_active = true;
+  }
 }
+
+
 
 function paintcard(card){
   var cardimg = new Image(); 
@@ -77,19 +97,15 @@ function paintcard(card){
 
 function init_dealer_deck(){
   ctx.beginPath();
-  var id = 0;
   var x=decklocation[0];
   var y=decklocation[1];
-  const card = new Card(x, y, id, );
-  id+=1;
-  cardCount +=1;
+  const card = new Card(x, y, 0, null, null);
   paintcard(card);
 }
 
 
 function deal_user_card(){
   ctx.beginPath();
-  var id = 0;
   var x=userlocation[0] + (50*cardCount);
   var y=userlocation[1] + (10*cardCount);
   var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
@@ -98,20 +114,25 @@ function deal_user_card(){
   id+=1;
   cardList.push(card);
   cardCount +=1;
+  numPlayerCards+=1;
   paintcard(card);
 }
 
 function deal_dealer_card(){
   ctx.beginPath();
-  var id = 0;
-  var x=decklocation[0]-100;
-  var y=decklocation[1];
+  var x=decklocation[0]-(50*numDealerCards)-200;
+  var y=decklocation[1]- (10*numDealerCards);
   var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
   var cardValue = cardValues[Math.ceil(Math.random()*100)%numValues];
   const card = new Card(x, y, id, cardSuit, cardValue);
+  card.fliplocked = 1;
+  if(numDealerCards != 0){
+    card.sideup *= -1; 
+  }
   id+=1;
+  numDealerCards+=1;
   cardList.push(card);
-  cardCount +=1;
+  cardCount;
   paintcard(card);
 }
 
@@ -120,25 +141,71 @@ function flipcard(event) {
   var mousey = event.clientY;
   for (let item of cardList) {
     if((item.x+cardsize[0] > mousex) && (item.x-cardsize[0] < mousex) && (item.y+cardsize[1] > mousey) && (item.y-cardsize[1] < mousey)){
-      item.sideup *= -1;
-      paintcard(item);
+      if(item.fliplocked === 0){
+        item.sideup *= -1;
+        paintcard(item);
+      }else{
+        paintcard(item);
+      }
       break;
     }
   } 
 }
 
 function hit() {
-  console.log("hit")
+  if(hit_active){
+    deal_user_card();
+  }
 
 }
 
-
 function stand() {
-  console.log("stand")
-  
+  if(stand_active){
+    
+    for (let i = 0; i < numPlayerCards-2; i++) {
+      setTimeout(function(){deal_dealer_card()}, 200*i);
+    }
+    var j=0;
+    for (let item of cardList) {
+      item.sideup = 1;
+      item.fliplocked = 1;
+      setTimeout(function(){paintcard(item)}, 200*j);
+      j+=1
+    }
+    bet_active = true;
+    bet_amount = 0;
+  }
+}
+
+function new_game(){
+  numPlayerCards = 0;
+  bet_amount = 0;
+  numDealerCards = 0;
+  cardList = [];
+  cardCount = 0;
+  hit_active = false;
+  stand_active = false;
+  bet_active = true;
+  deal_active = false;
+  repaint_canvas();
+}
+
+function repaint_canvas(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  init_dealer_deck();
 }
 
 function bet (){
-  console.log("bet")
+  if(bet_active){
+    if(bet_amount===0){
+      new_game();
+    }
+    repaint_canvas();
+    deal_active = true;
+    ctx.fillStyle = "gold";
+    ctx.font = "20px Comic Sans";
+    bet_amount += 10;
+    ctx.fillText(`+${bet_amount} ETHER...`, 1200, 270);
+  }
 }
 
