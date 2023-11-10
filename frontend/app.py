@@ -1,13 +1,25 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi import Request
 from pydantic import BaseModel
 import regex as re
 
 app = FastAPI()
 
+
 class FormItem(BaseModel):
     name: str
     bet: int
     address: str
+
+app.mount('/static', StaticFiles(directory='static', html=True), name='static')
+
+# from starlette.responses import FileResponse 
+
+# @app.get("/")
+# async def read_index():
+#     return FileResponse('Blackjack.html')
 
 @app.post("/F23_Blackjack_AI/frontend", response_model=str)
 def submit_form(item: FormItem):
@@ -22,18 +34,8 @@ def submit_form(item: FormItem):
     # You can process and use the form data as needed
     # In this example, just returning it as a response
     if re.match(".*(0x[a-f,A-F,0-9]{40}).*", address):
-        response_data = {
-            "name": name,
-            "bet": bet,
-            "address": re.search(".*(0x[a-f,A-F,0-9]{40}).*", address).group(1),
-        }
         return "valid"
     else:
-        response_data = {
-            "name": name,
-            "bet": "INVALID",
-            "address": "INVALID"
-        }
         return "invalid"
     # print(response_data)
     # return response_data
