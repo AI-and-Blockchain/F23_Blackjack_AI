@@ -1,5 +1,5 @@
 from typing import List
-from .player import LocalPlayer
+from model.player import LocalPlayer
 
 def place_bets(players: List[LocalPlayer]):
     for p in players:

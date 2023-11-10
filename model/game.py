@@ -3,8 +3,8 @@ from threading import Thread
 from time import time
 import numpy as np
 
-from .player import Agent, User, Dealer, LocalPlayer
-from .blockchain import place_bets
+from model.player import Agent, User, Dealer, LocalPlayer
+from model.blockchain import place_bets
 
 class BlackjackGame:
     def __init__(self, players: List[Union[Type[Agent], User]], decks = 8):

@@ -1,10 +1,9 @@
 from model.game import BlackjackGame
 from model.player import QAgent, ProbAgent, User
-from os import chdir
 import uvicorn
 
 def game_test():
-    dq = QAgent()
+    # dq = QAgent()
     # u1 = User()
     # p = ProbAgent()
 
@@ -25,4 +24,4 @@ def web_test():
     uvicorn.run("frontend.app:app",host="localhost", port = port,reload=True)
 
 if __name__ == "__main__":
-    web_test()
+    game_test()
