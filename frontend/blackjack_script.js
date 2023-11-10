@@ -136,6 +136,7 @@ function deal_dealer_card(){
   }
   id+=1;
   numDealerCards+=1;
+  console.log("dealer", cardList.length)
   cardList.push(card);
   console.log("dealer id", card.id)
   cardCount;
@@ -167,7 +168,7 @@ function hit() {
 
 function stand() {
   if(stand_active){
-    
+    console.log(cardList.length);
     for (let i = 0; i < numPlayerCards-2; i++) {
       setTimeout(function(){deal_dealer_card()}, 200*i);
     }
@@ -179,6 +180,12 @@ function stand() {
       setTimeout(function(){paintcard(item)}, 200*j);
       j+=1
     }
+    //reorder cards
+    setTimeout(function(){
+    for (let item of cardList) {
+      paintcard(item);
+    }}, 90*numPlayerCards);
+ 
     stand_active = false;
     hit_active = false;
     bet_active = true;
