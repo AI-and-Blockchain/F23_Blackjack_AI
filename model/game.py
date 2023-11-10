@@ -5,7 +5,6 @@ import numpy as np
 
 from .player import Agent, User, Dealer, LocalPlayer
 from .blockchain import place_bets
-from . import utils
 
 class BlackjackGame:
     def __init__(self, players: List[Union[Type[Agent], User]], decks = 8):

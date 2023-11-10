@@ -6,8 +6,8 @@ from collections import defaultdict
 from tqdm import tqdm
 from typing import List, Union, Type
 
-import utils
-import q_table
+from .utils import compute_total
+from .q_table import Q_TABLE
 
 class Agent: # Abstract Agent class
     def __init__(self):
@@ -202,7 +202,7 @@ class LocalPlayer:
     
     def deal(self, card: int):
         self.cards.append(card)
-        self.total = utils.compute_total(self.cards)
+        self.total = compute_total(self.cards)
         self.player.add_card(card, self.total)
         if len(self.cards) == 2 and self.total == 21:
             self.done = 1
@@ -214,7 +214,7 @@ class LocalPlayer:
     
     def hit(self, card: int):
         self.cards.append(card)
-        self.total = utils.compute_total(self.cards)
+        self.total = compute_total(self.cards)
         self.player.add_card(card, self.total)
         if self.total == 21:
             self.done = 2
