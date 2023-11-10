@@ -55,6 +55,8 @@ def submit_form(item: FormItem):
     #     user_bets[address] = bet
     return item
 
+# this is totally not a real thing anymore, but we will need some sort of getBet
+# request to validate eventually 
 @app.post("/getBet", response_model=betItem)
 def get_bet(item: betItem):
     address = item.address
