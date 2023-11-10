@@ -2,7 +2,7 @@
 //global vars
 //colors
 const backgroundcolor =  'rgb(217, 222, 200)';
-const backgroundimage =  "assets\ClassicBackground.png";
+const backgroundimage =  "assets\Blackjack_table.png";
 const greycolor = "rgb(77, 79, 102)";
 const redcolor = "rgb(178,51,81)";
 const greencolor = "rgb(136,178,51)";
@@ -44,16 +44,20 @@ class Card{
     this.y = y;
     this.id;
     this.sideup = -1; //1=front -1=back
+    this.fliplocked = 0
     this.suit =suit;
     this.value=value;
 
   }
 }
 
-
+// function setButtoncolors(){
+//   background-color: var(--btncolor);
+// }
 
 //call funcitons
 init_dealer_deck();
+new_game();
 document.addEventListener("click", flipcard);
 
 
@@ -65,6 +69,8 @@ function deal(){
     deal_active = false;
   }
 }
+
+
 
 function paintcard(card){
   var cardimg = new Image(); 
@@ -83,12 +89,9 @@ function paintcard(card){
 
 function init_dealer_deck(){
   ctx.beginPath();
-  var id = 0;
   var x=decklocation[0];
   var y=decklocation[1];
-  const card = new Card(x, y, id, );
-  id+=1;
-  cardCount +=1;
+  const card = new Card(x, y, 0, null, null);
   paintcard(card);
 }
 
@@ -105,6 +108,7 @@ function deal_user_card(){
   cardList.push(card);
   console.log("user id", card.id)
   cardCount +=1;
+  numPlayerCards+=1;
   paintcard(card);
   num_cards_dealt += 1;
 }
@@ -124,6 +128,7 @@ function deal_dealer_card(){
   }
   card.id = id;
   id+=1;
+  numDealerCards+=1;
   cardList.push(card);
   console.log("dealer id", card.id)
   cardCount;
@@ -135,18 +140,23 @@ function flipcard(event) {
   var mousey = event.clientY;
   for (let item of cardList) {
     if((item.x+cardsize[0] > mousex) && (item.x-cardsize[0] < mousex) && (item.y+cardsize[1] > mousey) && (item.y-cardsize[1] < mousey)){
-      item.sideup *= -1;
-      paintcard(item);
+      if(item.fliplocked === 0){
+        item.sideup *= -1;
+        paintcard(item);
+      }else{
+        paintcard(item);
+      }
       break;
     }
   } 
 }
 
 function hit() {
-  console.log("hit")
+  if(hit_active){
+    deal_user_card();
+  }
 
 }
-
 
 function stand() {
   if(stand_active){

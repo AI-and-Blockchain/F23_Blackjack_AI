@@ -14,16 +14,14 @@ See main.py for an example.
 
 ### AI Algorithms/Models
 
-We will be using Deep Q-learning as our algorithm.
+We will be using Q-learning as our algorithm.
 
-#### Why Use Deep Q-learning, and How Does it Work?
-* Normal Q-learning uses a table to store Q-values for each state-action pair.
-* Deep Q-learning employs the use of a neural network, which can be used to predict these Q-values.
-* Deep Q-learning is necessary for this task, as there are many different state possibilities in a blackjack game, thus resulting in a massive Q-table. We can optimize time and memory usage by predicting these values instead of performing table lookups.
-* The neural network will get the state as input, and output multiple Q-values associated with multiple actions. The algorithm chooses the largest Q-value and executes the action associated with it, to maximize the “reward”.
-* Instead of updating a Q-table like in normal Q-learning, the decision would update the weights in the neural network, thus allowing the neural network to learn. 
+#### Why Use Q-learning, and How Does it Work?
 
-
+* Q-learning is a reinforcement-learning algorithm where a model can learn and improve its strategy over time.
+* When the model makes a decision based on the current state of the environment, the Q-table is updated, and this affects the model's future decisions.
+* The Q-table stores an action for each possible state of the environment - when a state is encountered, the corresponding action for that state is retrieved from the Q-table and executed, and its value is updated. The model chooses the action that provides the highest "reward".
+* We can train the model, and then use its Q-table in our code, or we can train the model over time while it plays on our system.
 
 ### Blockchain Architecture
 * Smart contract used for betting cryptocurrency against the Blackjack AI
