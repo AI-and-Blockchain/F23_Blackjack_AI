@@ -29,8 +29,9 @@ class Agent: # Abstract Agent class
         pass
 
 class QAgent(Agent):
-    def __init__(self, learning_rate: float, initial_epsilon: float, 
-                 epsilon_decay: float, final_epsilon: float, discount_factor: float=0.95, smart: bool=True):
+    def __init__(self, learning_rate: float=0.001, initial_epsilon: float=5, 
+                 final_epsilon: float=0.01, discount_factor: float=0.95, 
+                 n_episodes: int=5000, smart: bool=True):
         super().__init__()
         
         self.env = gym.make("Blackjack-v1", sab=True)
@@ -41,7 +42,9 @@ class QAgent(Agent):
         self.discount_factor = discount_factor
 
         self.epsilon = initial_epsilon
-        self.epsilon_decay = epsilon_decay
+        self.epsilon_decay = self.epsilon / (n_episodes / 2)
+        
+        self.episodes = n_episodes
         self.final_epsilon = final_epsilon
 
         self.training_error = []
@@ -82,11 +85,11 @@ class QAgent(Agent):
     def decay_epsilon(self):
         self.epsilon = max(self.final_epsilon, self.epsilon - self.epsilon_decay)
         
-    def train(self, episodes: int):
+    def train(self):
         
-        env = gym.wrappers.RecordEpisodeStatistics(self.env, deque_size=episodes)
+        env = gym.wrappers.RecordEpisodeStatistics(self.env, deque_size=self.episodes)
         
-        for episode in tqdm(range(episodes)):
+        for episode in tqdm(range(self.episodes)):
             obs, info = env.reset()
             done = False
 
