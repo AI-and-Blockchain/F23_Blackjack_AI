@@ -1,7 +1,6 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from fastapi import Request
 from pydantic import BaseModel
 import regex as re
 
@@ -13,15 +12,15 @@ class FormItem(BaseModel):
     bet: int
     address: str
 
-app.mount('/static', StaticFiles(directory='static', html=True), name='static')
+app.mount('/frontend/static', StaticFiles(directory='frontend/static', html=True), name='static')
 
-# from starlette.responses import FileResponse 
+@app.get("/")
+@app.get("/frontend")
+@app.get("/frontend/static")
+async def redirect():
+    return RedirectResponse("http://127.0.0.1:8000/frontend/static/Login.html")
 
-# @app.get("/")
-# async def read_index():
-#     return FileResponse('Blackjack.html')
-
-@app.post("/F23_Blackjack_AI/frontend", response_model=str)
+@app.post("/login", response_model=str)
 def submit_form(item: FormItem):
     # Access the submitted form data as an object
     name = item.name
