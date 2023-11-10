@@ -31,10 +31,16 @@ var userlocation = [71/160*width, 560/735*height];
 var cardoffset = [50, 10];
 var card_backside = "/assets/Cards/backside.png";
 
-deal_active = false;
-bet_active = true;
-hit_active = false;
-stand_active = false;
+var id = 0;
+var bet_amount = 0;
+var numDealerCards = 0;
+var numPlayerCards = 0;
+var cardList = [];
+var cardCount = 0;
+var hit_active = false;
+var stand_active = false;
+var bet_active = true;
+var deal_active = false;
 
 
 //class
@@ -65,8 +71,12 @@ function deal(){
   if(deal_active){
     setTimeout(function(){deal_user_card()}, 20);
     setTimeout(function(){deal_user_card()}, 200);
-    setTimeout(function(){deal_dealer_card()}, 200);
+    setTimeout(function(){deal_dealer_card()},700);
+    setTimeout(function(){deal_dealer_card()}, 900);
     deal_active = false;
+    bet_active = false;
+    hit_active = true;
+    stand_active = true;
   }
 }
 
@@ -103,14 +113,12 @@ function deal_user_card(){
   var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
   var cardValue = cardValues[Math.ceil(Math.random()*100)%numValues];
   const card = new Card(x, y, id, cardSuit, cardValue);
-  card.id = id;
   id+=1;
   cardList.push(card);
   console.log("user id", card.id)
   cardCount +=1;
   numPlayerCards+=1;
   paintcard(card);
-  num_cards_dealt += 1;
 }
 
 function deal_dealer_card(){
@@ -126,7 +134,6 @@ function deal_dealer_card(){
   }else{
     card.sideup = 1;
   }
-  card.id = id;
   id+=1;
   numDealerCards+=1;
   cardList.push(card);
