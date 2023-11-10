@@ -204,7 +204,7 @@ function repaint_canvas(){
   init_dealer_deck();
 }
 
-function bet (){
+function bet(){
   if(bet_active){
     if(bet_amount===0){
       new_game();
