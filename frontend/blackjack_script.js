@@ -25,20 +25,16 @@ var cardSuits = ["spades", "hearts", "clubs", "diamonds"];
 var numSuits = 4;
 var cardValues = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"];
 var numValues = 13;
-var decklocation = [1000, 230]
-var userlocation = [710, 560]
-var card_backside = "/assets/Cards/backside.png"
+console.log(width, height)
+var decklocation = [10/16 * width, 230/735*height];
+var userlocation = [71/160*width, 560/735*height];
+var cardoffset = [50, 10];
+var card_backside = "/assets/Cards/backside.png";
 
-var id = 0;
-var bet_amount = 0;
-var numDealerCards = 0;
-var numPlayerCards = 0;
-var cardList = [];
-var cardCount = 0;
-var hit_active = false;
-var stand_active = false;
-var bet_active = true;
-var deal_active = false;
+deal_active = false;
+bet_active = true;
+hit_active = false;
+stand_active = false;
 
 
 //class
@@ -69,12 +65,8 @@ function deal(){
   if(deal_active){
     setTimeout(function(){deal_user_card()}, 20);
     setTimeout(function(){deal_user_card()}, 200);
-    setTimeout(function(){deal_dealer_card()},700);
-    setTimeout(function(){deal_dealer_card()}, 900);
+    setTimeout(function(){deal_dealer_card()}, 200);
     deal_active = false;
-    bet_active = false;
-    hit_active = true;
-    stand_active = true;
   }
 }
 
@@ -85,7 +77,7 @@ function paintcard(card){
   var cardSuit = card.suit
   var cardValue = card.value
   cardimg.src = `/assets/Cards/${cardValue}_of_${cardSuit}.png`;
-  if(card.sideup==-1){
+  if(card.sideup ===-1){
     cardimg.src = card_backside;
   }
   cardimg.onload = function (e)
@@ -106,32 +98,39 @@ function init_dealer_deck(){
 
 function deal_user_card(){
   ctx.beginPath();
-  var x=userlocation[0] + (50*cardCount);
-  var y=userlocation[1] + (10*cardCount);
+  var x=userlocation[0] + (cardoffset[0]*cardCount);
+  var y=userlocation[1] + (cardoffset[1]*cardCount);
   var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
   var cardValue = cardValues[Math.ceil(Math.random()*100)%numValues];
   const card = new Card(x, y, id, cardSuit, cardValue);
+  card.id = id;
   id+=1;
   cardList.push(card);
+  console.log("user id", card.id)
   cardCount +=1;
   numPlayerCards+=1;
   paintcard(card);
+  num_cards_dealt += 1;
 }
 
 function deal_dealer_card(){
   ctx.beginPath();
-  var x=decklocation[0]-(50*numDealerCards)-200;
-  var y=decklocation[1]- (10*numDealerCards);
+  var x=decklocation[0]-(cardoffset[0]*numDealerCards)-200;
+  var y=decklocation[1]- (cardoffset[1]*numDealerCards);
   var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
   var cardValue = cardValues[Math.ceil(Math.random()*100)%numValues];
-  const card = new Card(x, y, id, cardSuit, cardValue);
-  card.fliplocked = 1;
-  if(numDealerCards != 0){
-    card.sideup *= -1; 
+  var card = new Card(x, y, id, cardSuit, cardValue);
+  if(numDealerCards === 0){
+    card.fliplocked = 1;
+    card.sideup = -1; 
+  }else{
+    card.sideup = 1;
   }
+  card.id = id;
   id+=1;
   numDealerCards+=1;
   cardList.push(card);
+  console.log("dealer id", card.id)
   cardCount;
   paintcard(card);
 }
@@ -167,11 +166,14 @@ function stand() {
     }
     var j=0;
     for (let item of cardList) {
+      console.log(item.id);
       item.sideup = 1;
       item.fliplocked = 1;
       setTimeout(function(){paintcard(item)}, 200*j);
       j+=1
     }
+    stand_active = false;
+    hit_active = false;
     bet_active = true;
     bet_amount = 0;
   }
@@ -205,7 +207,7 @@ function bet (){
     ctx.fillStyle = "gold";
     ctx.font = "20px Comic Sans";
     bet_amount += 10;
-    ctx.fillText(`+${bet_amount} ETHER...`, 1200, 270);
+    ctx.fillText(`+${bet_amount} ETHER...`, 12/16*width, 270/735*height);
   }
 }
 
