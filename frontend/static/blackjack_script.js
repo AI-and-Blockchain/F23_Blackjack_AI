@@ -2,7 +2,7 @@
 //global vars
 //colors
 const backgroundcolor =  'rgb(217, 222, 200)';
-const backgroundimage =  "./assets/blackjack_table.png";
+const backgroundimage =  "./assets/blackjack_table.jpg";
 const greycolor = "rgb(77, 79, 102)";
 const redcolor = "rgb(178,51,81)";
 const greencolor = "rgb(136,178,51)";
