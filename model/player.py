@@ -6,8 +6,8 @@ from collections import defaultdict
 from tqdm import tqdm
 from typing import List, Union, Type
 
-from .utils import compute_total
-from .q_table import Q_TABLE
+from model.utils import compute_total
+from model.q_table import Q_TABLE
 
 class Agent: # Abstract Agent class
     def __init__(self):
