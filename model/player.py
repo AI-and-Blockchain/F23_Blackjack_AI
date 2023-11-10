@@ -5,7 +5,9 @@ import pandas as pd
 from collections import defaultdict
 from tqdm import tqdm
 from typing import List, Union, Type
-from . import utils
+
+import utils
+import q_table
 
 class Agent: # Abstract Agent class
     def __init__(self):
@@ -46,6 +48,9 @@ class QAgent(Agent):
         # self.Q = np.zeros(shape=(self.env.observation_space.shape, self.env.action_space.shape))
         # print(self.Q)
         self.smart = smart
+        if self.smart:
+            self.q_values = q_table.Q_TABLE
+        
         self.id = 1
         
     def get_action(self, obs: tuple[int, int, bool]) -> int:
