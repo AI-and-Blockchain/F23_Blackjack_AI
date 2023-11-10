@@ -9,7 +9,7 @@ class FormItem(BaseModel):
     bet: int
     address: str
 
-@app.post("/F23_Blackjack_AI/frontend", response_model=dict)
+@app.post("/F23_Blackjack_AI/frontend", response_model=str)
 def submit_form(item: FormItem):
     # Access the submitted form data as an object
     name = item.name
@@ -27,11 +27,13 @@ def submit_form(item: FormItem):
             "bet": bet,
             "address": re.search(".*(0x[a-f,A-F,0-9]{40}).*", address).group(1),
         }
+        return "valid"
     else:
         response_data = {
             "name": name,
             "bet": "INVALID",
             "address": "INVALID"
         }
-    print(response_data)
-    return response_data
+        return "invalid"
+    # print(response_data)
+    # return response_data
