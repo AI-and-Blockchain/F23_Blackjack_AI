@@ -3,8 +3,10 @@
 
 ### Running Instructions
 The Solidity code for the blockchain is hosted through Remix, but is provided in the blockchain directory.\
-Any code from the model directory must be imported and run through a .py file in the main directory.\
-See main.py for an example.
+All code (frontend and backend) must be run through main.py or a similar .py file from the top level directory.\
+main.py contains two starter functions for individual testing:
+- game_test() will test the backend game's logic by allowing you to interact with the game through a terminal interface (using the basic User agent)
+- web_test() will launch the website in its current development state
 
 ### Component Diagram
 ![image](assets/ComponentDiagram.png)
