@@ -1,6 +1,5 @@
 from model.game import BlackjackGame
 from model.player import QAgent, ProbAgent, User
-from os import chdir
 import uvicorn
 
 def game_test():
