@@ -53,15 +53,11 @@ function login() {
         if (text == "valid") {
             document.getElementById("login_doc").innerHTML = "logging in...";
             location.href = "Blackjack.html";
-
+        } else {
+            alert("Please enter a valid wallet address");
         }
 
     })
-    // .then(data => {
-        //     // Display the response in the output div
-        //     // outputDiv.textContent = `Response from Backend: ${data.message}`;
-        
-    // })
     .catch(error => {
         console.error('Error:', error);
     });
