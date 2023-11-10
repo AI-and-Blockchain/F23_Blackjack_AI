@@ -49,7 +49,7 @@ class QAgent(Agent):
         # print(self.Q)
         self.smart = smart
         if self.smart:
-            self.q_values = q_table.Q_TABLE
+            self.q_values = Q_TABLE
         
         self.id = 1
         
