@@ -1,7 +1,9 @@
+import gym
 import numpy as np
 import pandas as pd
-import gym
 
+from collections import defaultdict
+from tqdm import tqdm
 from typing import List, Union, Type
 from . import utils
 
@@ -25,17 +27,88 @@ class Agent: # Abstract Agent class
         pass
 
 class QAgent(Agent):
-    def __init__(self):
+    def __init__(self, learning_rate: float, initial_epsilon: float, 
+                 epsilon_decay: float, final_epsilon: float, discount_factor: float=0.95, smart: bool=True):
         super().__init__()
+        
+        self.env = gym.make("Blackjack-v1", sab=True)
+        
+        self.q_values = defaultdict(lambda: np.zeros(self.env.action_space.n))
 
+        self.lr = learning_rate
+        self.discount_factor = discount_factor
+
+        self.epsilon = initial_epsilon
+        self.epsilon_decay = epsilon_decay
+        self.final_epsilon = final_epsilon
+
+        self.training_error = []
         # self.Q = np.zeros(shape=(self.env.observation_space.shape, self.env.action_space.shape))
         # print(self.Q)
+        self.smart = smart
         self.id = 1
         
+    def get_action(self, obs: tuple[int, int, bool]) -> int:
+        """
+        Returns the best action with probability (1 - epsilon)
+        otherwise a random action with probability epsilon to ensure exploration.
+        """
+        # with probability epsilon return a random action to explore the environment
+        if np.random.random() < self.epsilon:
+            return self.env.action_space.sample()
+
+        # with probability (1 - epsilon) act greedily (exploit)
+        else:
+            return int(np.argmax(self.q_values[obs]))
         
+    def update(self, obs: tuple[int, int, bool], action: int, 
+               reward: float, terminated: bool, next_obs: tuple[int, int, bool]):
+        """Updates the Q-value of an action."""
+        future_q_value = (not terminated) * np.max(self.q_values[next_obs])
+        temporal_difference = (
+            reward + self.discount_factor * future_q_value - self.q_values[obs][action]
+        )
+
+        self.q_values[obs][action] = (
+            self.q_values[obs][action] + self.lr * temporal_difference
+        )
+        self.training_error.append(temporal_difference)
+
+    def decay_epsilon(self):
+        self.epsilon = max(self.final_epsilon, self.epsilon - self.epsilon_decay)
         
-    
-    
+    def train(self, episodes: int):
+        
+        env = gym.wrappers.RecordEpisodeStatistics(self.env, deque_size=episodes)
+        
+        for episode in tqdm(range(episodes)):
+            obs, info = env.reset()
+            done = False
+
+            # play one episode
+            while not done:
+                action = self.get_action(obs)
+                # print(action)
+                next_obs, reward, terminated, truncated, info = env.step(action)
+
+                # update the agent
+                self.update(obs, action, reward, terminated, next_obs)
+
+                # update if the environment is done and the current obs
+                done = terminated or truncated
+                obs = next_obs
+
+            self.decay_epsilon()
+            
+        def get_action(self, obs: tuple[int, int, bool]):
+            # assuming q table is full (not learning from moves anymore)
+            
+            if self.smart:
+                # action = self.get_action(obs)
+                return self.get_action(obs) # 0 is stand, 1 is hit
+            else:
+                pass
+            
 class ProbAgent(Agent):
     def __init__(self):
         super().__init__()
