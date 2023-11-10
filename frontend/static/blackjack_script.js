@@ -2,7 +2,7 @@
 //global vars
 //colors
 const backgroundcolor =  'rgb(217, 222, 200)';
-const backgroundimage =  "assets\Blackjack_table.png";
+const backgroundimage =  "./assets/blackjack_table.jpg";
 const greycolor = "rgb(77, 79, 102)";
 const redcolor = "rgb(178,51,81)";
 const greencolor = "rgb(136,178,51)";
@@ -29,7 +29,7 @@ console.log(width, height)
 var decklocation = [10/16 * width, 230/735*height];
 var userlocation = [71/160*width, 560/735*height];
 var cardoffset = [50, 10];
-var card_backside = "/assets/Cards/backside.png";
+var card_backside = "./assets/Cards/backside.png";
 
 var id = 0;
 var bet_amount = 0;
@@ -86,7 +86,7 @@ function paintcard(card){
   var cardimg = new Image(); 
   var cardSuit = card.suit
   var cardValue = card.value
-  cardimg.src = `/assets/Cards/${cardValue}_of_${cardSuit}.png`;
+  cardimg.src = `./assets/Cards/${cardValue}_of_${cardSuit}.png`;
   if(card.sideup ===-1){
     cardimg.src = card_backside;
   }

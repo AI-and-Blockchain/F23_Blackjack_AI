@@ -1,15 +1,26 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import regex as re
 
 app = FastAPI()
+
 
 class FormItem(BaseModel):
     name: str
     bet: int
     address: str
 
-@app.post("/F23_Blackjack_AI/frontend", response_model=dict)
+app.mount('/frontend/static', StaticFiles(directory='frontend/static', html=True), name='static')
+
+@app.get("/")
+@app.get("/frontend")
+@app.get("/frontend/static")
+async def redirect():
+    return RedirectResponse("http://127.0.0.1:8000/frontend/static/Login.html")
+
+@app.post("/login", response_model=str)
 def submit_form(item: FormItem):
     # Access the submitted form data as an object
     name = item.name
@@ -22,16 +33,8 @@ def submit_form(item: FormItem):
     # You can process and use the form data as needed
     # In this example, just returning it as a response
     if re.match(".*(0x[a-f,A-F,0-9]{40}).*", address):
-        response_data = {
-            "name": name,
-            "bet": bet,
-            "address": re.search(".*(0x[a-f,A-F,0-9]{40}).*", address).group(1),
-        }
+        return "valid"
     else:
-        response_data = {
-            "name": name,
-            "bet": "INVALID",
-            "address": "INVALID"
-        }
-    print(response_data)
-    return response_data
+        return "invalid"
+    # print(response_data)
+    # return response_data
