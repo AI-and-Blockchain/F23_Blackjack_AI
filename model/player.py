@@ -118,17 +118,21 @@ class QAgent(Agent):
     
     def add_card(self, card: int):
         
-        if self.state[0] + card > 21:
-            return
+        # if self.state[0] + card > 21:
+        #     return
         
-        else:
+        # else:
             if card == 1:
                 if self.state[0] + 11 <= 21:
                     self.state = (self.state[0] + 11, self.state[1], 1)
                 else:
                     self.state = (self.state[0] + 1, self.state[1], 0)
             else:
-                self.state = (self.state[0] + 11, self.state[1], self.state[2])
+                
+                if self.state[2] and self.state[0] + card > 21:
+                    self.state = (self.state[0] - 10 + card, self.state[1], 0)
+                else: # either bust or usable ace
+                    self.state = (self.state[0] + card, self.state[1], self.state[2])
     
     def add_dealer_card(self, card: int):
         
