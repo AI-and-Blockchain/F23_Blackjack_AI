@@ -25,7 +25,6 @@ var cardSuits = ["spades", "hearts", "clubs", "diamonds"];
 var numSuits = 4;
 var cardValues = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"];
 var numValues = 13;
-console.log(width, height)
 var decklocation = [10/16 * width, 230/735*height];
 var userlocation = [71/160*width, 560/735*height];
 var cardoffset = [50, 10];
@@ -115,7 +114,6 @@ function deal_user_card(){
   const card = new Card(x, y, id, cardSuit, cardValue);
   id+=1;
   cardList.push(card);
-  console.log("user id", card.id)
   cardCount +=1;
   numPlayerCards+=1;
   paintcard(card);
@@ -136,9 +134,7 @@ function deal_dealer_card(){
   }
   id+=1;
   numDealerCards+=1;
-  console.log("dealer", cardList.length)
   cardList.push(card);
-  console.log("dealer id", card.id)
   cardCount;
   paintcard(card);
 }
@@ -168,13 +164,11 @@ function hit() {
 
 function stand() {
   if(stand_active){
-    console.log(cardList.length);
     for (let i = 0; i < numPlayerCards-2; i++) {
       setTimeout(function(){deal_dealer_card()}, 200*i);
     }
     var j=0;
     for (let item of cardList) {
-      console.log(item.id);
       item.sideup = 1;
       item.fliplocked = 1;
       setTimeout(function(){paintcard(item)}, 200*j);
@@ -184,7 +178,7 @@ function stand() {
     setTimeout(function(){
     for (let item of cardList) {
       paintcard(item);
-    }}, 90*numPlayerCards);
+    }}, 300*numPlayerCards);
  
     stand_active = false;
     hit_active = false;
