@@ -50,6 +50,23 @@ code {
   background-color: var(--btncolor);
 }
 
+
+#plusbtn {
+  position:absolute;
+  left:73%;
+  top:35%;
+  border-radius: 15px;
+  background-color: var(--btncolor);
+}
+
+#minusbtn {
+  position:absolute;
+  left:74.5%;
+  top:35%;
+  border-radius: 15px;
+  background-color: var(--btncolor);
+}
+
 #dealbtn {
     position:absolute;
     left:70%;
