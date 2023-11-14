@@ -30,29 +30,18 @@ async def redirect():
 def submit_form(item: FormItem):
     # Access the submitted form data as an object
     name = item.name
-    # bet = item.bet
     address = item.address
-    #name
-    #bet
-    #metamask wallet id
     
-    # You can process and use the form data as needed
-    # In this example, just returning it as a response
-    # result = responseItem()
     if name == '':
         item.name = "invalid"
     else:
         item.name = "valid"
-    # if bet.isdigit():
-    #     item.bet = "valid"
-    # else:
-    #     item.bet = "invalid"
     if re.match(".*(0x[a-f,A-F,0-9]{40}).*", address):
         item.address = "valid"
     else:
         item.address = "invalid"
-    # if item.bet == item.address == "valid":
-    #     user_bets[address] = bet
+    
+    # need to create the game object with the player
     return item
 
 # this is totally not a real thing anymore, but we will need some sort of getBet

@@ -5,6 +5,7 @@ import numpy as np
 
 from model.player import Agent, User, Dealer, LocalPlayer
 from model.blockchain import place_bets
+from model.utils import States
 
 class BlackjackGame:
     def __init__(self, players: List[Union[Type[Agent], User]], decks = 8):
@@ -12,20 +13,11 @@ class BlackjackGame:
         self.dealer = LocalPlayer(Dealer())
         self.players = [LocalPlayer(p) for p in players]
         self.deck = np.array([[x if x < 11 else 10] * decks * 4 for x in range(1,14)]).flatten()
+        self.current_p = 0
         np.random.shuffle(self.deck)
         
         print(self.players)
 
-    def collect_bets(self):
-        threads = [Thread(target=p.place_bet) for p in self.players]
-        for t in threads:
-            t.start()
-        start = time()
-        while time() - start < 60 and any([t.is_alive() for t in threads]):
-            pass
-        if any([t.is_alive() for t in threads]):
-            raise TimeoutError
-        place_bets(self.players)
 
 
     def start(self):
@@ -38,6 +30,10 @@ class BlackjackGame:
         # except TimeoutError:
         #     raise TimeoutError
     
+    def collect_bet(self, bet):
+        # add bets to it and then send it to bchain
+        place_bets(self.players[0])
+    
     def deal(self):
         for i in range(2):
             for p in self.players:
@@ -49,7 +45,8 @@ class BlackjackGame:
                 for p in self.players:
                     p.add_dealer_card(card)
         # define player ids eventually and then return a list or json of cards dealt
-        
+    
+    def play(self, decision=""):
         for p in self.players:
             while p.playing():
                 match p.decision():
@@ -58,7 +55,9 @@ class BlackjackGame:
                     case "H":
                         card, *self.deck = self.deck
                         p.hit(card)
-        
+
+
+    def dealer_play(self):
         while self.dealer.playing():
             match self.dealer.decision():
                 case "S":
