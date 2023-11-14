@@ -53,16 +53,18 @@ class QAgent(Agent):
         self.smart = smart
         if self.smart:
             self.q_values = Q_TABLE
+            
+        self.state = (0, 0, 0) # 
         
         self.id = 1
         
-    def get_action(self, obs: tuple[int, int, bool]) -> int:
+    def get_action(self, obs: tuple[int, int, bool], force: bool=True) -> int:
         """
         Returns the best action with probability (1 - epsilon)
         otherwise a random action with probability epsilon to ensure exploration.
         """
         # with probability epsilon return a random action to explore the environment
-        if np.random.random() < self.epsilon:
+        if not force and np.random.random() < self.epsilon:
             return self.env.action_space.sample()
 
         # with probability (1 - epsilon) act greedily (exploit)
@@ -108,14 +110,29 @@ class QAgent(Agent):
 
             self.decay_epsilon()
             
-        def get_action(self, obs: tuple[int, int, bool]):
-            # assuming q table is full (not learning from moves anymore)
-            
-            if self.smart:
-                # action = self.get_action(obs)
-                return self.get_action(obs) # 0 is stand, 1 is hit
+    def decision(self) -> str:
+        decisions = {0: "S", 1: "H"}
+        return decisions[self.get_action(self.state, force=True)] # obs: (player's sum, dealer's card, usable ace)
+    
+    def add_card(self, card: int):
+        
+        if self.state[0] + card > 21:
+            return
+        
+        else:
+            if card == 1:
+                if self.state[0] + 11 <= 21:
+                    self.state = (self.state[0] + 11, self.state[1], 1)
+                else:
+                    self.state = (self.state[0] + 1, self.state[1], 0)
             else:
-                pass
+                self.state = (self.state[0] + 11, self.state[1], self.state[2])
+    
+    def add_dealer_card(self, card: int):
+        
+        self.state = (self.state[0], card, self.state[2])
+        
+        
             
 class ProbAgent(Agent):
     def __init__(self):
