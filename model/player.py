@@ -117,22 +117,18 @@ class QAgent(Agent):
         return decisions[self.get_action(self.state, force=True)] # obs: (player's sum, dealer's card, usable ace)
     
     def add_card(self, card: int):
-        
-        # if self.state[0] + card > 21:
-        #     return
-        
-        # else:
-            if card == 1:
-                if self.state[0] + 11 <= 21:
-                    self.state = (self.state[0] + 11, self.state[1], 1)
-                else:
-                    self.state = (self.state[0] + 1, self.state[1], 0)
+
+        if card == 1:
+            if self.state[0] + 11 <= 21:
+                self.state = (self.state[0] + 11, self.state[1], 1)
             else:
-                
-                if self.state[2] and self.state[0] + card > 21:
-                    self.state = (self.state[0] - 10 + card, self.state[1], 0)
-                else: # either bust or usable ace
-                    self.state = (self.state[0] + card, self.state[1], self.state[2])
+                self.state = (self.state[0] + 1, self.state[1], 0)
+        else:
+            
+            if self.state[2] and self.state[0] + card > 21:
+                self.state = (self.state[0] - 10 + card, self.state[1], 0)
+            else: # either bust or usable ace
+                self.state = (self.state[0] + card, self.state[1], self.state[2])
     
     def add_dealer_card(self, card: int):
         
