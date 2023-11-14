@@ -20,6 +20,8 @@ class Agent: # Abstract Agent class
         pass
     def add_card(self, card):
         pass
+    def add_dealer_card(self, card):
+        pass
     def decision(self):
         """
         Returns "S" for stand and "H" for hit
@@ -123,6 +125,7 @@ class User(Agent):
     def __init__(self):
         self.id = input("Enter a username: ")
         self.cards = []
+        self.dealer_card = 0
         self.total = 0
     def __repr__(self):
         return f"{self.id}"
@@ -132,7 +135,11 @@ class User(Agent):
     def add_card(self, card, total):
         self.cards.append(card)
         self.total = total
-        print(f"You have been dealt a {card}. Your cards are: {', '.join(map(str, self.cards))}. Your hand total is {self.total}.")
+        print(f"You have been dealt a {card}. Your cards are: {', '.join(map(str, self.cards))}. Your hand total is {self.total}. {f'The dealer has a {self.dealer_card}.' if self.dealer_card != 0 else ''}")
+
+    def add_dealer_card(self, card):
+        self.dealer_card = card
+        print(f"The dealer has been dealt a {card}")
 
     def decision(self):
         dec = input("Choose H for hit, or S for stand: ").upper()
@@ -174,6 +181,7 @@ class LocalPlayer:
         self.player = player
         self.bet = 0
         self.cards = []
+        self.dealer_card = 0
         self.total = 0
         self.done = 0 # 0 = playing, 1 = blackjack on first turn, 2 = blackjack after first, 3 = stood, 4 = bust
 
@@ -200,6 +208,10 @@ class LocalPlayer:
     def get_bet(self) -> float:
         return float(self.bet)
     
+    def add_dealer_card(self, card: int):
+        self.dealer_card = card
+        self.player.add_dealer_card(card)
+
     def deal(self, card: int):
         self.cards.append(card)
         self.total = compute_total(self.cards)

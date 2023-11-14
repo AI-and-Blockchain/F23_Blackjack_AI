@@ -28,21 +28,27 @@ class BlackjackGame:
         place_bets(self.players)
 
 
-    def run(self):
+    def start(self):
         self.dealer.start_new()
         for p in self.players:
             p.start_new()
-        try:
-            self.collect_bets()
-        except TimeoutError:
-            raise TimeoutError
         
-        for _ in range(2):
+        # try:
+        #     self.collect_bets()
+        # except TimeoutError:
+        #     raise TimeoutError
+    
+    def deal(self):
+        for i in range(2):
             for p in self.players:
                 card, *self.deck = self.deck
                 p.deal(card)
             card, *self.deck = self.deck
             self.dealer.deal(card)
+            if i == 0:
+                for p in self.players:
+                    p.add_dealer_card(card)
+        # define player ids eventually and then return a list or json of cards dealt
         
         for p in self.players:
             while p.playing():
