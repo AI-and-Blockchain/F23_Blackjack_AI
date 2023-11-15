@@ -59,10 +59,13 @@ def submit_form(item: FormItem):
 # request to validate eventually 
 @app.post("/getBet", response_model=betItem)
 def get_bet(item: betItem):
+    print(item)
     address = item.address
+    bet = item.bet
     if address in user_bets:
         item.bet = int(user_bets[address])
         item.message = "valid"
     else:
         item.bet = 0
         item.message = "invalid"
+    return item

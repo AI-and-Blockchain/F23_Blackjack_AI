@@ -40,6 +40,7 @@ var stand_active = false;
 var bet_active = true;
 var deal_active = false;
 var player_name = 'angelica';
+var player_address = '0xad2fDE7e8357E7536EDa0E4C477B42d5772a04C5';
 var playerObjects = []
 
 
@@ -84,7 +85,7 @@ function init_game(){
 }
 
 function init_players(){
-  main_player = new Player(userlocation[0], userlocation[1], player_name, 0, 0, 1);
+  main_player = new Player(userlocation[0], userlocation[1], player_name, player_address, 0, 1);
   console.log(main_player.main_player);
   ai_player = new Player(userlocation[0]+0.17, userlocation[1]-0.06, "Mr.JokerPoker", 0, -5, 0);
   playerObjects.push(main_player, ai_player);
@@ -283,6 +284,28 @@ function minus(){
   if(bet_amount >10){
     bet_helper(bet_amount - 10);
   }
+}
+
+function bet(){
+  var jsonData = {"address":   player_address, "bet": bet_amount};
+  console.log(jsonData);
+  fetch('/getBet', {
+      method: 'POST',
+      body: JSON.stringify(jsonData),
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  })
+  .then(response => response.json())
+  .then(json => {
+    console.log(json);
+    bet_active = false;
+    deal_active = true;
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
+
 }
 
 
