@@ -60,15 +60,13 @@ class Card{
 }
 
 class Player{
-  constructor(x, y,  name, address, angle, id, main_player) {
+  constructor(x, y,  name, address, angle, main_player) {
     this.x = x;
     this.y = y;
     this.name = name;
     this.address = address;
     this.angle = angle;
-    this.id = id;
     this.main_player = main_player;
-    this.card_count = 0;
   }
 }
 
@@ -86,10 +84,9 @@ function init_game(){
 }
 
 function init_players(){
-  player_id = 0;
-  main_player = new Player(userlocation[0], userlocation[1], player_name, 0, 0, player_id, 1);
-  player_id+=1;
-  ai_player = new Player(userlocation[0]+0.17, userlocation[1]-0.06, "Mr.JokerPoker", 0, -5, player_id, 0);
+  main_player = new Player(userlocation[0], userlocation[1], player_name, 0, 0, 1);
+  console.log(main_player.main_player);
+  ai_player = new Player(userlocation[0]+0.17, userlocation[1]-0.06, "Mr.JokerPoker", 0, -5, 0);
   playerObjects.push(main_player, ai_player);
 }
 
@@ -148,8 +145,14 @@ function deal_user_card(){
     id+=1;
     cardList.push(card);
     p.card_count +=1;
-    if(p.main_player){
+    console.log(p.main_player);
+    if(p.main_player === 1){
       numPlayerCards+=1;
+      card.fliplocked = 0;
+      card.sideup = 1;
+    }else{
+      card.fliplocked = 1;
+      card.sideup = -1;
     }
     paintcard(card);
   }
@@ -177,13 +180,15 @@ function deal_dealer_card(){
 function flipcard(event) {
   var mousex = event.clientX; 
   var mousey = event.clientY;
-  for (let item of cardList) {
-    if((item.x+cardsize[0] > mousex) && (item.x-cardsize[0] < mousex) && (item.y+cardsize[1] > mousey) && (item.y-cardsize[1] < mousey)){
-      if(item.fliplocked === 0){
-        item.sideup *= -1;
-        paintcard(item);
+  for (let card of cardList) {
+    x = card.x + cardoffset[0]*card.card_count;
+    y = card.y + cardoffset[0]*card.card_count;
+    if((x+cardsize[0] > mousex) && (x-cardsize[0] < mousex) && (y+cardsize[1] > mousey) && (y-cardsize[1] < mousey)){
+      if(card.fliplocked === 0){
+        card.sideup *= -1;
+        paintcard(card);
       }else{
-        paintcard(item);
+        paintcard(card);
       }
       break;
     }
