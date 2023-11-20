@@ -6,8 +6,6 @@ import regex as re
 
 app = FastAPI()
 
-user_bets = dict()
-
 class FormItem(BaseModel):
     name: str
     # bet: str
@@ -17,6 +15,13 @@ class betItem(BaseModel):
     address: str
     bet: int
     message: str
+
+class playerInfo(BaseModel):
+    username: str
+    address: str
+    bet: int
+
+user = playerInfo(username='', address='', bet=0)
 
 app.mount('/frontend/static', StaticFiles(directory='frontend/static', html=True), name='static')
 
@@ -28,41 +33,35 @@ async def redirect():
 
 @app.post("/login", response_model=FormItem)
 def submit_form(item: FormItem):
-    # Access the submitted form data as an object
     name = item.name
-    # bet = item.bet
     address = item.address
-    #name
-    #bet
-    #metamask wallet id
-    
-    # You can process and use the form data as needed
-    # In this example, just returning it as a response
-    # result = responseItem()
+
     if name == '':
         item.name = "invalid"
     else:
+        user.username = item.name
         item.name = "valid"
-    # if bet.isdigit():
-    #     item.bet = "valid"
-    # else:
-    #     item.bet = "invalid"
     if re.match(".*(0x[a-f,A-F,0-9]{40}).*", address):
+        user.address = item.address
         item.address = "valid"
     else:
         item.address = "invalid"
-    # if item.bet == item.address == "valid":
-    #     user_bets[address] = bet
+    if item.name == item.address == "valid":
+        user.bet = 0
     return item
 
-# this is totally not a real thing anymore, but we will need some sort of getBet
-# request to validate eventually 
-@app.post("/getBet", response_model=betItem)
-def get_bet(item: betItem):
+@app.post("/setBet", response_model=betItem)
+def set_bet(item: betItem):
+    print(item)
     address = item.address
-    if address in user_bets:
-        item.bet = int(user_bets[address])
+    if user.address == address:
+        user.bet = int(item.bet)
         item.message = "valid"
     else:
-        item.bet = 0
         item.message = "invalid"
+    return item
+
+
+@app.post("/playerData", response_model=playerInfo)
+def playerData():
+    return user

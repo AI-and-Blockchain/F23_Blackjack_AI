@@ -1,7 +1,5 @@
 from typing import List
-from model.player import LocalPlayer
+from model.player import WebUser
 
-def place_bets(players: List[LocalPlayer]):
-    for p in players:
-        # connect to wallet and place the bet
-        pass
+def place_bet(player: WebUser):
+    pass

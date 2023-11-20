@@ -25,9 +25,8 @@ var cardSuits = ["spades", "hearts", "clubs", "diamonds"];
 var numSuits = 4;
 var cardValues = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"];
 var numValues = 13;
-console.log(width, height)
-var decklocation = [10/16 * width, 230/735*height];
-var userlocation = [71/160*width, 560/735*height];
+var decklocation = [62.5/100, 31.2/100];
+var userlocation = [47/100, 77/100];  
 var cardoffset = [50, 10];
 var card_backside = "./assets/Cards/backside.png";
 
@@ -36,36 +35,71 @@ var bet_amount = 0;
 var numDealerCards = 0;
 var numPlayerCards = 0;
 var cardList = [];
-var cardCount = 0;
 var hit_active = false;
 var stand_active = false;
 var bet_active = true;
 var deal_active = false;
+var player_name;
+var player_address;
+var playerObjects = []
 
 
 //class
 class Card{
-  constructor(x, y, id, suit, value) {
+  constructor(x, y, id, suit, value, angle) {
     this.x = x;
     this.y = y;
     this.id;
     this.sideup = -1; //1=front -1=back
-    this.fliplocked = 0
+    this.fliplocked = 0;
     this.suit =suit;
     this.value=value;
+    this.angle = angle;
+    this.card_count = 0;
 
   }
 }
 
-// function setButtoncolors(){
-//   background-color: var(--btncolor);
-// }
+class Player{
+  constructor(x, y,  name, address, angle, main_player) {
+    this.x = x;
+    this.y = y;
+    this.name = name;
+    this.address = address;
+    this.angle = angle;
+    this.main_player = main_player;
+  }
+}
 
-//call funcitons
-init_dealer_deck();
-new_game();
-document.addEventListener("click", flipcard);
 
+//init game: call funcitons
+init_game();
+
+
+function init_game(){
+  fetch("/playerData", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    }
+  }).then(response => response.json())
+  .then(data => {
+    player_name = data.username;
+    player_address = data.address;
+  init_players();
+  init_dealer_deck();
+  new_game();
+  document.addEventListener("click", flipcard);
+  })
+}
+
+function init_players(){
+    main_player = new Player(userlocation[0], userlocation[1], player_name, player_address, 0, 1);
+    console.log(main_player.main_player);
+    console.log(main_player.name);
+    ai_player = new Player(userlocation[0]+0.17, userlocation[1]-0.06, "Mr.JokerPoker", 0, -5, 0);
+    playerObjects.push(main_player, ai_player);
+}
 
 function deal(){
   if(deal_active){
@@ -92,39 +126,53 @@ function paintcard(card){
   }
   cardimg.onload = function (e)
   {
-      ctx.drawImage(cardimg, card.x, card.y, cardsize[0], cardsize[1]);
+    ctx.save();
+    ctx.translate(card.x, card.y);
+    ctx.rotate(Math.PI/card.angle);
+    ctx.drawImage(cardimg, (cardoffset[0]*card.card_count), (cardoffset[1]*card.card_count), cardsize[0], cardsize[1]);
+    ctx.restore();
   }
 
 }
 
 function init_dealer_deck(){
   ctx.beginPath();
-  var x=decklocation[0];
-  var y=decklocation[1];
+  var x=decklocation[0]*width;
+  var y=decklocation[1]*height;
   const card = new Card(x, y, 0, null, null);
   paintcard(card);
 }
 
 
 function deal_user_card(){
-  ctx.beginPath();
-  var x=userlocation[0] + (cardoffset[0]*cardCount);
-  var y=userlocation[1] + (cardoffset[1]*cardCount);
-  var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
-  var cardValue = cardValues[Math.ceil(Math.random()*100)%numValues];
-  const card = new Card(x, y, id, cardSuit, cardValue);
-  id+=1;
-  cardList.push(card);
-  console.log("user id", card.id)
-  cardCount +=1;
-  numPlayerCards+=1;
-  paintcard(card);
+  for(let p of playerObjects){
+    ctx.beginPath();
+    var x=p.x*width;
+    var y=p.y*height;
+    var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
+    var cardValue = cardValues[Math.ceil(Math.random()*100)%numValues];
+    const card = new Card(x, y, id, cardSuit, cardValue, p.angle);
+    card.card_count = p.card_count;
+    id+=1;
+    cardList.push(card);
+    p.card_count +=1;
+    console.log(p.main_player);
+    if(p.main_player === 1){
+      numPlayerCards+=1;
+      card.fliplocked = 0;
+      card.sideup = 1;
+    }else{
+      card.fliplocked = 1;
+      card.sideup = -1;
+    }
+    paintcard(card);
+  }
 }
 
 function deal_dealer_card(){
   ctx.beginPath();
-  var x=decklocation[0]-(cardoffset[0]*numDealerCards)-200;
-  var y=decklocation[1]- (cardoffset[1]*numDealerCards);
+  var x=decklocation[0]*width-(cardoffset[0]*numDealerCards)-200;
+  var y=decklocation[1]*height- (cardoffset[1]*numDealerCards);
   var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
   var cardValue = cardValues[Math.ceil(Math.random()*100)%numValues];
   var card = new Card(x, y, id, cardSuit, cardValue);
@@ -137,21 +185,21 @@ function deal_dealer_card(){
   id+=1;
   numDealerCards+=1;
   cardList.push(card);
-  console.log("dealer id", card.id)
-  cardCount;
   paintcard(card);
 }
 
 function flipcard(event) {
   var mousex = event.clientX; 
   var mousey = event.clientY;
-  for (let item of cardList) {
-    if((item.x+cardsize[0] > mousex) && (item.x-cardsize[0] < mousex) && (item.y+cardsize[1] > mousey) && (item.y-cardsize[1] < mousey)){
-      if(item.fliplocked === 0){
-        item.sideup *= -1;
-        paintcard(item);
+  for (let card of cardList) {
+    x = card.x + cardoffset[0]*card.card_count;
+    y = card.y + cardoffset[0]*card.card_count;
+    if((x+cardsize[0] > mousex) && (x-cardsize[0] < mousex) && (y+cardsize[1] > mousey) && (y-cardsize[1] < mousey)){
+      if(card.fliplocked === 0){
+        card.sideup *= -1;
+        paintcard(card);
       }else{
-        paintcard(item);
+        paintcard(card);
       }
       break;
     }
@@ -167,18 +215,22 @@ function hit() {
 
 function stand() {
   if(stand_active){
-    
     for (let i = 0; i < numPlayerCards-2; i++) {
       setTimeout(function(){deal_dealer_card()}, 200*i);
     }
     var j=0;
     for (let item of cardList) {
-      console.log(item.id);
       item.sideup = 1;
       item.fliplocked = 1;
       setTimeout(function(){paintcard(item)}, 200*j);
       j+=1
     }
+    //reorder cards
+    setTimeout(function(){
+    for (let item of cardList) {
+      paintcard(item);
+    }}, 300*numPlayerCards);
+ 
     stand_active = false;
     hit_active = false;
     bet_active = true;
@@ -187,11 +239,13 @@ function stand() {
 }
 
 function new_game(){
+  for(let p of playerObjects){
+    p.card_count = 0;
+  }
   numPlayerCards = 0;
   bet_amount = 0;
   numDealerCards = 0;
   cardList = [];
-  cardCount = 0;
   hit_active = false;
   stand_active = false;
   bet_active = true;
@@ -202,9 +256,24 @@ function new_game(){
 function repaint_canvas(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   init_dealer_deck();
+  paint_playername();
+
 }
 
-function bet(){
+function paint_playername(){
+  for(let p of playerObjects){
+    ctx.save();
+    ctx.translate( (p.x+0.03) * width, (p.y+0.22) * height);
+    ctx.rotate( Math.PI / p.angle );
+    ctx.font = "bold 20px Arial";
+    ctx.fillStyle = "black";
+    ctx.textAlign = "center";
+    ctx.fillText(`${p.name}`, p.angle*-20, p.angle*-2);
+    ctx.restore();
+  }
+}
+
+function bet_helper(a){
   if(bet_active){
     if(bet_amount===0){
       new_game();
@@ -213,8 +282,50 @@ function bet(){
     deal_active = true;
     ctx.fillStyle = "gold";
     ctx.font = "20px Comic Sans";
-    bet_amount += 10;
-    ctx.fillText(`+${bet_amount} ETHER...`, 12/16*width, 270/735*height);
+    bet_amount = a;
+    ctx.fillText(`+${bet_amount} WEI...`, 77/100*width, 37.5/100*height);
   }
 }
+
+function plus(){
+  bet_helper(bet_amount + 10);
+}
+function minus(){
+  if(bet_amount >10){
+    bet_helper(bet_amount - 10);
+  }
+}
+
+function bet(){
+  if (bet_amount == 0) {
+    return;
+  }
+  var jsonData = {"address":   player_address, "bet": bet_amount, message: ""};
+  console.log(jsonData);
+  fetch("/setBet", {
+      method: "POST",
+      body: JSON.stringify(jsonData),
+      headers: {
+          "Content-Type": "application/json"
+      }
+  }).then(response => response.json())
+  .then(data => {
+    // alert(data.bet)
+    if (data.message == "invalid") {
+      alert("Invalid bet, please do not bet higher than your wallet balance")
+      deal_active = false;
+    } else {
+        bet_active = false;
+        deal_active = true;
+    }
+  })
+  .then(json => {
+    console.log(json);
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
+
+}
+
 
