@@ -43,11 +43,11 @@ class BlackjackGame:
             if i == 0:
                 for p in self.players:
                     p.add_dealer_card(card)
-        self.states = States.PLAY
+        self.state = States.PLAY
         return self.dealer.cards, [(p.cards, p.total) for p in self.players]
     
     def play_user(self, decision):
-        if self.states != States.PLAY:
+        if self.state != States.PLAY:
             return 0, True
         p = self.players[0]
         if not p.playing():
@@ -62,11 +62,11 @@ class BlackjackGame:
         if p.playing():
             return card, True
         else:
-            self.states = States.AI
+            self.state = States.AI
             return card, False
     
     def play_AI(self):
-        if self.states != States.AI:
+        if self.state != States.AI:
             return []
         all_cards = []
         for p in self.players[1:]:
@@ -80,11 +80,11 @@ class BlackjackGame:
                         p.hit(card)
                         cards.append(card)
             all_cards.append(cards)
-        self.states = States.DEALER
+        self.state = States.DEALER
         return all_cards
         
     def play_dealer(self):
-        if self.states != States.DEALER:
+        if self.state != States.DEALER:
             return []
         cards = []
         while self.dealer.playing():
@@ -95,11 +95,11 @@ class BlackjackGame:
                     card, *self.deck = self.deck
                     self.dealer.hit(card)
                     cards.append(card)
-        self.states = States.RESULTS
+        self.state = States.RESULTS
         return cards
 
     def results(self):
-        if self.states != States.RESULTS:
+        if self.state != States.RESULTS:
             return ""
         dealer_status = self.dealer.status()
         dealer_total = self.dealer.total
@@ -137,6 +137,7 @@ class BlackjackGame:
                             messages.append(f"Player {p} stood on {p.total} and the dealer busted, {p} wins.")
                 case 4:
                     messages.append(f"Player {p} busted and lost.")
+        self.state = States.READY
         return messages
 
 

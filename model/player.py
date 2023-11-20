@@ -131,7 +131,9 @@ class QAgent(Agent):
     def add_dealer_card(self, card: int):
         
         self.state = (self.state[0], card, self.state[2])
-        
+    
+    def start_new(self):
+        self.state = (0, 0, 0)
         
             
 class ProbAgent(Agent):
