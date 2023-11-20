@@ -6,7 +6,6 @@ import regex as re
 
 app = FastAPI()
 
-
 class FormItem(BaseModel):
     name: str
     # bet: str
@@ -34,26 +33,14 @@ async def redirect():
 
 @app.post("/login", response_model=FormItem)
 def submit_form(item: FormItem):
-    # Access the submitted form data as an object
     name = item.name
-    # bet = item.bet
     address = item.address
-    #name
-    #bet
-    #metamask wallet id
-    
-    # You can process and use the form data as needed
-    # In this example, just returning it as a response
-    # result = responseItem()
+
     if name == '':
         item.name = "invalid"
     else:
         user.username = item.name
         item.name = "valid"
-    # if bet.isdigit():
-    #     item.bet = "valid"
-    # else:
-    #     item.bet = "invalid"
     if re.match(".*(0x[a-f,A-F,0-9]{40}).*", address):
         user.address = item.address
         item.address = "valid"
@@ -78,4 +65,3 @@ def set_bet(item: betItem):
 @app.post("/playerData", response_model=playerInfo)
 def playerData():
     return user
-    

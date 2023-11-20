@@ -16,8 +16,6 @@ class Agent: # Abstract Agent class
         return f"{self.id}"
     def __str__(self):
         return f"{self.id}"
-    def place_bet(self) -> float:
-        pass
     def add_card(self, card):
         pass
     def add_dealer_card(self, card):
@@ -116,7 +114,7 @@ class QAgent(Agent):
         decisions = {0: "S", 1: "H"}
         return decisions[self.get_action(self.state, force=True)] # obs: (player's sum, dealer's card, usable ace)
     
-    def add_card(self, card: int):
+    def add_card(self, card: int, _):
         
         if self.state[0] + card > 21:
             return
@@ -141,35 +139,35 @@ class ProbAgent(Agent):
         super().__init__()
         self.id = 2
         
-class User(Agent):
-    def __init__(self):
-        self.id = input("Enter a username: ")
-        self.cards = []
-        self.dealer_card = 0
-        self.total = 0
-    def __repr__(self):
-        return f"{self.id}"
-    def place_bet(self) -> float:
-        return float(input("Enter how much you would like to bet: "))
+# class User(Agent):
+#     def __init__(self, id):
+#         self.id = id
+#         self.cards = []
+#         self.dealer_card = 0
+#         self.total = 0
+#     def __repr__(self):
+#         return f"{self.id}"
+#     def place_bet(self) -> float:
+#         return float(input("Enter how much you would like to bet: "))
 
-    def add_card(self, card, total):
-        self.cards.append(card)
-        self.total = total
-        print(f"You have been dealt a {card}. Your cards are: {', '.join(map(str, self.cards))}. Your hand total is {self.total}. {f'The dealer has a {self.dealer_card}.' if self.dealer_card != 0 else ''}")
+#     def add_card(self, card, total):
+#         self.cards.append(card)
+#         self.total = total
+#         print(f"You have been dealt a {card}. Your cards are: {', '.join(map(str, self.cards))}. Your hand total is {self.total}. {f'The dealer has a {self.dealer_card}.' if self.dealer_card != 0 else ''}")
 
-    def add_dealer_card(self, card):
-        self.dealer_card = card
-        print(f"The dealer has been dealt a {card}")
+    # def add_dealer_card(self, card):
+    #     self.dealer_card = card
+    #     print(f"The dealer has been dealt a {card}")
 
-    def decision(self):
-        dec = input("Choose H for hit, or S for stand: ").upper()
-        while dec not in ["H","S"]:
-            dec = input("Choose H for hit, or S for stand: ").upper()
-        return dec
+#     def decision(self):
+#         dec = input("Choose H for hit, or S for stand: ").upper()
+#         while dec not in ["H","S"]:
+#             dec = input("Choose H for hit, or S for stand: ").upper()
+#         return dec
     
-    def start_new(self):
-        self.cards = []
-        self.total = 0
+#     def start_new(self):
+#         self.cards = []
+#         self.total = 0
         
 class Dealer(Agent):
     def __init__(self):
@@ -180,9 +178,6 @@ class Dealer(Agent):
     def __repr__(self):
         return f"{self.id}"
     
-    def place_bet(self) -> float:
-        return 0.0
-
     def add_card(self, card, total):
         self.cards.append(card)
         self.total = total
@@ -194,12 +189,35 @@ class Dealer(Agent):
         self.cards = []
         self.total = 0
 
+class WebUser(Agent):
+    def __init__(self, id, bet, address):
+        self.id = id
+        self.bet = bet
+        self.address = address
+
+    def __repr__(self):
+        return f"{self.id}"
+    
+    def __str__(self):
+        return f"{self.id}"
+
+    def add_card(self, card, total):
+        pass
+
+    def add_dealer_card(self, card):
+        pass
+    
+    def decision(self):
+        pass
+    
+    def start_new(self):
+        self.cards = []
+        self.total = 0
     
 
 class LocalPlayer:
-    def __init__(self, player: Union[Type[Agent], User]):
+    def __init__(self, player: Type[Agent]):
         self.player = player
-        self.bet = 0
         self.cards = []
         self.dealer_card = 0
         self.total = 0
@@ -221,12 +239,6 @@ class LocalPlayer:
 
     def playing(self):
         return self.done == 0
-
-    def place_bet(self):
-        self.bet = self.player.place_bet()
-
-    def get_bet(self) -> float:
-        return float(self.bet)
     
     def add_dealer_card(self, card: int):
         self.dealer_card = card
@@ -243,6 +255,9 @@ class LocalPlayer:
         d = self.player.decision()
         self.done = 3 if d == "S" else 0
         return d
+
+    def stand(self):
+        self.done = 3
     
     def hit(self, card: int):
         self.cards.append(card)
@@ -261,21 +276,7 @@ class LocalPlayer:
         self.cards = []
         self.total = 0
         self.done = 0
-        self.bet = 0
 
 if __name__ == "__main__":
-    from random import randint
-    p = LocalPlayer(User())
-    print(p.blackjack([10,1],0))
-    p.deal(1)
-    p.deal(9)
-    p.hit(1)
-    while p.playing():
-        match p.decision():
-            case "S":
-                pass
-            case "H":
-                p.hit(randint(1,13))
-    print(p.status())
     
     pablo = QAgent()
