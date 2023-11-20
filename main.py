@@ -13,9 +13,13 @@ class FrontendUser:
 
     def bet(self):
         self.game.bet()
-        self.game.start()
         print("Bets are locked in (not really)\nGame is ready")
     
+    def reset(self):
+        self.cards = []
+        self.playing = True
+        self.game.start()
+
     def deal(self):
         dealer, players = self.game.deal()
         if players[0][1] == 21:
@@ -51,6 +55,7 @@ class FrontendUser:
         print(self.game.results())
 
     def run_game(self):
+        self.reset()
         self.deal()
         self.play()
         self.results()
@@ -65,7 +70,9 @@ def game_test():
     # p = ProbAgent()
 
     f = FrontendUser()
-    f.run_game()
+    while True:
+        input()
+        f.run_game()
     
 
 
