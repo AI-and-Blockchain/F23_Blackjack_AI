@@ -114,7 +114,7 @@ class QAgent(Agent):
         decisions = {0: "S", 1: "H"}
         return decisions[self.get_action(self.state, force=True)] # obs: (player's sum, dealer's card, usable ace)
     
-    def add_card(self, card: int):
+    def add_card(self, card: int, _):
 
         if card == 1:
             if self.state[0] + 11 <= 21:
