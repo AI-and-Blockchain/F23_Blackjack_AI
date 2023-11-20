@@ -39,8 +39,8 @@ var hit_active = false;
 var stand_active = false;
 var bet_active = true;
 var deal_active = false;
-var player_name = 'angelica';
-var player_address = '0xad2fDE7e8357E7536EDa0E4C477B42d5772a04C5';
+var player_name;
+var player_address;
 var playerObjects = []
 
 
@@ -77,15 +77,6 @@ init_game();
 
 
 function init_game(){
-  get_user_info();
-  init_players();
-  init_dealer_deck();
-  new_game();
-  document.addEventListener("click", flipcard);
-
-}
-
-function get_user_info() {
   fetch("/playerData", {
     method: "POST",
     headers: {
@@ -95,15 +86,19 @@ function get_user_info() {
   .then(data => {
     player_name = data.username;
     player_address = data.address;
+  init_players();
+  init_dealer_deck();
+  new_game();
+  document.addEventListener("click", flipcard);
   })
 }
 
 function init_players(){
-  main_player = new Player(userlocation[0], userlocation[1], player_name, player_address, 0, 1);
-  console.log(main_player.main_player);
-  console.log(main_player.name);
-  ai_player = new Player(userlocation[0]+0.17, userlocation[1]-0.06, "Mr.JokerPoker", 0, -5, 0);
-  playerObjects.push(main_player, ai_player);
+    main_player = new Player(userlocation[0], userlocation[1], player_name, player_address, 0, 1);
+    console.log(main_player.main_player);
+    console.log(main_player.name);
+    ai_player = new Player(userlocation[0]+0.17, userlocation[1]-0.06, "Mr.JokerPoker", 0, -5, 0);
+    playerObjects.push(main_player, ai_player);
 }
 
 function deal(){
