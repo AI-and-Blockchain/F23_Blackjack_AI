@@ -103,18 +103,24 @@ function init_players(){
 
 function deal(){
   if(deal_active){
-    setTimeout(function(){deal_user_card()}, 20);
-    setTimeout(function(){deal_user_card()}, 200);
-    setTimeout(function(){deal_dealer_card()},700);
-    setTimeout(function(){deal_dealer_card()}, 900);
-    deal_active = false;
-    bet_active = false;
-    hit_active = true;
-    stand_active = true;
+    fetch("/deal", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+      }
+    }).then(response => response.json())
+    .then(data => {
+      deal_all_cards(data.players);
+      // setTimeout(function(){deal_user_card()}, 200);
+      // setTimeout(function(){deal_dealer_card()},700);
+      // setTimeout(function(){deal_dealer_card()}, 900);
+      deal_active = false;
+      bet_active = false;
+      hit_active = true;
+      stand_active = true;
+    })
   }
 }
-
-
 
 function paintcard(card){
   var cardimg = new Image(); 
@@ -143,6 +149,34 @@ function init_dealer_deck(){
   paintcard(card);
 }
 
+function deal_all_cards(cards){
+  for (let i = 0; i < 2; i++) {
+    var count = 0;
+    for(let p of playerObjects){
+      ctx.beginPath();
+      var x=p.x*width;
+      var y=p.y*height;
+      var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
+      var cardValue = cardValues[cards[count][0][i]];
+      const card = new Card(x, y, id, cardSuit, cardValue, p.angle);
+      card.card_count = p.card_count;
+      id+=1;
+      cardList.push(card);
+      p.card_count +=1;
+      console.log(p.main_player);
+      if(p.main_player === 1){
+        numPlayerCards+=1;
+        card.fliplocked = 0;
+        card.sideup = 1;
+      }else{
+        card.fliplocked = 1;
+        card.sideup = -1;
+      }
+      setTimeout(function(){paintcard(card)}, 200 * (count + (i*2) + 1));
+      count++;
+    }
+  }
+}
 
 function deal_user_card(){
   for(let p of playerObjects){

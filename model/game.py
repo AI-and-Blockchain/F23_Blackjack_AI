@@ -6,14 +6,23 @@ from model.blockchain import place_bet
 from model.utils import States
 
 class BlackjackGame:
-    def __init__(self, players: List[Type[Agent]], decks = 8):
+    def __init__(self, players: List[Type[Agent]] = [], decks = 8):
         self.id = 3
         self.dealer = LocalPlayer(Dealer())
-        self.players = [LocalPlayer(p) for p in players]
         self.deck = np.array([[x if x < 11 else 10] * decks * 4 for x in range(1,14)]).flatten()
         np.random.shuffle(self.deck)
-        self.state = States.BET
+        if len(players) == 0:
+            self.state = States.PLAYERS
+        else:
+            self.players = [LocalPlayer(p) for p in players]
+            self.state = States.BET
         # print(self.players)
+
+    def add_players(self, players: List[Type[Agent]]):
+        if self.state != States.PLAYERS:
+            return
+        self.players = [LocalPlayer(p) for p in players]
+        self.state = States.BET
 
     def bet(self):
         if self.state != States.BET:
@@ -44,7 +53,7 @@ class BlackjackGame:
                 for p in self.players:
                     p.add_dealer_card(card)
         self.state = States.PLAY
-        return self.dealer.cards, [(p.cards, p.total) for p in self.players]
+        return [int(card) for card in self.dealer.cards], [[[int(card) for card in p.cards], p.total] for p in self.players]
     
     def play_user(self, decision):
         if self.state != States.PLAY:
