@@ -77,6 +77,7 @@ init_game();
 
 
 function init_game(){
+  get_user_info();
   init_players();
   init_dealer_deck();
   new_game();
@@ -84,9 +85,23 @@ function init_game(){
 
 }
 
+function get_user_info() {
+  fetch("/playerData", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    }
+  }).then(response => response.json())
+  .then(data => {
+    player_name = data.username;
+    player_address = data.address;
+  })
+}
+
 function init_players(){
   main_player = new Player(userlocation[0], userlocation[1], player_name, player_address, 0, 1);
   console.log(main_player.main_player);
+  console.log(main_player.name);
   ai_player = new Player(userlocation[0]+0.17, userlocation[1]-0.06, "Mr.JokerPoker", 0, -5, 0);
   playerObjects.push(main_player, ai_player);
 }
@@ -287,20 +302,30 @@ function minus(){
 }
 
 function bet(){
-  var jsonData = {"address":   player_address, "bet": bet_amount};
+  if (bet_amount == 0) {
+    return;
+  }
+  var jsonData = {"address":   player_address, "bet": bet_amount, message: ""};
   console.log(jsonData);
-  fetch('/getBet', {
-      method: 'POST',
+  fetch("/setBet", {
+      method: "POST",
       body: JSON.stringify(jsonData),
       headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
       }
+  }).then(response => response.json())
+  .then(data => {
+    // alert(data.bet)
+    if (data.message == "invalid") {
+      alert("Invalid bet, please do not bet higher than your wallet balance")
+      deal_active = false;
+    } else {
+        bet_active = false;
+        deal_active = true;
+    }
   })
-  .then(response => response.json())
   .then(json => {
     console.log(json);
-    bet_active = false;
-    deal_active = true;
   })
   .catch(error => {
       console.error('Error:', error);
