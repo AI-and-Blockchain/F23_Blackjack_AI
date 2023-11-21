@@ -17,6 +17,9 @@ class BlackjackGame:
             self.players = [LocalPlayer(p) for p in players]
             self.state = States.BET
         # print(self.players)
+    
+    def revert(self):
+        self.__init__()
 
     def add_players(self, players: List[Type[Agent]]):
         if self.state != States.PLAYERS:
@@ -69,10 +72,10 @@ class BlackjackGame:
                 card, *self.deck = self.deck
                 p.hit(card)
         if p.playing():
-            return card, True
+            return int(card), True
         else:
             self.state = States.AI
-            return card, False
+            return int(card), False
     
     def play_AI(self):
         if self.state != States.AI:
@@ -87,7 +90,7 @@ class BlackjackGame:
                     case "H":
                         card, *self.deck = self.deck
                         p.hit(card)
-                        cards.append(card)
+                        cards.append(int(card))
             all_cards.append(cards)
         self.state = States.DEALER
         return all_cards
@@ -103,7 +106,7 @@ class BlackjackGame:
                 case "H":
                     card, *self.deck = self.deck
                     self.dealer.hit(card)
-                    cards.append(card)
+                    cards.append(int(card))
         self.state = States.RESULTS
         return cards
 
