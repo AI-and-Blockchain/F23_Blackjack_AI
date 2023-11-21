@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import regex as re
@@ -101,3 +101,8 @@ def stand():
 def playerData():
     game.add_players([WebUser(user.username, user.bet, user.address), QAgent()])
     return user
+
+
+@app.get('/favicon.ico', include_in_schema=False)
+async def favicon():
+    return FileResponse("frontend/static/assets/favicon.ico")
