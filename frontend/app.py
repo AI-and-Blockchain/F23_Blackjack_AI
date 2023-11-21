@@ -28,6 +28,9 @@ class dealInfo(BaseModel):
     dealer: list
     players: list
 
+class cardInfo(BaseModel):
+    cards: list
+
 class playInfo(BaseModel):
     card: int
     status: bool
@@ -46,6 +49,7 @@ async def redirect():
 
 @app.post("/login", response_model=FormItem)
 def submit_form(item: FormItem):
+    game.revert()
     name = item.name
     address = item.address
 
@@ -65,7 +69,6 @@ def submit_form(item: FormItem):
 
 @app.post("/setBet", response_model=betItem)
 def set_bet(item: betItem):
-    print(item)
     address = item.address
     if user.address == address:
         user.bet = int(item.bet)
@@ -94,6 +97,18 @@ def hit():
 def stand():
     info = playInfo(card = 0, status = True)
     info.card, info.status = game.play_user("S")
+    return info
+
+@app.post("/AI", response_model=cardInfo)
+def AI():
+    info = cardInfo(cards = [])
+    info.cards = game.play_AI()
+    return info
+
+@app.post("/dealer", response_model=cardInfo)
+def AI():
+    info = cardInfo(cards = [])
+    info.cards = game.play_dealer()
     return info
 
 
