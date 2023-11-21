@@ -63,6 +63,7 @@ class BlackjackGame:
             return 0, True
         p = self.players[0]
         if not p.playing():
+            self.state = States.AI
             return 0, False
         match decision:
             case "S":
