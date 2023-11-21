@@ -2,10 +2,11 @@
 *Ryan Karch (karchr), Dominic Beyer (beyerd), Angelica Loshak (loshaka), Michael Dong (dongm2)*
 
 ### Running Instructions
+### Development Testing Only
 The Solidity code for the blockchain is hosted through Remix, but is provided in the blockchain directory.\
 All code (frontend and backend) must be run through main.py or a similar .py file from the top level directory.\
 main.py contains two starter functions for individual testing:
-- game_test() will test the backend game's logic by allowing you to interact with the game through a terminal interface (using the basic User agent)
+- game_test() will simulate a frontend server in a terminal environment that allows the tester to view states of the game as it progresses
 - web_test() will launch the website in its current development state
 
 ### Component Diagram
