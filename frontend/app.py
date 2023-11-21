@@ -35,6 +35,9 @@ class playInfo(BaseModel):
     card: int
     status: bool
 
+class resultsItem(BaseModel):
+    data: list
+
 
 user = playerInfo(username='', address='', bet=0)
 game = BlackjackGame()
@@ -116,6 +119,10 @@ def AI():
 def playerData():
     game.add_players([WebUser(user.username, user.bet, user.address), QAgent()])
     return user
+
+@app.post("/results", response_model=playerInfo)
+def results():
+    return resultsItem(data = game.results())
 
 
 @app.get('/favicon.ico', include_in_schema=False)
