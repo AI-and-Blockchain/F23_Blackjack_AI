@@ -120,7 +120,7 @@ def playerData():
     game.add_players([WebUser(user.username, user.bet, user.address), QAgent()])
     return user
 
-@app.post("/results", response_model=playerInfo)
+@app.post("/results", response_model=resultsItem)
 def results():
     return resultsItem(data = game.results())
 
