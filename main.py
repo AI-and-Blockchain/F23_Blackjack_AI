@@ -40,8 +40,8 @@ class FrontendUser:
             choice = self.decision()
             card, self.playing = self.game.play_user(choice)
             if card != 0:
+                self.cards.append(card)
                 if self.playing:
-                    # self.cards.append(card)
                     print(f"{self.player.id} has been dealt a {card} and now has a hand total of {compute_total(self.cards)}")
                 else:
                     print(f"{self.player.id} has been dealt a {card} and has busted with a hand total of {compute_total(self.cards)}")

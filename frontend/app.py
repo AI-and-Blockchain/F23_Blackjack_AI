@@ -1,8 +1,11 @@
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import regex as re
+
+from model.game import BlackjackGame
+from model.player import WebUser, QAgent
 
 app = FastAPI()
 
@@ -21,7 +24,17 @@ class playerInfo(BaseModel):
     address: str
     bet: int
 
+class dealInfo(BaseModel):
+    dealer: list
+    players: list
+
+class playInfo(BaseModel):
+    card: int
+    status: bool
+
+
 user = playerInfo(username='', address='', bet=0)
+game = BlackjackGame()
 
 app.mount('/frontend/static', StaticFiles(directory='frontend/static', html=True), name='static')
 
@@ -57,11 +70,39 @@ def set_bet(item: betItem):
     if user.address == address:
         user.bet = int(item.bet)
         item.message = "valid"
+        game.bet()
+        game.start()
     else:
         item.message = "invalid"
     return item
 
+@app.post("/deal", response_model=dealInfo)
+def deal():
+    info = dealInfo(dealer = [], players = [])
+    info.dealer, info.players = game.deal()
+    return info
+
+
+@app.post("/hit", response_model=playInfo)
+def hit():
+    info = playInfo(card = 0, status = True)
+    info.card, info.status = game.play_user("H")
+    return info
+
+
+@app.post("/stand", response_model=playInfo)
+def stand():
+    info = playInfo(card = 0, status = True)
+    info.card, info.status = game.play_user("S")
+    return info
+
 
 @app.post("/playerData", response_model=playerInfo)
 def playerData():
+    game.add_players([WebUser(user.username, user.bet, user.address), QAgent()])
     return user
+
+
+@app.get('/favicon.ico', include_in_schema=False)
+async def favicon():
+    return FileResponse("frontend/static/assets/favicon.ico")

@@ -5,13 +5,14 @@ convert = {1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, 11:10, 12:10, 13:
 
 
 class States(Enum):
-    BET = 0
-    READY = 1
-    DEAL = 2
-    PLAY = 3
-    AI = 4
-    DEALER = 5
-    RESULTS = 6
+    PLAYERS = 0
+    BET = 1
+    READY = 2
+    DEAL = 3
+    PLAY = 4
+    AI = 5
+    DEALER = 6
+    RESULTS = 7
 
 
 def compute_total(cards):
