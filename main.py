@@ -62,8 +62,6 @@ class FrontendUser:
 
         
 
-    
-
 def game_test():
     # dq = QAgent()
     # u1 = User()

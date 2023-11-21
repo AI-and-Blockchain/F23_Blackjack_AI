@@ -334,11 +334,19 @@ function stand() {
           for (let item of cardList) {
             paintcard(item);
           }}, 300*numPlayerCards);
-      
-          stand_active = false;
-          hit_active = false;
-          bet_active = true;
-          bet_amount = 0;
+          fetch("/results", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+          }).then(response => response.json())
+          .then(data => {
+            alert(data.data);
+            stand_active = false;
+            hit_active = false;
+            bet_active = true;
+            bet_amount = 0;
+          })
         })
       })
     })
