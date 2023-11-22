@@ -4,6 +4,19 @@
     <title>BlackJack Login</title>
     <!-- <link id="favicon" rel="icon" type="image/x-icon" href="assets/favicon.ico"> -->
 </head>
+<script src="https://c0f4f41c-2f55-4863-921b-sdk-docs.github.io/cdn/metamask-sdk.js"></script>
+
+<script>
+
+    const MMSDK = new MetaMaskSDK.MetaMaskSDK()
+    // Because init process of the MetaMaskSDK is async.
+    setTimeout(() => {
+        const ethereum = MMSDK.getProvider() // You can also access via window.ethereum
+
+        console.log(ethereum.request({ method: 'eth_requestAccounts' }))
+    }, 0)
+
+</script>
 <body>
     <form id="dataForm">
         <label for="name">name:</label>
@@ -19,7 +32,8 @@
     </form>
     <div id="output"></div>
     <p id="login_doc"></p>
-
+    <button class="enableEthereumButton btn">Enable Ethereum</button>
+    <button class="sendEthButton btn">Send ETH</button>
     <script src="login_script.js"></script>
 </body>
 </html>

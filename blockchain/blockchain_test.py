@@ -10,7 +10,7 @@ load_dotenv()
   
 private_key = input("Private Key: ").strip()
 from_account = "0x5233862f7245CB0d76af46716631abFB389163C0"
-to_account = "0xf9a568f094FEb5cfD453F1e8e13dfdbe55323B77"  
+to_account = "0xf9a568f094FEb5cfD453F1e8e13dfdbe55323B77"
 web3 = Web3(Web3.HTTPProvider(infura_url))  
   
 try:

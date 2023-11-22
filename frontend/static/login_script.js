@@ -34,3 +34,37 @@ function login() {
         console.error('Error:', error);
     });
   }
+
+  const ethereumButton = document.querySelector('.enableEthereumButton');
+  const sendEthButton = document.querySelector('.sendEthButton');
+  
+  let accounts = ["0x5233862f7245CB0d76af46716631abFB389163C0"];
+  
+  // Send Ethereum to an address
+  sendEthButton.addEventListener('click', () => {
+    ethereum
+      .request({
+        method: 'eth_sendTransaction',
+        // The following sends an EIP-1559 transaction. Legacy transactions are also supported.
+        params: [
+          {
+            from: accounts[0], // The user's active address.
+            to: "0xf9a568f094FEb5cfD453F1e8e13dfdbe55323B77",
+            value: '1000',
+            gasLimit: '0x5028', // Customizable by the user during MetaMask confirmation.
+            maxPriorityFeePerGas: '0x3b9aca00', // Customizable by the user during MetaMask confirmation.
+            maxFeePerGas: '0x2540be400', // Customizable by the user during MetaMask confirmation.
+          },
+        ],
+      })
+      .then((txHash) => console.log(txHash))
+      .catch((error) => console.error(error));
+  });
+  
+  ethereumButton.addEventListener('click', () => {
+    getAccount();
+  });
+  
+  async function getAccount() {
+    accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+  }
