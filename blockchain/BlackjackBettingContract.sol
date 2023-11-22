@@ -1,6 +1,3 @@
-/*
-/ guys this is so scuffed i just took the code from our lab and we need to modify it
-*/
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.0;
@@ -10,49 +7,44 @@ import "hardhat/console.sol";
 
 contract BlackjackBettingContract {
 
-    address payable owner;
+    address owner;
+    address private infura = 0x0000000000000000000000000000000000000000;
 
     event Received(address, uint);
+    event Sent(address, uint);
     mapping (address => uint256) private users;
+    address[] private user_list;
 
-    constructor() payable{
-        owner = payable(msg.sender); 
+    constructor() payable {
+        owner = msg.sender; 
     }
 
-    // 
     receive() external payable {
+        if (users[msg.sender] == 0) {
+            user_list.push(msg.sender);
+        }
         users[msg.sender] += msg.value;
+        emit Received(msg.sender, msg.value);
     }
 
-    function payWinner(address payable _to, uint256 _value) external payable returns (bool) 
-    {
-        require(msg.sender == owner);
-        require(_value <= address(this).balance);
-        bool success = payable(_to).send(_value);
-        return(success);
-    }
-
-    function receivePayment() external payable
-    {
-       emit Received(msg.sender, msg.value);
-    }
-
-    event DepositMade(address _from, address _to, uint _amount);
-    event WithdrawMade(address _from, address _to, uint _amount);
-
-    // modifier to check if caller has enough money
-    modifier canWithdraw(uint256 amount) {
-        require(amount < users[msg.sender]);
+    modifier isAuthority() {
+        require(msg.sender == owner || msg.sender == infura);
         _;
     }
 
+    modifier canWithdraw(address user, uint256 amount) {
+        require(amount < users[user]);
+        _;
+    }
 
-    /**
-     * @dev Deposits amount into the users account
-     */
-    function deposit() external payable {
-        emit DepositMade(msg.sender, address(this), msg.value);
-        users[msg.sender] += msg.value;
+    function cashOut(address payable _to, uint256 _value) external payable isAuthority() canWithdraw(_to, _value) returns (bool) 
+    {
+        (bool sent, ) = payable(_to).call{value: _value}("Cash Out");
+        if (sent) {
+            users[_to] -= _value;
+            emit Sent(_to, _value);
+        }
+        return sent;
     }
 
     /**
@@ -70,22 +62,24 @@ contract BlackjackBettingContract {
     }
 
     /**
-     * @dev Withdraws money from the user's account if they have enough
-     */
-    function withdraw(uint256 amount) public payable canWithdraw(amount) {
-        emit WithdrawMade(address(this), msg.sender, amount);
-        (bool sent, ) = payable(msg.sender).call{value: amount}("");
-        users[msg.sender] -= amount;
-        require(sent, "Failed to withdraw");
-    }
-
-    /**
      * @dev Withdraws all money from a user's account
      */
-    function withdrawAll() public payable {
-        emit WithdrawMade(address(this), msg.sender, users[msg.sender]);
-        (bool sent, ) = payable(msg.sender).call{value: users[msg.sender]}("");
-        users[msg.sender] = 0;
-        require(sent, "Failed to withdraw");
+    function evacuateFunds() public isAuthority() returns (bool) {
+        for (uint i = 0; i < user_list.length; i++) {
+            address user = user_list[i];
+            if (users[user] != 0) {
+                (bool sent, ) = payable(user).call{value: users[user]}("Cash Out");
+                if (sent) {
+                    emit Sent(user, users[user]);
+                    users[user] = 0;
+                }
+            }
+        }
+        uint256 remaining = address(this).balance;
+        (bool sentOwner, ) = payable(owner).call{value: remaining}("Returning leftover");
+        if (sentOwner) {
+            emit Sent(owner, remaining);
+        }
+        return sentOwner;
     }
 } 
