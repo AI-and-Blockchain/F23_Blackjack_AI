@@ -2,7 +2,6 @@ from typing import List, Type
 import numpy as np
 
 from model.player import Agent, Dealer, LocalPlayer
-from model.blockchain import place_bet
 from model.utils import States
 
 class BlackjackGame:
@@ -30,7 +29,6 @@ class BlackjackGame:
     def bet(self):
         if self.state != States.BET:
             return
-        place_bet(self.players[0].player)
         self.state = States.READY
 
 

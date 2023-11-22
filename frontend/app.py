@@ -6,6 +6,7 @@ import regex as re
 
 from model.game import BlackjackGame
 from model.player import WebUser, QAgent
+from model.blockchain import BlockchainInterface
 
 app = FastAPI()
 
@@ -38,9 +39,15 @@ class playInfo(BaseModel):
 class resultsItem(BaseModel):
     data: list
 
+class userBalance(BaseModel):
+    address: str
+    balance: int
+
 
 user = playerInfo(username='', address='', bet=0)
 game = BlackjackGame()
+with open("blockchain/address.txt") as f:
+    contract = BlockchainInterface(f.read().strip())
 
 app.mount('/frontend/static', StaticFiles(directory='frontend/static', html=True), name='static')
 
@@ -61,12 +68,12 @@ def submit_form(item: FormItem):
     else:
         user.username = item.name
         item.name = "valid"
-    if re.match(".*(0x[a-f,A-F,0-9]{40}).*", address):
+    # if re.match(".*(0x[a-f,A-F,0-9]{40}).*", address):
+    #     item.address = "valid"
+    # else:
+    #     item.address = "invalid"
+    if item.name == "valid":
         user.address = item.address
-        item.address = "valid"
-    else:
-        item.address = "invalid"
-    if item.name == item.address == "valid":
         user.bet = 0
     return item
 
@@ -124,6 +131,10 @@ def playerData():
 def results():
     return resultsItem(data = game.results())
 
+@app.post("/getBalance", response_model=userBalance)
+def getBalance(item: userBalance):
+    item.balance = contract.getBalance(item.address)
+    return item
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
