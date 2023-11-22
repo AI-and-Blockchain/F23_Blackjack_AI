@@ -2,38 +2,33 @@
 <html>
 <head>
     <title>BlackJack Login</title>
-    <!-- <link id="favicon" rel="icon" type="image/x-icon" href="assets/favicon.ico"> -->
 </head>
 <script src="https://c0f4f41c-2f55-4863-921b-sdk-docs.github.io/cdn/metamask-sdk.js"></script>
 
-<script>
-
-    const MMSDK = new MetaMaskSDK.MetaMaskSDK()
-    // Because init process of the MetaMaskSDK is async.
-    setTimeout(() => {
-        const ethereum = MMSDK.getProvider() // You can also access via window.ethereum
-
-        console.log(ethereum.request({ method: 'eth_requestAccounts' }))
-    }, 0)
-
-</script>
 <body>
-    <form id="dataForm">
-        <label for="name">name:</label>
-        <input type="text" id="name" name="name" placeholder="Enter your name"><br>
+    <label for="name">name:</label>
+    <input type="text" id="name" name="name" placeholder="Enter your name"><br>
 
-        <!-- <label for="bet">bet:</label>
-        <input type="bet" id="bet" name="bet" placeholder="Enter your bet"><br> -->
+    <!-- <label for="bet">bet:</label>
+    <input type="bet" id="bet" name="bet" placeholder="Enter your bet"><br> -->
 
-        <label for="address">address:</label>
-        <input type="Metamask Wallet ID" id="address" name="address" placeholder="Enter your metamask wallet id"><br>
-
-        <button onclick=login() type="button" id="loginButton">login</button>
-    </form>
+    <!-- label for="address">address:</label>
+    <input type="Metamask Wallet ID" id="address" name="address" placeholder="Enter your metamask wallet id"><br> -->
+    
+    
     <div id="output"></div>
     <p id="login_doc"></p>
-    <button class="enableEthereumButton btn">Enable Ethereum</button>
-    <button class="sendEthButton btn">Send ETH</button>
+    
+    
+    <button onclick=checkBalance() type="button" id="balanceButton">Check Balance</button>
+    <p id="balanceLabel"></p><br><br>
+    
+    <input type="Deposit Amount" id="amount" name="amount" placeholder="Enter an amount to deposit">
+    <label for="amount">Wei</label><br>
+    <button class="deposit btn">Deposit</button><br><br>
+    
+    <button onclick=login() type="button" id="loginButton">Proceed</button>
+    
     <script src="login_script.js"></script>
 </body>
 </html>
