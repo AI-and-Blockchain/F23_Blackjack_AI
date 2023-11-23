@@ -30,4 +30,6 @@ class BlockchainInterface():
                 sleep(1)
                 continue
             return True
-        
+    
+    def getByteCode(self, func):
+        return Web3.to_hex(Web3.keccak(text=func))[:10]

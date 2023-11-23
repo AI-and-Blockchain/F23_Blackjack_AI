@@ -1,6 +1,9 @@
-const hex = d => Number(d).toString(16).padStart(2, '0')
+const hex = d => Number(d).toString(16).padStart(64, '0')
 var contract = "";
+var cashOut = "";
+var depositCode = "";
 const deposit = document.querySelector('.deposit');
+const withdraw = document.querySelector('.withdraw');
 
 async function login() {
     await getAccount();
@@ -43,6 +46,44 @@ async function login() {
     })
     
   }
+
+  withdraw.addEventListener("click", async() => {
+    await getAccount();
+
+    var amount = hex(document.getElementById("wamount").value);
+    if (isNaN(parseInt(amount)) || amount == 0) {
+        alert("Please enter a valid and non-zero amount to withdraw.")
+        return;
+    }
+
+    ethereum
+      .request({
+        method: 'eth_sendTransaction',
+        params: [
+          {
+            from: account, // The user's active address.
+            to: contract,
+            data: cashOut + amount,
+            gasLimit: '0x5028', // Customizable by the user during MetaMask confirmation.
+            maxPriorityFeePerGas: '0x3b9aca00', // Customizable by the user during MetaMask confirmation.
+            maxFeePerGas: '0x2540be400', // Customizable by the user during MetaMask confirmation.
+          },
+        ],
+      })
+      .then((txHash) => {
+            console.log(txHash);
+            fetch('/trackTransaction', {
+                method: 'POST',
+                body: JSON.stringify({address: txHash}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(_ => checkBalance())
+      })
+      .catch((error) => console.error(error));
+
+  })
   
   // Send Ethereum to an address
   deposit.addEventListener('click', async() => {
@@ -55,12 +96,12 @@ async function login() {
     ethereum
       .request({
         method: 'eth_sendTransaction',
-        // The following sends an EIP-1559 transaction. Legacy transactions are also supported.
         params: [
           {
             from: account, // The user's active address.
             to: contract,
             value: amount,
+            data: depositCode,
             gasLimit: '0x5028', // Customizable by the user during MetaMask confirmation.
             maxPriorityFeePerGas: '0x3b9aca00', // Customizable by the user during MetaMask confirmation.
             maxFeePerGas: '0x2540be400', // Customizable by the user during MetaMask confirmation.
@@ -100,6 +141,28 @@ async function login() {
     .then(response => response.json())
     .then(data => {
         contract = data.address;
+    })
+    fetch('/byteCode', {
+        method: 'POST',
+        body: JSON.stringify({func: "cashOut(uint256)"}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        cashOut = data.func;
+    })
+    fetch('/byteCode', {
+        method: 'POST',
+        body: JSON.stringify({func: "deposit()"}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        depositCode = data.func;
     })
   }
   

@@ -4,6 +4,7 @@
     <title>BlackJack Login</title>
 </head>
 <script src="https://c0f4f41c-2f55-4863-921b-sdk-docs.github.io/cdn/metamask-sdk.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
 
 <body>
     <label for="name">name:</label>
@@ -26,6 +27,10 @@
     <input type="Deposit Amount" id="amount" name="amount" placeholder="Enter an amount to deposit">
     <label for="amount">Wei</label><br>
     <button class="deposit btn">Deposit</button><br><br>
+    
+    <input type="Withdrawal Amount" id="wamount" name="wamount" placeholder="Enter an amount to withdraw">
+    <label for="wamount">Wei</label><br>
+    <button class="withdraw btn">Withdraw</button><br><br>
     
     <button onclick=login() type="button" id="loginButton">Proceed</button>
     
