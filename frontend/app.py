@@ -6,7 +6,7 @@ import regex as re
 
 from model.game import BlackjackGame
 from model.player import WebUser, QAgent
-from model.blockchain import BlockchainInterface
+from blockchain.blockchain import BlockchainInterface
 
 app = FastAPI()
 
@@ -42,6 +42,9 @@ class resultsItem(BaseModel):
 class userBalance(BaseModel):
     address: str
     balance: int
+
+class addressItem(BaseModel):
+    address: str
 
 
 user = playerInfo(username='', address='', bet=0)
@@ -135,6 +138,15 @@ def results():
 def getBalance(item: userBalance):
     item.balance = contract.getBalance(item.address)
     return item
+
+@app.post("/trackTransaction", response_model=addressItem)
+async def getBalance(item: addressItem):
+    await contract.watchForTransaction(item.address)
+    return item
+
+@app.post("/contractAddress", response_model=addressItem)
+async def getAddress():
+    return contract
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():

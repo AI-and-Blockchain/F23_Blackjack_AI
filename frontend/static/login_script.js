@@ -1,3 +1,7 @@
+const hex = d => Number(d).toString(16).padStart(2, '0')
+var contract = "";
+const deposit = document.querySelector('.deposit');
+
 async function login() {
     await getAccount();
     
@@ -39,11 +43,14 @@ async function login() {
     })
     
   }
-
-  const deposit = document.querySelector('.deposit');
   
   // Send Ethereum to an address
   deposit.addEventListener('click', async() => {
+    var amount = hex(document.getElementById("amount").value);
+    if (isNaN(parseInt(amount)) || amount == 0) {
+        alert("Please enter a valid and non-zero amount to deposit.")
+        return;
+    }
     await getAccount();
     ethereum
       .request({
@@ -52,15 +59,25 @@ async function login() {
         params: [
           {
             from: account, // The user's active address.
-            to: "0x4fd4b4Db50542818974f8Cac54F0fE384546ce94",
-            value: '1000',
+            to: contract,
+            value: amount,
             gasLimit: '0x5028', // Customizable by the user during MetaMask confirmation.
             maxPriorityFeePerGas: '0x3b9aca00', // Customizable by the user during MetaMask confirmation.
             maxFeePerGas: '0x2540be400', // Customizable by the user during MetaMask confirmation.
           },
         ],
       })
-      .then((txHash) => console.log(txHash))
+      .then((txHash) => {
+            console.log(txHash);
+            fetch('/trackTransaction', {
+                method: 'POST',
+                body: JSON.stringify({address: txHash}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(_ => checkBalance())
+      })
       .catch((error) => console.error(error));
   });
   
@@ -74,5 +91,15 @@ async function login() {
     setTimeout(() => {
         const ethereum = MMSDK.getProvider() // You can also access via window.ethereum
     }, 0)
+    fetch('/contractAddress', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        contract = data.address;
+    })
   }
   

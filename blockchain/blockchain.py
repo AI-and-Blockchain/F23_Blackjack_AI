@@ -1,6 +1,7 @@
 import json
 from web3 import Web3
 from dotenv import load_dotenv
+from time import sleep
 
 
 class BlockchainInterface():
@@ -20,3 +21,13 @@ class BlockchainInterface():
     
     def payUser(self, user, amount):
         return self.contract.functions.cashOut(Web3.to_checksum_address(user), amount).call()
+    
+    async def watchForTransaction(self, address):
+        while True:
+            try:
+                self.web3.eth.get_transaction_receipt(address)
+            except:
+                sleep(1)
+                continue
+            return True
+        
