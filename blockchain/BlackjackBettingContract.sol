@@ -37,14 +37,24 @@ contract BlackjackBettingContract {
         _;
     }
 
-    function cashOut(address payable _to, uint256 _value) external payable isAuthority() canWithdraw(_to, _value) returns (bool) 
-    {
+    function cashOut(address payable _to, uint256 _value) external payable isAuthority() canWithdraw(_to, _value) returns (bool) {
         (bool sent, ) = payable(_to).call{value: _value}("Cash Out");
         if (sent) {
             users[_to] -= _value;
             emit Sent(_to, _value);
         }
         return sent;
+    }
+
+    function changeBalance(address user, uint256 value, bool increase) public isAuthority() returns (uint256) {
+        if (users[user] < value && !increase) {
+            users[user] = 0;
+            return 0;
+        }
+        else {
+            users[user] = increase ? users[user] + value : users[user] - value;
+            return users[user];
+        }
     }
 
     /**
