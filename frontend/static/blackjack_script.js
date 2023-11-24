@@ -108,6 +108,7 @@ window.onload = function() {
   .then(data => {
       changeBalanceCode = data.func;
   })
+  checkBalance();
 }
 
 //init game: call funcitons
@@ -354,12 +355,11 @@ function stand() {
                 "Content-Type": "application/json"
             }
           }).then(response => response.json())
-          .then(data => {
+          .then(async data => {
             setTimeout(function(){alert(data.data)}, 1500); // should change this to not be an alert!
+            await changeBal(data.data[0][1]);
             stand_active = false;
             hit_active = false;
-            bet_active = true;
-            exit_active = true;
             bet_amount = 0;
           })
         })
@@ -467,15 +467,12 @@ function exit() {
 }
 
 
-async function changeBal() {
+async function changeBal(modifier) {
   await getAccount();
 
-  var amount = hex64(bet_amount);
-  if (isNaN(parseInt(amount)) || amount == 0) {
-      alert("Please enter a valid and non-zero amount to withdraw.")
-      return;
-  }
-  var increase = hex64("1");
+  var amount = hex64(bet_amount * Math.abs(modifier));
+  console.log(amount);  
+  var increase = hex64(modifier == -1 ? "0": "1");
 
   fetch('/owner', {
       method: 'POST',
@@ -510,7 +507,11 @@ async function changeBal() {
                       'Content-Type': 'application/json'
                   }
               })
-              .then(_ => checkBalance())
+              .then(async _ => {
+                await checkBalance();
+                bet_active = true;
+                exit_active = true;
+              })
       })
       .catch((error) => console.error(error));
       })

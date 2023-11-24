@@ -9,7 +9,7 @@ const pad64 = d => d.padStart(64, '0');
 async function checkBalance() {
     await getAccount();
     
-    fetch('/getBalance', {
+    await fetch('/getBalance', {
         method: 'POST',
         body: JSON.stringify({address: account, balance: 0}),
         headers: {
@@ -22,3 +22,14 @@ async function checkBalance() {
     })
     
 }
+
+fetch('/contractAddress', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+})
+.then(response => response.json())
+.then(data => {
+    contract = data.address;
+})

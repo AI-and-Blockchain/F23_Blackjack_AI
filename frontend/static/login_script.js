@@ -1,4 +1,3 @@
-var contract = "";
 var cashOutCode = "";
 var depositCode = "";
 const deposit = document.querySelector('.deposit');
@@ -113,16 +112,6 @@ window.onload = function() {
     setTimeout(() => {
         const ethereum = MMSDK.getProvider() // You can also access via window.ethereum
     }, 0)
-    fetch('/contractAddress', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        contract = data.address;
-    })
     fetch('/byteCode', {
         method: 'POST',
         body: JSON.stringify({func: "cashOut(uint256)"}),
