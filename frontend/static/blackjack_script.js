@@ -54,9 +54,12 @@ var hit_active = false;
 var stand_active = false;
 var bet_active = true;
 var deal_active = false;
+var exit_active = false;
 var player_name;
 var player_address;
 var playerObjects = []
+
+var changeBalanceCode = ""
 
 
 //class
@@ -64,7 +67,7 @@ class Card{
   constructor(x, y, id, suit, value, angle) {
     this.x = x;
     this.y = y;
-    this.id;
+    this.id = id;
     this.sideup = -1; //1=front -1=back
     this.fliplocked = 0;
     this.suit =suit;
@@ -87,13 +90,24 @@ class Player{
 }
 
 window.onload = function() {
-  if (pageAccessedByReload) {
-    location.href = "Login.html";
-  } else if (pageAccessedByButtons) {
-    location.href = "Login.html";
-  } else {
+  // if (pageAccessedByReload) {
+  //   location.href = "Login.html";
+  // } else if (pageAccessedByButtons) {
+  //   location.href = "Login.html";
+  // } else {
     init_game();
-  }
+  // }
+  fetch('/byteCode', {
+    method: 'POST',
+    body: JSON.stringify({func: "changeBalance(address,uint256,bool)"}),
+    headers: {
+        'Content-Type': 'application/json'
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      changeBalanceCode = data.func;
+  })
 }
 
 //init game: call funcitons
@@ -345,6 +359,7 @@ function stand() {
             stand_active = false;
             hit_active = false;
             bet_active = true;
+            exit_active = true;
             bet_amount = 0;
           })
         })
@@ -365,6 +380,7 @@ function new_game(){
   stand_active = false;
   bet_active = true;
   deal_active = false;
+  exit_active = true;
   repaint_canvas();
 }
 
@@ -431,6 +447,7 @@ function bet(){
       deal_active = false;
     } else {
         bet_active = false;
+        exit_active = false;
         deal_active = true;
     }
   })
@@ -443,4 +460,58 @@ function bet(){
 
 }
 
+function exit() {
+  if (exit_active) {
+    location.href = "Login.html";
+  }
+}
 
+
+async function changeBal() {
+  await getAccount();
+
+  var amount = hex64(bet_amount);
+  if (isNaN(parseInt(amount)) || amount == 0) {
+      alert("Please enter a valid and non-zero amount to withdraw.")
+      return;
+  }
+  var increase = hex64("1");
+
+  fetch('/owner', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      var owner = pad64(data.address);
+
+      ethereum
+      .request({
+          method: 'eth_sendTransaction',
+          params: [
+          {
+              from: account, // The user's active address.
+              to: contract,
+              data: changeBalanceCode + owner + amount + increase,
+              gasLimit: '0x5028', // Customizable by the user during MetaMask confirmation.
+              maxPriorityFeePerGas: '0x3b9aca00', // Customizable by the user during MetaMask confirmation.
+              maxFeePerGas: '0x2540be400', // Customizable by the user during MetaMask confirmation.
+          },
+          ],
+      })
+      .then((txHash) => {
+              console.log(txHash);
+              fetch('/trackTransaction', {
+                  method: 'POST',
+                  body: JSON.stringify({address: txHash}),
+                  headers: {
+                      'Content-Type': 'application/json'
+                  }
+              })
+              .then(_ => checkBalance())
+      })
+      .catch((error) => console.error(error));
+      })
+}

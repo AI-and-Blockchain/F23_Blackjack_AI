@@ -76,4 +76,19 @@ code {
     border-radius: 15px;
     background-color: var(--btncolor);
   }
+
+  #exitbtn {
+    position:absolute;
+    left:10%;
+    top:10%;
+    border-radius: 15px;
+    background-color: var(--btncolor);
+  }
+  
+  #balanceLabel {
+    position: absolute;
+    left:10%;
+    top: 12%;
+    background-color: var(--btncolor);
+  }
   
