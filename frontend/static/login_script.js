@@ -1,6 +1,7 @@
-const hex = d => Number(d).toString(16).padStart(64, '0')
+const hex64 = d => Number(d).toString(16).padStart(64, '0');
+const pad64 = d => d.padStart(64, '0');
 var contract = "";
-var cashOut = "";
+var cashOutCode = "";
 var depositCode = "";
 const deposit = document.querySelector('.deposit');
 const withdraw = document.querySelector('.withdraw');
@@ -50,7 +51,7 @@ async function login() {
   withdraw.addEventListener("click", async() => {
     await getAccount();
 
-    var amount = hex(document.getElementById("wamount").value);
+    var amount = hex64(document.getElementById("wamount").value);
     if (isNaN(parseInt(amount)) || amount == 0) {
         alert("Please enter a valid and non-zero amount to withdraw.")
         return;
@@ -63,7 +64,7 @@ async function login() {
           {
             from: account, // The user's active address.
             to: contract,
-            data: cashOut + amount,
+            data: cashOutCode + amount,
             gasLimit: '0x5028', // Customizable by the user during MetaMask confirmation.
             maxPriorityFeePerGas: '0x3b9aca00', // Customizable by the user during MetaMask confirmation.
             maxFeePerGas: '0x2540be400', // Customizable by the user during MetaMask confirmation.
@@ -85,9 +86,58 @@ async function login() {
 
   })
   
+  async function changeBal() {
+    await getAccount();
+
+    var amount = hex64("1000");
+    if (isNaN(parseInt(amount)) || amount == 0) {
+        alert("Please enter a valid and non-zero amount to withdraw.")
+        return;
+    }
+    var increase = hex64("1");
+
+    fetch('/owner', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        var owner = pad64(data.address);
+
+        ethereum
+        .request({
+            method: 'eth_sendTransaction',
+            params: [
+            {
+                from: account, // The user's active address.
+                to: contract,
+                data: changeBalanceCode + owner + amount + increase,
+                gasLimit: '0x5028', // Customizable by the user during MetaMask confirmation.
+                maxPriorityFeePerGas: '0x3b9aca00', // Customizable by the user during MetaMask confirmation.
+                maxFeePerGas: '0x2540be400', // Customizable by the user during MetaMask confirmation.
+            },
+            ],
+        })
+        .then((txHash) => {
+                console.log(txHash);
+                fetch('/trackTransaction', {
+                    method: 'POST',
+                    body: JSON.stringify({address: txHash}),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(_ => checkBalance())
+        })
+        .catch((error) => console.error(error));
+        })
+  }
+
   // Send Ethereum to an address
   deposit.addEventListener('click', async() => {
-    var amount = hex(document.getElementById("amount").value);
+    var amount = hex64(document.getElementById("amount").value);
     if (isNaN(parseInt(amount)) || amount == 0) {
         alert("Please enter a valid and non-zero amount to deposit.")
         return;
@@ -151,7 +201,7 @@ async function login() {
     })
     .then(response => response.json())
     .then(data => {
-        cashOut = data.func;
+        cashOutCode = data.func;
     })
     fetch('/byteCode', {
         method: 'POST',
@@ -163,6 +213,17 @@ async function login() {
     .then(response => response.json())
     .then(data => {
         depositCode = data.func;
+    })
+    fetch('/byteCode', {
+        method: 'POST',
+        body: JSON.stringify({func: "changeBalance(address,uint256,bool)"}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        changeBalanceCode = data.func;
     })
   }
   

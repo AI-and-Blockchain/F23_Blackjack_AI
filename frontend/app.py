@@ -151,6 +151,11 @@ async def getBalance(item: addressItem):
 async def getAddress():
     return addressItem(address=contract.address)
 
+@app.post("/owner", response_model=addressItem)
+async def getOwner():
+    with open("blockchain/owner.txt", 'r') as f:
+        return addressItem(address=f.read().strip())
+
 @app.post("/byteCode", response_model=byteCode)
 async def convert(item: byteCode):
     return byteCode(func=contract.getByteCode(item.func))
