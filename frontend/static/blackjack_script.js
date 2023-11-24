@@ -341,7 +341,7 @@ function stand() {
             }
           }).then(response => response.json())
           .then(data => {
-            alert(data.data);
+            setTimeout(function(){alert(data.data)}, 1500); // should change this to not be an alert!
             stand_active = false;
             hit_active = false;
             bet_active = true;

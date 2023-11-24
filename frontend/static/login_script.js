@@ -1,10 +1,9 @@
-const hex64 = d => Number(d).toString(16).padStart(64, '0');
-const pad64 = d => d.padStart(64, '0');
 var contract = "";
 var cashOutCode = "";
 var depositCode = "";
 const deposit = document.querySelector('.deposit');
 const withdraw = document.querySelector('.withdraw');
+
 
 async function login() {
     await getAccount();
@@ -30,23 +29,7 @@ async function login() {
         console.error('Error:', error);
     });
   }
-  
-  async function checkBalance() {
-    await getAccount();
-    
-    fetch('/getBalance', {
-        method: 'POST',
-        body: JSON.stringify({address: account, balance: 0}),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById("balanceLabel").innerHTML = data.balance;
-    })
-    
-  }
+
 
   withdraw.addEventListener("click", async() => {
     await getAccount();
@@ -172,10 +155,7 @@ async function login() {
       .catch((error) => console.error(error));
   });
   
-  async function getAccount() {
-    await ethereum.request({ method: 'eth_requestAccounts' }).then(data => account = data[0]);
-  }
-
+  
   window.onload = function() {
     const MMSDK = new MetaMaskSDK.MetaMaskSDK()
     // Because init process of the MetaMaskSDK is async.
