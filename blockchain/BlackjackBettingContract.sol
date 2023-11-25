@@ -8,7 +8,6 @@ import "hardhat/console.sol";
 contract BlackjackBettingContract {
 
     address owner;
-    address private infura = 0x0000000000000000000000000000000000000000;
 
     event Received(address, uint);
     event Sent(address, uint);
@@ -19,7 +18,19 @@ contract BlackjackBettingContract {
         owner = msg.sender; 
     }
 
-    receive() external payable {
+    receive() external payable {}
+
+    modifier isAuthority() {
+        require(msg.sender == owner);
+        _;
+    }
+
+    modifier knowsOwner(address input) {
+        require(input == owner);
+        _;
+    }
+
+    function deposit() external payable {
         if (users[msg.sender] == 0) {
             user_list.push(msg.sender);
         }
@@ -27,33 +38,28 @@ contract BlackjackBettingContract {
         emit Received(msg.sender, msg.value);
     }
 
-    modifier isAuthority() {
-        require(msg.sender == owner || msg.sender == infura);
+    modifier canWithdraw(uint256 amount) {
+        require(amount < users[msg.sender]);
         _;
     }
 
-    modifier canWithdraw(address user, uint256 amount) {
-        require(amount < users[user]);
-        _;
-    }
-
-    function cashOut(address payable _to, uint256 _value) external payable isAuthority() canWithdraw(_to, _value) returns (bool) {
-        (bool sent, ) = payable(_to).call{value: _value}("Cash Out");
+    function cashOut(uint256 _value) external payable canWithdraw(_value) returns (bool) {
+        (bool sent, ) = payable(msg.sender).call{value: _value}("Cash Out");
         if (sent) {
-            users[_to] -= _value;
-            emit Sent(_to, _value);
+            users[msg.sender] -= _value;
+            emit Sent(msg.sender, _value);
         }
         return sent;
     }
 
-    function changeBalance(address user, uint256 value, bool increase) public isAuthority() returns (uint256) {
-        if (users[user] < value && !increase) {
-            users[user] = 0;
+    function changeBalance(address owner_, uint256 value, bool increase) public knowsOwner(owner_) returns (uint256) {
+        if (users[msg.sender] < value && !increase) {
+            users[msg.sender] = 0;
             return 0;
         }
         else {
-            users[user] = increase ? users[user] + value : users[user] - value;
-            return users[user];
+            users[msg.sender] = increase ? users[msg.sender] + value : users[msg.sender] - value;
+            return users[msg.sender];
         }
     }
 

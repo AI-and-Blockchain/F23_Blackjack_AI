@@ -46,6 +46,9 @@ class userBalance(BaseModel):
 class addressItem(BaseModel):
     address: str
 
+class byteCode(BaseModel):
+    func: str
+
 
 user = playerInfo(username='', address='', bet=0)
 game = BlackjackGame()
@@ -146,7 +149,16 @@ async def getBalance(item: addressItem):
 
 @app.post("/contractAddress", response_model=addressItem)
 async def getAddress():
-    return contract
+    return addressItem(address=contract.address)
+
+@app.post("/owner", response_model=addressItem)
+async def getOwner():
+    with open("blockchain/owner.txt", 'r') as f:
+        return addressItem(address=f.read().strip())
+
+@app.post("/byteCode", response_model=byteCode)
+async def convert(item: byteCode):
+    return byteCode(func=contract.getByteCode(item.func))
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():

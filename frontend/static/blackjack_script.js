@@ -54,9 +54,12 @@ var hit_active = false;
 var stand_active = false;
 var bet_active = true;
 var deal_active = false;
+var exit_active = false;
 var player_name;
 var player_address;
 var playerObjects = []
+
+var changeBalanceCode = ""
 
 
 //class
@@ -64,7 +67,7 @@ class Card{
   constructor(x, y, id, suit, value, angle) {
     this.x = x;
     this.y = y;
-    this.id;
+    this.id = id;
     this.sideup = -1; //1=front -1=back
     this.fliplocked = 0;
     this.suit =suit;
@@ -94,6 +97,18 @@ window.onload = function() {
   } else {
     init_game();
   }
+  fetch('/byteCode', {
+    method: 'POST',
+    body: JSON.stringify({func: "changeBalance(address,uint256,bool)"}),
+    headers: {
+        'Content-Type': 'application/json'
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      changeBalanceCode = data.func;
+  })
+  checkBalance();
 }
 
 //init game: call funcitons
@@ -340,11 +355,13 @@ function stand() {
                 "Content-Type": "application/json"
             }
           }).then(response => response.json())
-          .then(data => {
-            alert(data.data);
+          .then(async data => {
+            for (let i = 0; i < data.data.length; i++) {
+              document.getElementById(i == 0 ? "playerStatus" : i == 1 ? "AI1Status" : "AI2Status").innerHTML = data.data[i][0];
+            }
+            await changeBal(data.data[0][1]);
             stand_active = false;
             hit_active = false;
-            bet_active = true;
             bet_amount = 0;
           })
         })
@@ -365,6 +382,7 @@ function new_game(){
   stand_active = false;
   bet_active = true;
   deal_active = false;
+  exit_active = true;
   repaint_canvas();
 }
 
@@ -403,10 +421,12 @@ function bet_helper(a){
 }
 
 function plus(){
-  bet_helper(bet_amount + 10);
+  if (Number(document.getElementById("balanceLabel").innerHTML) >= bet_amount + 10) {
+    bet_helper(bet_amount + 10);
+  }
 }
 function minus(){
-  if(bet_amount >10){
+  if(bet_amount > 10){
     bet_helper(bet_amount - 10);
   }
 }
@@ -431,6 +451,7 @@ function bet(){
       deal_active = false;
     } else {
         bet_active = false;
+        exit_active = false;
         deal_active = true;
     }
   })
@@ -443,4 +464,68 @@ function bet(){
 
 }
 
+function exit() {
+  if (exit_active) {
+    location.href = "Login.html";
+  }
+}
 
+
+async function changeBal(modifier) {
+  await getAccount();
+
+  var amount = hex64(bet_amount * Math.abs(modifier));
+  console.log(amount);  
+  var increase = hex64(modifier == -1 ? "0": "1");
+
+  fetch('/owner', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      var owner = pad64(data.address);
+
+      ethereum
+      .request({
+          method: 'eth_sendTransaction',
+          params: [
+          {
+              from: account, // The user's active address.
+              to: contract,
+              data: changeBalanceCode + owner + amount + increase,
+              gasLimit: '0x5028', // Customizable by the user during MetaMask confirmation.
+              maxPriorityFeePerGas: '0x3b9aca00', // Customizable by the user during MetaMask confirmation.
+              maxFeePerGas: '0x2540be400', // Customizable by the user during MetaMask confirmation.
+          },
+          ],
+      })
+      .then((txHash) => {
+              console.log(txHash);
+              fetch('/trackTransaction', {
+                  method: 'POST',
+                  body: JSON.stringify({address: txHash}),
+                  headers: {
+                      'Content-Type': 'application/json'
+                  }
+              })
+              .then(async _ => {
+                await checkBalance();
+                if (Number(document.getElementById("balanceLabel").innerHTML) < 10) {
+                  alert("You do not have enough money to continue betting, please exit and deposit more.")
+                  hit_active = false;
+                  stand_active = false;
+                  bet_active = false;
+                  deal_active = false;
+                  exit_active = false;
+                } else {
+                  bet_active = true;
+                  exit_active = true;
+                }
+              })
+      })
+      .catch((error) => console.error(error));
+      })
+}

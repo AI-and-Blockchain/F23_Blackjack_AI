@@ -1,9 +1,11 @@
-const hex = d => Number(d).toString(16).padStart(2, '0')
-var contract = "";
+var cashOutCode = "";
+var depositCode = "";
 const deposit = document.querySelector('.deposit');
+const withdraw = document.querySelector('.withdraw');
+
 
 async function login() {
-    await getAccount();
+    await checkBalance();
     
     const jsonData = {name: document.getElementById("name").value, address: account};
 
@@ -18,6 +20,8 @@ async function login() {
     .then(data => {
         if (data.name == "invalid") {
             alert("Please enter a name");
+        } else if (Number(document.getElementById("balanceLabel").innerHTML) < 10) {
+            alert("Please deposit at least 10 Wei into your account.")
         } else {
             location.href = "Blackjack.html";
         }
@@ -26,27 +30,49 @@ async function login() {
         console.error('Error:', error);
     });
   }
-  
-  async function checkBalance() {
+
+
+withdraw.addEventListener("click", async() => {
     await getAccount();
-    
-    fetch('/getBalance', {
-        method: 'POST',
-        body: JSON.stringify({address: account, balance: 0}),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById("balanceLabel").innerHTML = data.balance;
-    })
-    
-  }
-  
+
+    var amount = hex64(document.getElementById("wamount").value);
+    if (isNaN(parseInt(amount)) || amount == 0) {
+        alert("Please enter a valid and non-zero amount to withdraw.")
+        return;
+    }
+
+    ethereum
+      .request({
+        method: 'eth_sendTransaction',
+        params: [
+          {
+            from: account, // The user's active address.
+            to: contract,
+            data: cashOutCode + amount,
+            gasLimit: '0x5028', // Customizable by the user during MetaMask confirmation.
+            maxPriorityFeePerGas: '0x3b9aca00', // Customizable by the user during MetaMask confirmation.
+            maxFeePerGas: '0x2540be400', // Customizable by the user during MetaMask confirmation.
+          },
+        ],
+      })
+      .then((txHash) => {
+            console.log(txHash);
+            fetch('/trackTransaction', {
+                method: 'POST',
+                body: JSON.stringify({address: txHash}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(_ => checkBalance())
+      })
+      .catch((error) => console.error(error));
+
+  })
+
   // Send Ethereum to an address
-  deposit.addEventListener('click', async() => {
-    var amount = hex(document.getElementById("amount").value);
+deposit.addEventListener('click', async() => {
+    var amount = hex64(document.getElementById("amount").value);
     if (isNaN(parseInt(amount)) || amount == 0) {
         alert("Please enter a valid and non-zero amount to deposit.")
         return;
@@ -55,12 +81,12 @@ async function login() {
     ethereum
       .request({
         method: 'eth_sendTransaction',
-        // The following sends an EIP-1559 transaction. Legacy transactions are also supported.
         params: [
           {
             from: account, // The user's active address.
             to: contract,
             value: amount,
+            data: depositCode,
             gasLimit: '0x5028', // Customizable by the user during MetaMask confirmation.
             maxPriorityFeePerGas: '0x3b9aca00', // Customizable by the user during MetaMask confirmation.
             maxFeePerGas: '0x2540be400', // Customizable by the user during MetaMask confirmation.
@@ -81,25 +107,34 @@ async function login() {
       .catch((error) => console.error(error));
   });
   
-  async function getAccount() {
-    await ethereum.request({ method: 'eth_requestAccounts' }).then(data => account = data[0]);
-  }
-
-  window.onload = function() {
+  
+window.onload = function() {
     const MMSDK = new MetaMaskSDK.MetaMaskSDK()
     // Because init process of the MetaMaskSDK is async.
     setTimeout(() => {
         const ethereum = MMSDK.getProvider() // You can also access via window.ethereum
     }, 0)
-    fetch('/contractAddress', {
+    fetch('/byteCode', {
         method: 'POST',
+        body: JSON.stringify({func: "cashOut(uint256)"}),
         headers: {
             'Content-Type': 'application/json'
         }
     })
     .then(response => response.json())
     .then(data => {
-        contract = data.address;
+        cashOutCode = data.func;
+    })
+    fetch('/byteCode', {
+        method: 'POST',
+        body: JSON.stringify({func: "deposit()"}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        depositCode = data.func;
     })
   }
   

@@ -1,6 +1,7 @@
 from model.game import BlackjackGame
 from model.player import QAgent, ProbAgent, WebUser
 from model.utils import compute_total
+from blockchain.blockchain import BlockchainInterface
 import uvicorn
 
 class FrontendUser:
@@ -60,7 +61,7 @@ class FrontendUser:
         self.play()
         self.results()
 
-        
+
 
 def game_test():
     # dq = QAgent()
