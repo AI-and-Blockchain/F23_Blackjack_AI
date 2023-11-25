@@ -61,7 +61,7 @@ class FrontendUser:
         self.play()
         self.results()
 
-        
+
 
 def game_test():
     # dq = QAgent()

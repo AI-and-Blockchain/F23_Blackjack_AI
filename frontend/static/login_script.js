@@ -5,7 +5,7 @@ const withdraw = document.querySelector('.withdraw');
 
 
 async function login() {
-    await getAccount();
+    await checkBalance();
     
     const jsonData = {name: document.getElementById("name").value, address: account};
 
@@ -20,6 +20,8 @@ async function login() {
     .then(data => {
         if (data.name == "invalid") {
             alert("Please enter a name");
+        } else if (Number(document.getElementById("balanceLabel").innerHTML) < 10) {
+            alert("Please deposit at least 10 Wei into your account.")
         } else {
             location.href = "Blackjack.html";
         }

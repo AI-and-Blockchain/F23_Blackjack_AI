@@ -419,10 +419,12 @@ function bet_helper(a){
 }
 
 function plus(){
-  bet_helper(bet_amount + 10);
+  if (Number(document.getElementById("balanceLabel").innerHTML) >= bet_amount + 10) {
+    bet_helper(bet_amount + 10);
+  }
 }
 function minus(){
-  if(bet_amount >10){
+  if(bet_amount > 10){
     bet_helper(bet_amount - 10);
   }
 }
@@ -509,8 +511,17 @@ async function changeBal(modifier) {
               })
               .then(async _ => {
                 await checkBalance();
-                bet_active = true;
-                exit_active = true;
+                if (Number(document.getElementById("balanceLabel").innerHTML) < 10) {
+                  alert("You do not have enough money to continue betting, please exit and deposit more.")
+                  hit_active = false;
+                  stand_active = false;
+                  bet_active = false;
+                  deal_active = false;
+                  exit_active = false;
+                } else {
+                  bet_active = true;
+                  exit_active = true;
+                }
               })
       })
       .catch((error) => console.error(error));
