@@ -90,13 +90,13 @@ class Player{
 }
 
 window.onload = function() {
-  // if (pageAccessedByReload) {
-  //   location.href = "Login.html";
-  // } else if (pageAccessedByButtons) {
-  //   location.href = "Login.html";
-  // } else {
+  if (pageAccessedByReload) {
+    location.href = "Login.html";
+  } else if (pageAccessedByButtons) {
+    location.href = "Login.html";
+  } else {
     init_game();
-  // }
+  }
   fetch('/byteCode', {
     method: 'POST',
     body: JSON.stringify({func: "changeBalance(address,uint256,bool)"}),
@@ -356,7 +356,9 @@ function stand() {
             }
           }).then(response => response.json())
           .then(async data => {
-            setTimeout(function(){alert(data.data)}, 1500); // should change this to not be an alert!
+            for (let i = 0; i < data.data.length; i++) {
+              document.getElementById(i == 0 ? "playerStatus" : i == 1 ? "AI1Status" : "AI2Status").innerHTML = data.data[i][0];
+            }
             await changeBal(data.data[0][1]);
             stand_active = false;
             hit_active = false;

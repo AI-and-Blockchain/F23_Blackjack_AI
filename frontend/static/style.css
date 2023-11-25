@@ -92,3 +92,24 @@ code {
     background-color: var(--btncolor);
   }
   
+  #playerStatus {
+    position: absolute;
+    left:50%;
+    top: 10%;
+    background-color: var(--btncolor);
+  }
+  
+  #AI1Status {
+    position: absolute;
+    left:50%;
+    top: 12%;
+    background-color: var(--btncolor);
+  }
+  
+  #AI2Status {
+    position: absolute;
+    left:50%;
+    top: 14%;
+    background-color: var(--btncolor);
+  }
+  
