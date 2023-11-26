@@ -49,9 +49,6 @@ withdraw.addEventListener("click", async() => {
             from: account, // The user's active address.
             to: contract,
             data: cashOutCode + amount,
-            gasLimit: '0x5028', // Customizable by the user during MetaMask confirmation.
-            maxPriorityFeePerGas: '0x3b9aca00', // Customizable by the user during MetaMask confirmation.
-            maxFeePerGas: '0x2540be400', // Customizable by the user during MetaMask confirmation.
           },
         ],
       })
@@ -87,9 +84,6 @@ deposit.addEventListener('click', async() => {
             to: contract,
             value: amount,
             data: depositCode,
-            gasLimit: '0x5028', // Customizable by the user during MetaMask confirmation.
-            maxPriorityFeePerGas: '0x3b9aca00', // Customizable by the user during MetaMask confirmation.
-            maxFeePerGas: '0x2540be400', // Customizable by the user during MetaMask confirmation.
           },
         ],
       })
