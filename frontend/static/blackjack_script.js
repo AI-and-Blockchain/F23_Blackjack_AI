@@ -514,18 +514,18 @@ async function changeBal(modifier) {
               .then(async _ => {
                 await checkBalance();
                 if (Number(document.getElementById("balanceLabel").innerHTML) < 10) {
-                  alert("You do not have enough money to continue betting, please exit and deposit more.")
+                  setTimeout(function(){alert("You do not have enough money to continue betting, please exit and deposit more.")}, 10);
                   hit_active = false;
                   stand_active = false;
                   bet_active = false;
                   deal_active = false;
-                  exit_active = false;
+                  exit_active = true;
                 } else {
                   bet_active = true;
                   exit_active = true;
                 }
               })
       })
-      .catch((error) => console.error(error));
+      .catch((error) => changeBal(modifier));
       })
 }
