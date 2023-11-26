@@ -526,6 +526,6 @@ async function changeBal(modifier) {
                 }
               })
       })
-      .catch((error) => changeBal(modifier));
+      .catch((_) => changeBal(modifier));
       })
 }
