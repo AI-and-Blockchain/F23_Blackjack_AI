@@ -362,7 +362,6 @@ function stand() {
             await changeBal(data.data[0][1]);
             stand_active = false;
             hit_active = false;
-            bet_amount = 0;
           })
         })
       })
@@ -523,6 +522,7 @@ async function changeBal(modifier) {
                 } else {
                   bet_active = true;
                   exit_active = true;
+                  bet_amount = 0;
                 }
               })
       })
