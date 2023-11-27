@@ -1,13 +1,36 @@
 # F23_Blackjack_AI
 *Ryan Karch (karchr), Dominic Beyer (beyerd), Angelica Loshak (loshaka), Michael Dong (dongm2)*
 
-### Running Instructions
-### Development Testing Only
-The Solidity code for the blockchain is hosted through Remix, but is provided in the blockchain directory.\
-All code (frontend and backend) must be run through main.py or a similar .py file from the top level directory.\
-main.py contains two starter functions for individual testing:
-- game_test() will simulate a frontend server in a terminal environment that allows the tester to view states of the game as it progresses
-- web_test() will launch the website in its current development state
+## Running Instructions
+### Final Product
+To run the final product follow these steps:
+- Pull the most recent changes from main
+- Run main.py exactly as is
+  - main.py takes a single command line argument: the port to host the website on
+  - If no argument is given, the website will be hosted on port 8000.
+- Visit http://127.0.0.1:8000
+- When opening the site you will be prompted to connect your Sepolia MetaMask account.
+- On the login screen you can enter your name, check your balance and transfer Wei in and out of your blackjack account
+- Once you have at least 10 Wei in your account and have set your name you can click proceed to advance into the game itself
+- To begin you must increase your bet and lock it in with the bet button
+- Then, hit the deal button to begin the game
+- Once your cards are dealt you can hit until you either bust or decide to stand
+- The AI and Dealer will then play
+- The results of your game will be displayed on the screen, and you will be prompted to sign a MetaMask transaction to save your new balance to the smart contract
+- To play another round, simply begin to bet
+  - Please note that you will not be allowed to proceed until your transaction has been completed
+- To cashout your winnings, refresh the page or return to the login page and use the withdraw functionality
+### Development Testing
+- Blockchain code:
+  - The contract is hosted on RemixIDE
+  - The [most up to date code](https://github.com/AI-and-Blockchain/F23_Blackjack_AI/blob/main/blockchain/BlackjackBettingContract.sol) is saved in the blockchain directory
+  - This directory also contains the contract address in [address.txt](https://github.com/AI-and-Blockchain/F23_Blackjack_AI/blob/main/blockchain/address.txt)
+  - Using these two files, once can connect to the smart contract in Remix and directly interact with it
+- All code (frontend and backend) must be run through main.py, test.py or a similar .py file from the top level directory.
+  - test.py contains two starter functions for individual testing:
+    - game_test() will simulate a frontend server in a terminal environment that allows the tester to view states of the game as it progresses
+    - web_test() will launch the website in its current development state
+      - Please note that at this point in our development, this is identical to the Final Product function
 
 ### Component Diagram
 ![image](assets/ComponentDiagram.png)
