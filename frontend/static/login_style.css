@@ -11,7 +11,8 @@ body {
   overflow: hidden;
 
   background-image: url("./assets/casino2.png");
-  background-size: cover;
+  /*background-size: cover; */
+  background-size: 100% 100%; 
   background-position: absolute;
   background-repeat: no-repeat;
 
