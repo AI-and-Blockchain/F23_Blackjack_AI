@@ -90,13 +90,14 @@ class Player{
 }
 
 window.onload = function() {
-  if (pageAccessedByReload) {
-    location.href = "Login.html";
-  } else if (pageAccessedByButtons) {
-    location.href = "Login.html";
-  } else {
-    init_game();
-  }
+  // if (pageAccessedByReload) {
+  //   location.href = "Login.html";
+  // } else if (pageAccessedByButtons) {
+  //   location.href = "Login.html";
+  // } else {
+  //   init_game();
+  // }
+  init_game();
   fetch('/byteCode', {
     method: 'POST',
     body: JSON.stringify({func: "changeBalance(address,uint256,bool)"}),
@@ -415,7 +416,7 @@ function bet_helper(a){
     ctx.fillStyle = "gold";
     ctx.font = "20px Comic Sans";
     bet_amount = a;
-    ctx.fillText(`+${bet_amount} WEI...`, 77/100*width, 37.5/100*height);
+    ctx.fillText(`+${bet_amount} WEI...`, 77/100*width, 27.5/100*height);
   }
 }
 

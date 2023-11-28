@@ -31,7 +31,7 @@ code {
 #standbtn {
   position:absolute;
   left:70%;
-  top:40%;
+  top:30%;
   border-radius: 15px;
   background-color: var(--btncolor);
 }
@@ -39,7 +39,7 @@ code {
 #hitbtn {
   position:absolute;
   left:70%;
-  top:45%;
+  top:35%;
   border-radius: 15px;
   background-color: var(--btncolor);
 }
@@ -47,7 +47,7 @@ code {
 #betbtn {
   position:absolute;
   left:70%;
-  top:35%;
+  top:25%;
   border-radius: 15px;
   background-color: var(--btncolor);
 }
@@ -56,7 +56,7 @@ code {
 #plusbtn {
   position:absolute;
   left:73%;
-  top:35%;
+  top:25%;
   border-radius: 15px;
   background-color: var(--btncolor);
 }
@@ -64,7 +64,7 @@ code {
 #minusbtn {
   position:absolute;
   left:74.5%;
-  top:35%;
+  top:25%;
   border-radius: 15px;
   background-color: var(--btncolor);
 }
@@ -72,15 +72,15 @@ code {
 #dealbtn {
     position:absolute;
     left:70%;
-    top:30%;
+    top:20%;
     border-radius: 15px;
     background-color: var(--btncolor);
   }
 
   #exitbtn {
     position:absolute;
-    left:10%;
-    top:10%;
+    left:2%;
+    top:2%;
     border-radius: 15px;
     background-color: var(--btncolor);
   }
