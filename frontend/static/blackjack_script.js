@@ -435,7 +435,7 @@ function minus(){
 }
 
 function bet(){
-  if (bet_amount == 0) {
+  if (bet_amount == 0 || !bet_active) {
     return;
   }
   var jsonData = {"address": player_address, "bet": bet_amount, message: ""};
@@ -475,11 +475,7 @@ async function changeBal(modifier) {
   if (bet_active) {
     total = bet_amount;
   } else {
-    if (modifier > 0) {
-      total = bet_amount * (modifier + 1);
-    } else {
-      total = 0;
-    }
+    total = bet_amount * (modifier + 1)
   }
 
   var amount = hex64(total);
