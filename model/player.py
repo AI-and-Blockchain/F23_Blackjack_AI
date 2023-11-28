@@ -99,26 +99,30 @@ class QAgent(Agent):
         
     def train(self):
         
-        env = gym.wrappers.RecordEpisodeStatistics(self.env, deque_size=self.episodes)
+        if self.trainable:
         
-        for episode in tqdm(range(self.episodes)):
-            obs, info = env.reset()
-            done = False
+            env = gym.wrappers.RecordEpisodeStatistics(self.env, deque_size=self.episodes)
+            
+            for episode in tqdm(range(self.episodes)):
+                obs, info = env.reset()
+                done = False
 
-            # play one episode
-            while not done:
-                action = self.get_action(obs)
-                # print(action)
-                next_obs, reward, terminated, truncated, info = env.step(action)
+                # play one episode
+                while not done:
+                    action = self.get_action(obs)
+                    # print(action)
+                    next_obs, reward, terminated, truncated, info = env.step(action)
 
-                # update the agent
-                self.update(obs, action, reward, terminated, next_obs)
+                    # update the agent
+                    self.update(obs, action, reward, terminated, next_obs)
 
-                # update if the environment is done and the current obs
-                done = terminated or truncated
-                obs = next_obs
+                    # update if the environment is done and the current obs
+                    done = terminated or truncated
+                    obs = next_obs
 
-            self.decay_epsilon()
+                self.decay_epsilon()
+        else:
+            return
             
     def decision(self) -> str:
         decisions = {0: "S", 1: "H"}
