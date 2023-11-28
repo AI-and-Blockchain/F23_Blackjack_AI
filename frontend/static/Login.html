@@ -2,33 +2,42 @@
 <html>
 <head>
     <title>BlackJack Login</title>
+    <link rel="stylesheet" type="text/css" href="login_style.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
 </head>
 <script src="https://c0f4f41c-2f55-4863-921b-sdk-docs.github.io/cdn/metamask-sdk.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
 <script src="./utils.js"></script>
 
 <body>
-    <label for="name">name:</label>
-    <input type="text" id="name" name="name" placeholder="Enter your name"><br>
-    
-    <div id="output"></div>
-    <p id="login_doc"></p>
-    
-    
-    <button onclick=checkBalance() type="button" id="balanceButton">Check Balance</button>
-    <p id="balanceLabel"></p><br><br>
-    
-    <input type="Deposit Amount" id="amount" name="amount" placeholder="Enter an amount to deposit">
-    <label for="amount">Wei</label><br>
-    <button class="deposit btn">Deposit</button><br><br>
-    
-    <input type="Withdrawal Amount" id="wamount" name="wamount" placeholder="Enter an amount to withdraw">
-    <label for="wamount">Wei</label><br>
-    <button class="withdraw btn">Withdraw</button><br><br>
-    
-    <button onclick=login() type="button" id="loginButton">Proceed</button>
+    <div id="inputs">
+        <img src="./assets/logo.png" alt="BlackJack AI logo"><br>
+        <label for="name">Name</label><br>
+        <input type="text" id="name" name="name" placeholder="Enter your name"><br>
+
+        <!-- <p id="login_doc"></p> -->
+        
+        <button onclick=checkBalance() type="button" id="balanceButton">Check Balance</button>
+        <p id="balanceLabel"></p>
+
+        <label id="DepWithWei">Deposit/Withdraw Wei</label>
+        <div class="wei">
+            <div id="deposit">
+                <input type="Deposit Amount" id="amount" name="amount" placeholder="Enter an amount to deposit"><br>
+                <!-- <label for="amount">Wei</label><br> -->
+                <button class="deposit-btn">Deposit</button><br><br>
+            </div>
+            <div id="withdraw">
+                <input type="Withdrawal Amount" id="wamount" name="wamount" placeholder="Enter an amount to withdraw"><br>
+                <!-- <label for="wamount">Wei</label><br> -->
+                <button class="withdraw-btn">Withdraw</button><br><br>
+            </div>
+        </div>
+        <button onclick=login() type="button" id="loginButton">Proceed</button>
+    </div>
     
     <script src="login_script.js"></script>
 </body>
 </html>
-
