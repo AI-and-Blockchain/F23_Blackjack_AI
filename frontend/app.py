@@ -130,7 +130,7 @@ def AI():
 
 @app.post("/playerData", response_model=playerInfo)
 def playerData():
-    game.add_players([WebUser(user.username, user.bet, user.address), QAgent()])
+    game.add_players([WebUser(user.username, user.bet, user.address), QAgent(smartness=1, trainable=False)])
     return user
 
 @app.post("/results", response_model=resultsItem)

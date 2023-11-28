@@ -29,12 +29,23 @@ class Agent: # Abstract Agent class
         pass
 
 class QAgent(Agent):
-    def __init__(self, learning_rate: float=0.001, initial_epsilon: float=5, 
-                 final_epsilon: float=0.01, discount_factor: float=0.95, 
-                 n_episodes: int=5000, smart: bool=True):
+    def __init__(self, smartness: float=0, trainable: bool=True):
         super().__init__()
         
         self.env = gym.make("Blackjack-v1", sab=True)
+        
+        self.trainable = trainable
+        if self.trainable:
+            learning_rate = 0.001
+            initial_epsilon = 5
+            final_epsilon = 0.01
+            discount_factor = 0.95
+            n_episodes = 5000
+        
+        self.smart = True
+        if smartness == 0:
+            self.smart = False
+            
         
         self.q_values = defaultdict(lambda: np.zeros(self.env.action_space.n))
 
@@ -48,12 +59,11 @@ class QAgent(Agent):
         self.final_epsilon = final_epsilon
 
         self.training_error = []
-        # self.Q = np.zeros(shape=(self.env.observation_space.shape, self.env.action_space.shape))
-        # print(self.Q)
-        self.smart = smart
+
+        self.smartness = smartness
         if self.smart:
             self.q_values = Q_TABLE
-            
+
         self.state = (0, 0, 0) # 
         
         self.id = 1
@@ -63,11 +73,11 @@ class QAgent(Agent):
         Returns the best action with probability (1 - epsilon)
         otherwise a random action with probability epsilon to ensure exploration.
         """
-        # with probability epsilon return a random action to explore the environment
-        if not force and np.random.random() < self.epsilon:
+        # with probability (1 - smartness) return a random action to explore the environment
+        if not force and np.random.random() >= self.smartness:
             return self.env.action_space.sample()
 
-        # with probability (1 - epsilon) act greedily (exploit)
+        # with probability smartness act "smart"
         else:
             return int(np.argmax(self.q_values[obs]))
         
@@ -89,26 +99,30 @@ class QAgent(Agent):
         
     def train(self):
         
-        env = gym.wrappers.RecordEpisodeStatistics(self.env, deque_size=self.episodes)
+        if self.trainable:
         
-        for episode in tqdm(range(self.episodes)):
-            obs, info = env.reset()
-            done = False
+            env = gym.wrappers.RecordEpisodeStatistics(self.env, deque_size=self.episodes)
+            
+            for episode in tqdm(range(self.episodes)):
+                obs, info = env.reset()
+                done = False
 
-            # play one episode
-            while not done:
-                action = self.get_action(obs)
-                # print(action)
-                next_obs, reward, terminated, truncated, info = env.step(action)
+                # play one episode
+                while not done:
+                    action = self.get_action(obs)
+                    # print(action)
+                    next_obs, reward, terminated, truncated, info = env.step(action)
 
-                # update the agent
-                self.update(obs, action, reward, terminated, next_obs)
+                    # update the agent
+                    self.update(obs, action, reward, terminated, next_obs)
 
-                # update if the environment is done and the current obs
-                done = terminated or truncated
-                obs = next_obs
+                    # update if the environment is done and the current obs
+                    done = terminated or truncated
+                    obs = next_obs
 
-            self.decay_epsilon()
+                self.decay_epsilon()
+        else:
+            return
             
     def decision(self) -> str:
         decisions = {0: "S", 1: "H"}
@@ -134,43 +148,7 @@ class QAgent(Agent):
     
     def start_new(self):
         self.state = (0, 0, 0)
-        
-            
-class ProbAgent(Agent):
-    def __init__(self):
-        super().__init__()
-        self.id = 2
-        
-# class User(Agent):
-#     def __init__(self, id):
-#         self.id = id
-#         self.cards = []
-#         self.dealer_card = 0
-#         self.total = 0
-#     def __repr__(self):
-#         return f"{self.id}"
-#     def place_bet(self) -> float:
-#         return float(input("Enter how much you would like to bet: "))
-
-#     def add_card(self, card, total):
-#         self.cards.append(card)
-#         self.total = total
-#         print(f"You have been dealt a {card}. Your cards are: {', '.join(map(str, self.cards))}. Your hand total is {self.total}. {f'The dealer has a {self.dealer_card}.' if self.dealer_card != 0 else ''}")
-
-    # def add_dealer_card(self, card):
-    #     self.dealer_card = card
-    #     print(f"The dealer has been dealt a {card}")
-
-#     def decision(self):
-#         dec = input("Choose H for hit, or S for stand: ").upper()
-#         while dec not in ["H","S"]:
-#             dec = input("Choose H for hit, or S for stand: ").upper()
-#         return dec
-    
-#     def start_new(self):
-#         self.cards = []
-#         self.total = 0
-        
+      
 class Dealer(Agent):
     def __init__(self):
         self.id = "Dealer"
@@ -281,4 +259,4 @@ class LocalPlayer:
 
 if __name__ == "__main__":
     
-    pablo = QAgent()
+    pablo = QAgent(smartness=1, trainable=False)
