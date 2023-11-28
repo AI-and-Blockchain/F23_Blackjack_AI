@@ -1,0 +1,88 @@
+
+
+body {
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* position:absolute; */
+  overflow: hidden;
+
+  background-image: url("./assets/casino2.png");
+  background-size: cover;
+  background-position: absolute;
+  background-repeat: no-repeat;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.wei {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#withdraw {
+  margin-left: 20px;
+}
+
+/* compied from angi's code, not sure if needed but will keep in for now */
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#inputs {
+    text-align: center;
+    font-size: 150%;
+}
+
+label[for="name"] {
+  font-size: 125%;
+}
+
+#DepWithWei {
+  font-size: 125%;
+}
+
+#name {
+  font-size: 85%;
+}
+
+#amount{
+  font-size: 85%;
+}
+
+#amount::placeholder {
+  font-size: 85%;
+}
+
+.deposit-btn{
+  font-size: 95%;
+}
+
+#wamount{
+  font-size: 85%;
+}
+
+#wamount::placeholder {
+  font-size: 85%;
+}
+
+.withdraw-btn{
+  font-size: 95%;
+}
+
+#loginButton {
+  font-size: 95%;
+}
+
+#balanceButton {
+  font-size: 95%;
+}
