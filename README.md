@@ -2,6 +2,8 @@
 *Ryan Karch (karchr), Dominic Beyer (beyerd), Angelica Loshak (loshaka), Michael Dong (dongm2)*
 
 ## Running Instructions
+### Before running any code please run the following command from the top level directory:
+`pip install -r requirements.txt`
 ### Final Product
 To run the final product follow these steps:
 - Pull the most recent changes from main
