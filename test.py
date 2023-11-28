@@ -1,5 +1,5 @@
 from model.game import BlackjackGame
-from model.player import QAgent, ProbAgent, WebUser
+from model.player import QAgent, WebUser
 from model.utils import compute_total
 import uvicorn
 from sys import argv

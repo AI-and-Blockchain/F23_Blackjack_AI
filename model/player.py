@@ -29,7 +29,7 @@ class Agent: # Abstract Agent class
         pass
 
 class QAgent(Agent):
-    def __init__(self, smartness: float=0, trainable: bool=True):
+    def __init__(self, name: str="Pablo", smartness: float=0, trainable: bool=True):
         super().__init__()
         
         self.env = gym.make("Blackjack-v1", sab=True)
@@ -66,7 +66,7 @@ class QAgent(Agent):
 
         self.state = (0, 0, 0) # 
         
-        self.id = 1
+        self.id = name
         
     def get_action(self, obs: tuple[int, int, bool], force: bool=True) -> int:
         """
