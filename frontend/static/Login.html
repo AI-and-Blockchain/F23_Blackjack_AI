@@ -17,10 +17,14 @@
         <label for="name">Name</label><br>
         <input type="text" id="name" name="name" placeholder="Enter your name"><br>
 
-        <!-- <p id="login_doc"></p> -->
-        
-        <button onclick=checkBalance() type="button" id="balanceButton">Check Balance</button>
-        <p id="balanceLabel"></p>
+        <div class="balance">
+            <div>
+                <p>Your Balance:</p>
+            </div>
+            <div class="balanceDiv">
+                <p id="balanceLabel"></p>
+            </div>
+        </div>
 
         <label id="DepWithWei">Deposit/Withdraw Wei</label>
         <div class="wei">

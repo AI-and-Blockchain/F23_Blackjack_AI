@@ -359,6 +359,7 @@ function stand() {
             for (let i = 0; i < data.data.length; i++) {
               document.getElementById(i == 0 ? "playerStatus" : i == 1 ? "AI1Status" : "AI2Status").innerHTML = data.data[i][0];
             }
+            document.getElementById("balanceLabel").innerHTML = "⟳ Balance Loading ⟳";
             await changeBal(data.data[0][1]);
             stand_active = false;
             hit_active = false;
@@ -451,6 +452,7 @@ function bet(){
       alert("Invalid bet, please do not bet higher than your wallet balance")
       deal_active = false;
     } else {
+        document.getElementById("balanceLabel").innerHTML = "⟳ Balance Loading ⟳";
         await changeBal(-1);
     }
   })

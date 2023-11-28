@@ -40,7 +40,7 @@ withdraw.addEventListener("click", async() => {
         alert("Please enter a valid and non-zero amount to withdraw.")
         return;
     }
-
+    document.getElementById("balanceLabel").innerHTML = "⟳ Balance Loading ⟳";
     ethereum
       .request({
         method: 'eth_sendTransaction',
@@ -74,6 +74,7 @@ deposit.addEventListener('click', async() => {
         alert("Please enter a valid and non-zero amount to deposit.")
         return;
     }
+    document.getElementById("balanceLabel").innerHTML = "⟳ Balance Loading ⟳";
     await getAccount();
     ethereum
       .request({
@@ -102,8 +103,13 @@ deposit.addEventListener('click', async() => {
   });
   
   
-window.onload = function() {
-    const MMSDK = new MetaMaskSDK.MetaMaskSDK()
+window.onload = async function() {
+    try {
+        await checkBalance();
+    } catch {
+        console.log("first time user");
+    }
+    const MMSDK = new MetaMaskSDK.MetaMaskSDK();
     // Because init process of the MetaMaskSDK is async.
     setTimeout(() => {
         const ethereum = MMSDK.getProvider() // You can also access via window.ethereum
