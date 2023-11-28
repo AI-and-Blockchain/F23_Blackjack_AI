@@ -29,6 +29,17 @@ body {
   align-items: center;
 }
 
+.balance {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.balanceDiv {
+  margin-left: 10px;
+}
+
 #withdraw {
   margin-left: 20px;
 }
@@ -81,9 +92,5 @@ label[for="name"] {
 }
 
 #loginButton {
-  font-size: 95%;
-}
-
-#balanceButton {
   font-size: 95%;
 }
