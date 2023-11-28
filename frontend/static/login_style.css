@@ -36,8 +36,19 @@ body {
   align-items: center;
 }
 
+.slidecontainer {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .balanceDiv {
   margin-left: 10px;
+}
+
+.slidedisplay {
+  margin-left: 10px
 }
 
 #withdraw {

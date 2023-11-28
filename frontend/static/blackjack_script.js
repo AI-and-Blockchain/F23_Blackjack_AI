@@ -57,6 +57,7 @@ var deal_active = false;
 var exit_active = false;
 var player_name;
 var player_address;
+var ai_name;
 var playerObjects = []
 
 var changeBalanceCode = ""
@@ -127,6 +128,7 @@ function init_game(){
       }
       player_name = data.username;
       player_address = data.address;
+      ai_name = data.aiName;
   init_players();
   init_dealer_deck();
   new_game();
@@ -138,7 +140,7 @@ function init_players(){
     main_player = new Player(userlocation[0], userlocation[1], player_name, player_address, 0, 1);
     console.log(main_player.main_player);
     console.log(main_player.name);
-    ai_player = new Player(userlocation[0]+0.17, userlocation[1]-0.06, "Mr.JokerPoker", 0, -5, 0);
+    ai_player = new Player(userlocation[0]+0.17, userlocation[1]-0.06, ai_name, 0, -5, 0);
     playerObjects.push(main_player, ai_player);
 }
 
