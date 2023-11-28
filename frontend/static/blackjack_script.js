@@ -475,13 +475,7 @@ async function changeBal(modifier) {
   if (bet_active) {
     total = bet_amount;
   } else {
-    if (modifier > 0) {
-      total = bet_amount * (modifier + 1);
-    } else if (modifer == 0) {
-      total = bet_amount * (modifier);
-    } else {
-      total = 0;
-    }
+    total = bet_amount * (modifier + 1)
   }
 
   var amount = hex64(total);
