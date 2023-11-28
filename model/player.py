@@ -41,24 +41,23 @@ class QAgent(Agent):
             final_epsilon = 0.01
             discount_factor = 0.95
             n_episodes = 5000
+            
+            self.lr = learning_rate
+            self.discount_factor = discount_factor
+
+            self.epsilon = initial_epsilon
+            self.epsilon_decay = self.epsilon / (n_episodes / 2)
+            
+            self.episodes = n_episodes
+            self.final_epsilon = final_epsilon
+
+            self.training_error = []
         
         self.smart = True
         if smartness == 0:
             self.smart = False
-            
         
         self.q_values = defaultdict(lambda: np.zeros(self.env.action_space.n))
-
-        self.lr = learning_rate
-        self.discount_factor = discount_factor
-
-        self.epsilon = initial_epsilon
-        self.epsilon_decay = self.epsilon / (n_episodes / 2)
-        
-        self.episodes = n_episodes
-        self.final_epsilon = final_epsilon
-
-        self.training_error = []
 
         self.smartness = smartness
         if self.smart:
