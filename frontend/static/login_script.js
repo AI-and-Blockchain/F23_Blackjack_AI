@@ -3,11 +3,20 @@ var depositCode = "";
 const deposit = document.querySelector('.deposit-btn');
 const withdraw = document.querySelector('.withdraw-btn');
 
+var slider = document.getElementById("AILevel");
+var output = document.getElementById("slidelabel");
+output.innerHTML = slider.value + "%"; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+  output.innerHTML = this.value + "%";
+}
+
 
 async function login() {
     await checkBalance();
     
-    const jsonData = {name: document.getElementById("name").value, address: account};
+    const jsonData = {name: document.getElementById("name").value, address: account, smartness: slider.value};
 
     fetch('/login', {
         method: 'POST',

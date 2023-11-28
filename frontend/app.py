@@ -12,8 +12,8 @@ app = FastAPI()
 
 class FormItem(BaseModel):
     name: str
-    # bet: str
     address: str
+    smartness: int
 
 class betItem(BaseModel):
     address: str
@@ -24,6 +24,7 @@ class playerInfo(BaseModel):
     username: str
     address: str
     bet: int
+    aiName: str
 
 class dealInfo(BaseModel):
     dealer: list
@@ -49,9 +50,13 @@ class addressItem(BaseModel):
 class byteCode(BaseModel):
     func: str
 
+class smartnessStorage(BaseModel):
+    smartness: float
 
-user = playerInfo(username='', address='', bet=0)
+
+user = playerInfo(username='', address='', bet=0, aiName="")
 game = BlackjackGame()
+smartness = smartnessStorage(smartness=0.0)
 with open("blockchain/address.txt") as f:
     contract = BlockchainInterface(f.read().strip())
 
@@ -67,17 +72,15 @@ async def redirect():
 def submit_form(item: FormItem):
     game.revert()
     name = item.name
-    address = item.address
+    smartness.smartness = item.smartness / 100
+    user.aiName = "Godlike AI" if item.smartness == 100 else "Super Smart AI" if item.smartness > 70 else "Pretty Good AI" if item.smartness > 40 else "Beginner AI" if item.smartness > 10 else "Fresh Off the Compiler AI"
 
     if name == '':
         item.name = "invalid"
     else:
         user.username = item.name
         item.name = "valid"
-    # if re.match(".*(0x[a-f,A-F,0-9]{40}).*", address):
-    #     item.address = "valid"
-    # else:
-    #     item.address = "invalid"
+
     if item.name == "valid":
         user.address = item.address
         user.bet = 0
@@ -130,7 +133,7 @@ def AI():
 
 @app.post("/playerData", response_model=playerInfo)
 def playerData():
-    game.add_players([WebUser(user.username, user.bet, user.address), QAgent(name="SmartBoi", smartness=1, trainable=False)])
+    game.add_players([WebUser(user.username, user.bet, user.address), QAgent(name=user.aiName, smartness=smartness.smartness, trainable=False)])
     return user
 
 @app.post("/results", response_model=resultsItem)
