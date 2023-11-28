@@ -166,3 +166,4 @@ async def convert(item: byteCode):
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
     return FileResponse("frontend/static/assets/favicon.ico")
+
