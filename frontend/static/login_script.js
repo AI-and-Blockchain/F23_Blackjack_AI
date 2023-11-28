@@ -1,7 +1,7 @@
 var cashOutCode = "";
 var depositCode = "";
-const deposit = document.querySelector('.deposit');
-const withdraw = document.querySelector('.withdraw');
+const deposit = document.querySelector('.deposit-btn');
+const withdraw = document.querySelector('.withdraw-btn');
 
 
 async function login() {
