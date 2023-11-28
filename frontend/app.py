@@ -50,10 +50,13 @@ class addressItem(BaseModel):
 class byteCode(BaseModel):
     func: str
 
+class smartnessStorage(BaseModel):
+    smartness: float
+
 
 user = playerInfo(username='', address='', bet=0, aiName="")
 game = BlackjackGame()
-smartness = 0
+smartness = smartnessStorage(smartness=0.0)
 with open("blockchain/address.txt") as f:
     contract = BlockchainInterface(f.read().strip())
 
@@ -69,7 +72,7 @@ async def redirect():
 def submit_form(item: FormItem):
     game.revert()
     name = item.name
-    smartness = item.smartness / 100
+    smartness.smartness = item.smartness / 100
     user.aiName = "Godlike AI" if item.smartness == 100 else "Super Smart AI" if item.smartness > 70 else "Pretty Good AI" if item.smartness > 40 else "Beginner AI" if item.smartness > 10 else "Fresh Off the Compiler AI"
 
     if name == '':
@@ -130,7 +133,7 @@ def AI():
 
 @app.post("/playerData", response_model=playerInfo)
 def playerData():
-    game.add_players([WebUser(user.username, user.bet, user.address), QAgent(name="SmartBoi", smartness=1, trainable=False)])
+    game.add_players([WebUser(user.username, user.bet, user.address), QAgent(name=user.aiName, smartness=smartness.smartness, trainable=False)])
     return user
 
 @app.post("/results", response_model=resultsItem)
