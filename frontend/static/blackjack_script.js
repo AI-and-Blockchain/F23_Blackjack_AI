@@ -437,7 +437,7 @@ function bet(){
   if (bet_amount == 0) {
     return;
   }
-  var jsonData = {"address":   player_address, "bet": bet_amount, message: ""};
+  var jsonData = {"address": player_address, "bet": bet_amount, message: ""};
   console.log(jsonData);
   fetch("/setBet", {
       method: "POST",
@@ -446,19 +446,13 @@ function bet(){
           "Content-Type": "application/json"
       }
   }).then(response => response.json())
-  .then(data => {
-    // alert(data.bet)
+  .then(async data => {
     if (data.message == "invalid") {
       alert("Invalid bet, please do not bet higher than your wallet balance")
       deal_active = false;
     } else {
-        bet_active = false;
-        exit_active = false;
-        deal_active = true;
+        await changeBal(-1);
     }
-  })
-  .then(json => {
-    console.log(json);
   })
   .catch(error => {
       console.error('Error:', error);
@@ -475,8 +469,18 @@ function exit() {
 
 async function changeBal(modifier) {
   await getAccount();
+  var total = 0;
+  if (bet_active) {
+    total = bet_amount;
+  } else {
+    if (modifier > 0) {
+      total = bet_amount * (modifier + 1);
+    } else {
+      total = 0;
+    }
+  }
 
-  var amount = hex64(bet_amount * Math.abs(modifier));
+  var amount = hex64(total);
   console.log(amount);  
   var increase = hex64(modifier == -1 ? "0": "1");
 
@@ -512,7 +516,7 @@ async function changeBal(modifier) {
               })
               .then(async _ => {
                 await checkBalance();
-                if (Number(document.getElementById("balanceLabel").innerHTML) < 10) {
+                if (Number(document.getElementById("balanceLabel").innerHTML) < 10 && !bet_active) {
                   setTimeout(function(){alert("You do not have enough money to continue betting, please exit and deposit more.")}, 10);
                   hit_active = false;
                   stand_active = false;
@@ -520,10 +524,16 @@ async function changeBal(modifier) {
                   deal_active = false;
                   exit_active = true;
                 } else {
-                  bet_active = true;
-                  exit_active = true;
-                  bet_amount = 0;
-                  new_game();
+                  if (bet_active) {
+                    bet_active = false;
+                    exit_active = false;
+                    deal_active = true;
+                  } else {
+                    bet_active = true;
+                    exit_active = true;
+                    bet_amount = 0;
+                    new_game();
+                  }
                 }
               })
       })
