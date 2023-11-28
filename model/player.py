@@ -73,11 +73,11 @@ class QAgent(Agent):
         Returns the best action with probability (1 - epsilon)
         otherwise a random action with probability epsilon to ensure exploration.
         """
-        # with probability smartness return a random action to explore the environment
+        # with probability (1 - smartness) return a random action to explore the environment
         if not force and np.random.random() >= self.smartness:
             return self.env.action_space.sample()
 
-        # with probability (1 - epsilon) act greedily (exploit)
+        # with probability smartness act "smart"
         else:
             return int(np.argmax(self.q_values[obs]))
         
