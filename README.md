@@ -2,8 +2,10 @@
 *Ryan Karch (karchr), Dominic Beyer (beyerd), Angelica Loshak (loshaka), Michael Dong (dongm2)*
 
 ## Running Instructions
-### Before running any code please run the following command from the top level directory:
-`pip install -r requirements.txt`
+### Before running any code please perform the following:
+- Ensure that you have at least python 3.10 installed
+- Run the following command from the top level directory:\
+  `pip install -r requirements.txt`
 ### Final Product
 To run the final product follow these steps:
 - Pull the most recent changes from main
