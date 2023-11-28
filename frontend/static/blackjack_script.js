@@ -370,6 +370,9 @@ function stand() {
 }
 
 function new_game(){
+  document.getElementById("playerStatus").innerHTML = "";
+  document.getElementById("AI1Status").innerHTML = "";
+  document.getElementById("AI2Status").innerHTML = "";
   for(let p of playerObjects){
     p.card_count = 0;
   }
@@ -520,6 +523,7 @@ async function changeBal(modifier) {
                   bet_active = true;
                   exit_active = true;
                   bet_amount = 0;
+                  new_game();
                 }
               })
       })
