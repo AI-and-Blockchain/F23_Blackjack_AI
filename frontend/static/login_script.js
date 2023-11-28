@@ -5,7 +5,6 @@ const withdraw = document.querySelector('.withdraw-btn');
 
 var slider = document.getElementById("AILevel");
 var output = document.getElementById("slidelabel");
-output.innerHTML = slider.value + "%"; // Display the default slider value
 
 // Update the current slider value (each time you drag the slider handle)
 slider.oninput = function() {
@@ -113,6 +112,9 @@ deposit.addEventListener('click', async() => {
   
   
 window.onload = async function() {
+    slider.value = '50';
+    output.innerHTML = slider.value + "%"; // Display the default slider value
+
     try {
         await checkBalance();
     } catch {
