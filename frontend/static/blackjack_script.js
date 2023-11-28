@@ -90,14 +90,13 @@ class Player{
 }
 
 window.onload = function() {
-  // if (pageAccessedByReload) {
-  //   location.href = "Login.html";
-  // } else if (pageAccessedByButtons) {
-  //   location.href = "Login.html";
-  // } else {
-  //   init_game();
-  // }
-  init_game();
+  if (pageAccessedByReload) {
+    location.href = "Login.html";
+  } else if (pageAccessedByButtons) {
+    location.href = "Login.html";
+  } else {
+    init_game();
+  }
   fetch('/byteCode', {
     method: 'POST',
     body: JSON.stringify({func: "changeBalance(address,uint256,bool)"}),
