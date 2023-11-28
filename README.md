@@ -26,7 +26,7 @@ To run the final product follow these steps:
 - To cashout your winnings, refresh the page or return to the login page and use the withdraw functionality
 ### Development Testing
 - Blockchain code:
-  - The contract is hosted on RemixIDE
+  - The [contract](https://sepolia.etherscan.io/address/0x8288b1e33c9035efbd037ebcc3f6a5a34afe49e8) is hosted on RemixIDE
   - The [most up to date code](https://github.com/AI-and-Blockchain/F23_Blackjack_AI/blob/main/blockchain/BlackjackBettingContract.sol) is saved in the blockchain directory
   - This directory also contains the contract address in [address.txt](https://github.com/AI-and-Blockchain/F23_Blackjack_AI/blob/main/blockchain/address.txt)
   - Using these two files, once can connect to the smart contract in Remix and directly interact with it
