@@ -6,9 +6,7 @@ from time import sleep
 
 class BlockchainInterface():
     def __init__(self, address):
-        self.infura_url = "https://sepolia.infura.io/v3/7b10c7ba73db47deac3f82c84bd00a94"
-
-        load_dotenv()  
+        self.infura_url = "https://sepolia.infura.io/v3/7b10c7ba73db47deac3f82c84bd00a94" 
 
         self.web3 = Web3(Web3.HTTPProvider(self.infura_url))
 
@@ -18,9 +16,6 @@ class BlockchainInterface():
     
     def getBalance(self, user):
         return self.contract.functions.getBalance(Web3.to_checksum_address(user)).call()
-    
-    def payUser(self, user, amount):
-        return self.contract.functions.cashOut(Web3.to_checksum_address(user), amount).call()
     
     async def watchForTransaction(self, address):
         while True:
