@@ -1,7 +1,7 @@
 canvas { 
     /* border: 32px solid rgb(16, 50, 33); */
     background:url(./assets/blackjack_table.jpg);
-    background-size: auto 100%;
+    background-size: 100% 100%;
     background-position: center;
     /* background-size: contain auto; */
 }

@@ -16,8 +16,10 @@
 <body>
     <div id="inputs">
         <img src="./assets/logo.png" alt="BlackJack AI logo"><br>
+
         <label for="name">Name</label><br>
-        <input type="text" id="name" name="name" placeholder="Enter your name"><br>
+        <input type="text" id="name" name="name" class="form-control rounded" placeholder="Enter your name">
+    
 
         <div class="balance">
             <div>
@@ -31,13 +33,11 @@
         <label id="DepWithWei">Deposit/Withdraw Wei</label>
         <div class="wei">
             <div id="deposit">
-                <input type="Deposit Amount" id="amount" name="amount" placeholder="Enter an amount to deposit"><br>
-                <!-- <button class="deposit-btn">Deposit</button><br><br> -->
+                <input type="Deposit Amount" id="amount" class="form-control rounded" name="amount" placeholder="Enter an amount to deposit">
                 <button class="deposit-btn btn btn-primary rounded">Deposit</button><br><br>
             </div>
             <div id="withdraw">
-                <input type="Withdrawal Amount" id="wamount" name="wamount" placeholder="Enter an amount to withdraw"><br>
-                <!-- <button class="withdraw-btn">Withdraw</button><br><br> -->
+                <input type="Withdrawal Amount" id="wamount" class="form-control rounded" name="wamount" placeholder="Enter an amount to withdraw">
                 <button class="withdraw-btn btn btn-primary rounded">Withdraw</button><br><br>
             </div>
         </div>
@@ -49,7 +49,6 @@
                 <p id="slidelabel"></p>
             </div>
         </div>
-        <!-- <button onclick=login() type="button" id="loginButton">Proceed</button> -->
         <button onclick=login() type="button" id="loginButton" class="btn btn-primary rounded">Proceed</button><br><br>
     </div>
     
