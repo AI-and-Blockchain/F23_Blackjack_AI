@@ -63,13 +63,12 @@ class BlackjackGame:
         if not p.playing():
             self.state = States.AI
             return 0, False
-        match decision:
-            case "S":
-                p.stand()
-                card = 0
-            case "H":
-                card, *self.deck = self.deck
-                p.hit(card)
+        if decision == "S":
+            p.stand()
+            card = 0
+        else:
+            card, *self.deck = self.deck
+            p.hit(card)
         if p.playing():
             return int(card), True
         else:
@@ -83,13 +82,12 @@ class BlackjackGame:
         for p in self.players[1:]:
             cards = []
             while p.playing():
-                match p.decision():
-                    case "S":
-                        pass
-                    case "H":
-                        card, *self.deck = self.deck
-                        p.hit(card)
-                        cards.append(int(card))
+                if p.decision() == "S":
+                    pass
+                else:
+                    card, *self.deck = self.deck
+                    p.hit(card)
+                    cards.append(int(card))
             all_cards.append(cards)
         self.state = States.DEALER
         return all_cards
@@ -99,13 +97,12 @@ class BlackjackGame:
             return []
         cards = []
         while self.dealer.playing():
-            match self.dealer.decision():
-                case "S":
-                    pass
-                case "H":
-                    card, *self.deck = self.deck
-                    self.dealer.hit(card)
-                    cards.append(int(card))
+            if self.dealer.decision() == "S":
+                pass
+            else:
+                card, *self.deck = self.deck
+                self.dealer.hit(card)
+                cards.append(int(card))
         self.state = States.RESULTS
         return cards
 
@@ -116,41 +113,39 @@ class BlackjackGame:
         dealer_total = self.dealer.total
         messages = []
         for p in self.players:
-            match p.status():
-                case 1:
-                    if dealer_status == 1:
-                        messages.append([f"Both the dealer and player {p} got a natural blackjack, they push.", 0])
+            if p.status() == 1:
+                if dealer_status == 1:
+                    messages.append([f"Both the dealer and player {p} got a natural blackjack, they push.", 0])
+                else:
+                    messages.append([f"Player {p} got a natural blackjack and wins the bonus payout.", 1.5])
+            elif p.status() == 2:
+                if dealer_status == 1:
+                    messages.append([f"The dealer had natural blackjack, {p} loses.", -1])
+                elif dealer_status == 2:
+                    messages.append([f"Both the dealer and player {p} got a blackjack, they push.", 0])
+                else:
+                    messages.append([f"Player {p} got blackjack after hitting and wins", 1])
+            elif p.status() == 3:
+                if dealer_status == 1:
+                    messages.append([f"The dealer had natural blackjack, player {p} loses.", -1])
+                elif dealer_status == 2:
+                    messages.append([f"The dealer got a blackjack, player {p} loses.", -1])
+                elif dealer_status == 3:
+                    s = f"Player {p} stood on {p.total} and the dealer stood on {dealer_total},"
+                    result = 0
+                    if p.total > dealer_total:
+                        s+= f" {p} wins."
+                        result = 1
+                    elif p.total < dealer_total:
+                        s += f" {p} loses."
+                        result = -1
                     else:
-                        messages.append([f"Player {p} got a natural blackjack and wins the bonus payout.", 1.5])
-                case 2:
-                    if dealer_status == 1:
-                        messages.append([f"The dealer had natural blackjack, {p} loses.", -1])
-                    elif dealer_status == 2:
-                        messages.append([f"Both the dealer and player {p} got a blackjack, they push.", 0])
-                    else:
-                        messages.append([f"Player {p} got blackjack after hitting and wins", 1])
-                case 3:
-                    match dealer_status:
-                        case 1:
-                            messages.append([f"The dealer had natural blackjack, player {p} loses.", -1])
-                        case 2:
-                            messages.append([f"The dealer got a blackjack, player {p} loses.", -1])
-                        case 3:
-                            s = f"Player {p} stood on {p.total} and the dealer stood on {dealer_total},"
-                            result = 0
-                            if p.total > dealer_total:
-                                s+= f" {p} wins."
-                                result = 1
-                            elif p.total < dealer_total:
-                                s += f" {p} loses."
-                                result = -1
-                            else:
-                                s += f" they push."
-                            messages.append([s, result])
-                        case 4:
-                            messages.append([f"Player {p} stood on {p.total} and the dealer busted, {p} wins.", 1])
-                case 4:
-                    messages.append([f"Player {p} busted and lost.", -1])
+                        s += f" they push."
+                    messages.append([s, result])
+                elif dealer_status == 4:
+                    messages.append([f"Player {p} stood on {p.total} and the dealer busted, {p} wins.", 1])
+            elif 4:
+                messages.append([f"Player {p} busted and lost.", -1])
         self.state = States.READY
         return messages
 
