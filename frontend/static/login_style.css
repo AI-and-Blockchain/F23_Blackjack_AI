@@ -124,3 +124,9 @@ label[for="name"] {
   background-color: var(--btncolor2) !important;
   font-size: 95%;
 }
+
+#uploadButton {
+  box-shadow: none !important;
+  background-color: var(--btncolor2) !important;
+  font-size: 95%;
+}
