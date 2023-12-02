@@ -132,7 +132,6 @@ function init_game(){
   init_dealer_deck();
   new_game();
   document.addEventListener("click", flipcard);
-  window.addEventListener("resize", repaint_canvas);
   })
 }
 
@@ -196,7 +195,7 @@ function deal_all_cards(cards, dealerCards){
       ctx.beginPath();
       var x=p.x*width;
       var y=p.y*height;
-      var cardSuit = (cardSuits[Math.ceil(Math.random()*100)%numSuits-1])+1;
+      var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
       var cardValue = cardValues[cards[count][0][i]];
       const card = new Card(x, y, id, cardSuit, cardValue, p.angle);
       card.card_count = p.card_count;
@@ -216,7 +215,7 @@ function deal_all_cards(cards, dealerCards){
     ctx.beginPath();
     var x=decklocation[0]*width-(cardoffset[0]*numDealerCards)-200;
     var y=decklocation[1]*height-(cardoffset[1]*numDealerCards);
-    var cardSuit = cardSuits[(Math.ceil(Math.random()*100)%numSuits-1)+1];
+    var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
     var cardValue = cardValues[dealerCards[i]];
     var card = new Card(x, y, id, cardSuit, cardValue);
     if(numDealerCards === 0){
@@ -238,7 +237,7 @@ function deal_user_card(p, c){
   ctx.beginPath();
   var x=p.x*width;
   var y=p.y*height;
-  var cardSuit = cardSuits[(Math.ceil(Math.random()*100)%numSuits-1)+1];
+  var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
   var cardValue = cardValues[c];
   const card = new Card(x, y, id, cardSuit, cardValue, p.angle);
   card.card_count = p.card_count;
@@ -258,7 +257,7 @@ function deal_dealer_card(c){
   ctx.beginPath();
   var x=decklocation[0]*width-(cardoffset[0]*numDealerCards)-200;
   var y=decklocation[1]*height- (cardoffset[1]*numDealerCards);
-  var cardSuit = cardSuits[(Math.ceil(Math.random()*100)%numSuits-1)+1];
+  var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
   var cardValue = cardValues[c];
   var card = new Card(x, y, id, cardSuit, cardValue);
   if(numDealerCards === 0){
@@ -393,9 +392,6 @@ function new_game(){
 
 function repaint_canvas(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // ctx.canvas.width  = window.innerWidth;
-  // ctx.canvas.height = window.innerHeight;
-  // ctx.background = backgroundimage;
   init_dealer_deck();
   paint_playername();
 
