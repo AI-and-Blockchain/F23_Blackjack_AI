@@ -65,9 +65,9 @@ code {
 
 #inputs {
     position: relative;
-    top: 200px;
+    top: 100px;
     text-align: center;
-    font-size: 250%;
+    font-size: 100%;
 }
 
 label[for="name"] {
