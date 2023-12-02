@@ -15,16 +15,19 @@
 
 <body>
     <div id="inputs">
-        <img src="./assets/logo.png" alt="BlackJack AI logo"><br>
+        <!-- <img src="./assets/logo.png" alt="BlackJack AI logo"><br> -->
         <label for="name"></label><br>
-        <input type="text" id="name" name="name" placeholder="Enter your name"><br>
+        <input type="text" id="name" name="name" placeholder="Enter your name" class="form-control rounded"><br>
 
         <div class="balance">
             <div>
-                <p>Your Balance:</p>
+                <p style="color:rgb(0, 0, 0); font-weight:1000; 
+                text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff;" >Your Balance:</p>
             </div>
             <div class="balanceDiv">
-                <p id="balanceLabel"></p>
+                <p id="balanceLabel"
+                style="color:rgb(0, 0, 0); font-weight:1000; 
+                text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff;"></p>
             </div>
         </div>
 
@@ -44,7 +47,9 @@
                 <input type="range" min="1" max="100" value="50" class="slider" id="AILevel">
             </div>
             <div class="slidedisplay">
-                <p id="slidelabel"></p>
+                <p id="slidelabel"
+                style="color:rgb(47, 46, 13); font-weight:1000; 
+                text-shadow: -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff, 1px 1px 0 #ffffff;" ></p>
             </div>
         </div>
         <button onclick=login() type="button" id="loginButton" class="btn btn-primary rounded">Proceed</button><br><br>

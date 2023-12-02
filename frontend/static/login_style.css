@@ -13,10 +13,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
 
-  background-image: url("./assets/casino2.png");
-  /*background-size: cover; */
-  background-size: 100% 100%; 
-  background-position: absolute;
+  background-image: url("./assets/Casino_Login.png");
+  background-size: cover;
+  /* background-size: 100% 100%;  */
+  background-position:  0% 20%;
   background-repeat: no-repeat;
 
   display: flex;
@@ -64,8 +64,10 @@ code {
 }
 
 #inputs {
+    position: relative;
+    top: 200px;
     text-align: center;
-    font-size: 150%;
+    font-size: 250%;
 }
 
 label[for="name"] {

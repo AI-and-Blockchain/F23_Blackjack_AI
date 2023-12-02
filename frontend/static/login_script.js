@@ -8,7 +8,7 @@ var output = document.getElementById("slidelabel");
 
 // Update the current slider value (each time you drag the slider handle)
 slider.oninput = function() {
-  output.innerHTML = this.value + "% DIFFICULTY";
+  output.innerHTML = "AI LEVEL: " + this.value + "%";
 }
 
 
@@ -113,7 +113,7 @@ deposit.addEventListener('click', async() => {
   
 window.onload = async function() {
     slider.value = '50';
-    output.innerHTML = slider.value + "% DIFFICULTY"; // Display the default slider value
+    output.innerHTML = "AI LEVEL: "  + slider.value + "%"; // Display the default slider value
 
     try {
         await checkBalance();
