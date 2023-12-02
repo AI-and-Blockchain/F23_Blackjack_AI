@@ -1,4 +1,8 @@
 
+:root {
+  --btncolor: rgb(203, 209, 180);
+  --btncolor2: rgb(108, 120, 106);
+}
 
 body {
   margin: 0 auto;
@@ -10,6 +14,7 @@ body {
   overflow: hidden;
 
   background-image: url("./assets/casino2.png");
+  /*background-size: cover; */
   background-size: 100% 100%; 
   background-position: absolute;
   background-repeat: no-repeat;
@@ -90,9 +95,12 @@ label[for="name"] {
   text-align: center;
 }
 
-.deposit-btn{
+.deposit-btn {
+  box-shadow: none !important;
+  background-color: var(--btncolor2) !important;
   font-size: 95%;
-}
+} 
+
 
 #wamount{
   font-size: 85%;
@@ -104,9 +112,13 @@ label[for="name"] {
 }
 
 .withdraw-btn{
+  box-shadow: none !important;
+  background-color: var(--btncolor2) !important;
   font-size: 95%;
 }
 
 #loginButton {
+  box-shadow: none !important;
+  background-color: var(--btncolor2) !important;
   font-size: 95%;
 }

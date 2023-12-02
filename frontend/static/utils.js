@@ -7,7 +7,7 @@ const hex64 = d => Number(d).toString(16).padStart(64, '0');
 const pad64 = d => d.padStart(64, '0');
 
 async function checkBalance() {
-    document.getElementById("balanceLabel").innerHTML = "⟳ Balance Loading ⟳";
+    document.getElementById("balanceLabel").innerHTML = "⟳ Loading...";
     await getAccount();
     
     await fetch('/getBalance', {

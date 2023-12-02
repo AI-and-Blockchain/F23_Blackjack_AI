@@ -8,7 +8,7 @@ var output = document.getElementById("slidelabel");
 
 // Update the current slider value (each time you drag the slider handle)
 slider.oninput = function() {
-  output.innerHTML = this.value + "%";
+  output.innerHTML = this.value + "% DIFFICULTY";
 }
 
 
@@ -48,7 +48,7 @@ withdraw.addEventListener("click", async() => {
         alert("Please enter a valid and non-zero amount to withdraw.")
         return;
     }
-    document.getElementById("balanceLabel").innerHTML = "⟳ Balance Loading ⟳";
+    document.getElementById("balanceLabel").innerHTML = "⟳ Loading...";
     ethereum
       .request({
         method: 'eth_sendTransaction',
@@ -82,7 +82,7 @@ deposit.addEventListener('click', async() => {
         alert("Please enter a valid and non-zero amount to deposit.")
         return;
     }
-    document.getElementById("balanceLabel").innerHTML = "⟳ Balance Loading ⟳";
+    document.getElementById("balanceLabel").innerHTML = "⟳ Loading...";
     await getAccount();
     ethereum
       .request({
@@ -113,7 +113,7 @@ deposit.addEventListener('click', async() => {
   
 window.onload = async function() {
     slider.value = '50';
-    output.innerHTML = slider.value + "%"; // Display the default slider value
+    output.innerHTML = slider.value + "% DIFFICULTY"; // Display the default slider value
 
     try {
         await checkBalance();

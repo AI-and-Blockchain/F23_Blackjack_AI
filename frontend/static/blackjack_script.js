@@ -33,7 +33,6 @@ ctx.background = backgroundimage;
 
 
 
-
 //card vars
 var cardsize = [80, 120];
 var cardSuits = ["spades", "hearts", "clubs", "diamonds"];
@@ -133,6 +132,7 @@ function init_game(){
   init_dealer_deck();
   new_game();
   document.addEventListener("click", flipcard);
+  window.addEventListener("resize", repaint_canvas);
   })
 }
 
@@ -196,7 +196,7 @@ function deal_all_cards(cards, dealerCards){
       ctx.beginPath();
       var x=p.x*width;
       var y=p.y*height;
-      var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
+      var cardSuit = (cardSuits[Math.ceil(Math.random()*100)%numSuits-1])+1;
       var cardValue = cardValues[cards[count][0][i]];
       const card = new Card(x, y, id, cardSuit, cardValue, p.angle);
       card.card_count = p.card_count;
@@ -216,7 +216,7 @@ function deal_all_cards(cards, dealerCards){
     ctx.beginPath();
     var x=decklocation[0]*width-(cardoffset[0]*numDealerCards)-200;
     var y=decklocation[1]*height-(cardoffset[1]*numDealerCards);
-    var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
+    var cardSuit = cardSuits[(Math.ceil(Math.random()*100)%numSuits-1)+1];
     var cardValue = cardValues[dealerCards[i]];
     var card = new Card(x, y, id, cardSuit, cardValue);
     if(numDealerCards === 0){
@@ -238,7 +238,7 @@ function deal_user_card(p, c){
   ctx.beginPath();
   var x=p.x*width;
   var y=p.y*height;
-  var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
+  var cardSuit = cardSuits[(Math.ceil(Math.random()*100)%numSuits-1)+1];
   var cardValue = cardValues[c];
   const card = new Card(x, y, id, cardSuit, cardValue, p.angle);
   card.card_count = p.card_count;
@@ -258,7 +258,7 @@ function deal_dealer_card(c){
   ctx.beginPath();
   var x=decklocation[0]*width-(cardoffset[0]*numDealerCards)-200;
   var y=decklocation[1]*height- (cardoffset[1]*numDealerCards);
-  var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
+  var cardSuit = cardSuits[(Math.ceil(Math.random()*100)%numSuits-1)+1];
   var cardValue = cardValues[c];
   var card = new Card(x, y, id, cardSuit, cardValue);
   if(numDealerCards === 0){
@@ -361,7 +361,7 @@ function stand() {
             for (let i = 0; i < data.data.length; i++) {
               document.getElementById(i == 0 ? "playerStatus" : i == 1 ? "AI1Status" : "AI2Status").innerHTML = data.data[i][0];
             }
-            document.getElementById("balanceLabel").innerHTML = "⟳ Balance Loading ⟳";
+            document.getElementById("balanceLabel").innerHTML = "⟳ Loading...";
             await changeBal(data.data[0][1]);
             stand_active = false;
             hit_active = false;
@@ -393,6 +393,9 @@ function new_game(){
 
 function repaint_canvas(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // ctx.canvas.width  = window.innerWidth;
+  // ctx.canvas.height = window.innerHeight;
+  // ctx.background = backgroundimage;
   init_dealer_deck();
   paint_playername();
 
@@ -421,7 +424,7 @@ function bet_helper(a){
     ctx.fillStyle = "gold";
     ctx.font = "20px Comic Sans";
     bet_amount = a;
-    ctx.fillText(`+${bet_amount} WEI...`, 77/100*width, 27.5/100*height);
+    ctx.fillText(`+${bet_amount} WEI...`, 0.77*width, 0.33*height);
   }
 }
 
@@ -454,7 +457,7 @@ function bet(){
       alert("Invalid bet, please do not bet higher than your wallet balance")
       deal_active = false;
     } else {
-        document.getElementById("balanceLabel").innerHTML = "⟳ Balance Loading ⟳";
+        document.getElementById("balanceLabel").innerHTML = "⟳ Loading...";
         await changeBal(-1);
     }
   })
