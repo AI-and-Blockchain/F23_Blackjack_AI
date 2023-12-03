@@ -53,6 +53,17 @@ We will be using Q-learning as our algorithm.
 * The Q-table stores an action for each possible state of the environment - when a state is encountered, the corresponding action for that state is retrieved from the Q-table and executed, and its value is updated. The model chooses the action that provides the highest "reward".
 * We can train the model, and then use its Q-table in our code, or we can train the model over time while it plays on our system.
 
+#### Results of Q-learning Training
+
+The open-source model we used for development included some functionality for plotting the strategy of the generated model. We can see how the strategy improved over time. The error curve flattened, and the rewards were maximized. We trained the model on many, many games so it would create the best strategy possible, at the cost of our graphs being very condensed. However, the trends in the data are still apparent.
+
+![image](assets/training_graphs.png)
+
+The graphs below show the strategy that the AI model learned. We can observe that without a usable ace, the model learned to be conservative, because, due to the game parameters, it knew that the dealer would stand on 17. With a usable ace, however, the model learned that it was not at risk of busting (going over 21), so it was not as conservative. Note that our terminology differs from the graph slightly; the term "stick" is equivalent to our use of the term "stand", which both indicate that the user will not elect to receive another card at that point.
+
+![image](assets/withoutusable.png)
+![image](assets/withusable.png)
+
 ### Blockchain Architecture
 * Smart contract used for betting cryptocurrency against the Blackjack AI
     * Ensures that the outcomes of the betting are fair and secure

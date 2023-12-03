@@ -29,6 +29,21 @@ class Agent: # Abstract Agent class
         pass
 
 class QAgent(Agent):
+    '''
+    
+    Original code provided by:
+    
+    # Author: Till Zemann
+    # License: MIT License
+    
+    "Users of software using an MIT License are permitted to use, 
+    copy, modify, merge publish, distribute, sublicense, and sell copies of the software."
+    
+    We modified this code to fit our own needs, and only some major important pieces remain.
+    
+    Link to original code: https://gymnasium.farama.org/tutorials/training_agents/blackjack_tutorial/
+    
+    '''
     def __init__(self, name: str="Pablo", smartness: float=0, trainable: bool=True):
         super().__init__()
         
