@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from importlib import reload
+import sys
 
 
 from model.game import BlackjackGame
@@ -64,7 +64,8 @@ class playerCount(BaseModel):
     players: int
 
 def testAgent():
-    reload(model.CustomAgent)
+    del sys.modules["model.CustomAgent"]
+    import model.CustomAgent
     agent = model.CustomAgent.CustomAgent("test")
     if not (agent.id == str(agent) == repr(agent) == "test"):
         raise Exception

@@ -51,6 +51,7 @@ async function login() {
                     .then(data => {
                         if (data.players == 2) {
                             alert("Your file was not accepted, please review the required format.")
+                            document.getElementById("agent-upload").value = "";
                         } else {
                             location.href = "Blackjack.html";
                         }
