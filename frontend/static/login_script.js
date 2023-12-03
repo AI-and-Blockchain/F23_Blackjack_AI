@@ -2,6 +2,11 @@ var cashOutCode = "";
 var depositCode = "";
 const deposit = document.querySelector('.deposit-btn');
 const withdraw = document.querySelector('.withdraw-btn');
+const agentUpload = document.getElementById('agent-upload');
+
+agentUpload.addEventListener('change', function(){
+    document.getElementById("uploadLabel").textContent = this.files[0].name
+})
 
 var slider = document.getElementById("AILevel");
 var output = document.getElementById("slidelabel");
@@ -29,9 +34,30 @@ async function login() {
         if (data.name == "invalid") {
             alert("Please enter a name");
         } else if (Number(document.getElementById("balanceLabel").innerHTML) < 10) {
-            alert("Please deposit at least 10 Wei into your account.")
+            alert("Please deposit at least 10 Wei into your account.");
         } else {
-            location.href = "Blackjack.html";
+            if (agentUpload.files.length != 0) {
+                agentUpload.files[0].text().then((data) => {
+                    const formData = {file: data}
+        
+                    fetch('/upload', {
+                        method: 'POST',
+                        body: JSON.stringify(formData),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.players == 2) {
+                            alert("Your file was not accepted, please review the required format.")
+                            document.getElementById("agent-upload").value = "";
+                        } else {
+                            location.href = "Blackjack.html";
+                        }
+                    })
+                })
+            } else {location.href = "Blackjack.html";}
         }
     })
     .catch(error => {
@@ -114,6 +140,9 @@ deposit.addEventListener('click', async() => {
 window.onload = async function() {
     slider.value = '50';
     output.innerHTML = "AI LEVEL: "  + slider.value + "%"; // Display the default slider value
+    if (agentUpload.files.length != 0) {
+        document.getElementById("agent-upload").value = "";
+    }
 
     try {
         await checkBalance();

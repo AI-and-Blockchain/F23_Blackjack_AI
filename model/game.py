@@ -112,26 +112,26 @@ class BlackjackGame:
         dealer_status = self.dealer.status()
         dealer_total = self.dealer.total
         messages = []
-        for p in self.players:
+        for i, p in enumerate(self.players):
             if p.status() == 1:
                 if dealer_status == 1:
-                    messages.append([f"Both the dealer and player {p} got a natural blackjack, they push.", 0])
+                    messages.append([f"Both the dealer and {'player ' * (i == 0)}{p} got a natural blackjack, they push.", 0])
                 else:
-                    messages.append([f"Player {p} got a natural blackjack and wins the bonus payout.", 1.5])
+                    messages.append([f"{'Player ' * (i == 0)}{p} got a natural blackjack and wins the bonus payout.", 1.5])
             elif p.status() == 2:
                 if dealer_status == 1:
                     messages.append([f"The dealer had natural blackjack, {p} loses.", -1])
                 elif dealer_status == 2:
-                    messages.append([f"Both the dealer and player {p} got a blackjack, they push.", 0])
+                    messages.append([f"Both the dealer and {'player ' * (i == 0)}{p} got a blackjack, they push.", 0])
                 else:
-                    messages.append([f"Player {p} got blackjack after hitting and wins", 1])
+                    messages.append([f"{'Player ' * (i == 0)}{p} got blackjack after hitting and wins", 1])
             elif p.status() == 3:
                 if dealer_status == 1:
-                    messages.append([f"The dealer had natural blackjack, player {p} loses.", -1])
+                    messages.append([f"The dealer had natural blackjack, {'player ' * (i == 0)}{p} loses.", -1])
                 elif dealer_status == 2:
-                    messages.append([f"The dealer got a blackjack, player {p} loses.", -1])
+                    messages.append([f"The dealer got a blackjack, {'player ' * (i == 0)}{p} loses.", -1])
                 elif dealer_status == 3:
-                    s = f"Player {p} stood on {p.total} and the dealer stood on {dealer_total},"
+                    s = f"{'Player ' * (i == 0)}{p} stood on {p.total} and the dealer stood on {dealer_total},"
                     result = 0
                     if p.total > dealer_total:
                         s+= f" {p} wins."
@@ -143,9 +143,9 @@ class BlackjackGame:
                         s += f" they push."
                     messages.append([s, result])
                 elif dealer_status == 4:
-                    messages.append([f"Player {p} stood on {p.total} and the dealer busted, {p} wins.", 1])
+                    messages.append([f"{'Player ' * (i == 0)}{p} stood on {p.total} and the dealer busted, {p} wins.", 1])
             elif 4:
-                messages.append([f"Player {p} busted and lost.", -1])
+                messages.append([f"{'Player ' * (i == 0)}{p} busted and lost.", -1])
         self.state = States.READY
         return messages
 

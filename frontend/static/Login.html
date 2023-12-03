@@ -42,7 +42,11 @@
                 <button class="withdraw-btn btn btn-primary rounded">Withdraw</button><br><br>
             </div>
         </div>
-        <button onclick=upload() type="button" id="uploadButton" class="btn btn-primary rounded">Upload AI 📤</button><br><br>
+        <form id="uploadForm" action="/api" method="post" enctype="multipart/form-data">
+            <label id="uploadLabel" for="agent-upload">Upload AI 📤</label>
+            <input type="file" id="agent-upload" accept=".py" hidden/>
+            <!-- <button for="file" type="button" id="uploadButton" class="btn btn-primary rounded">Upload AI 📤</button><br><br> -->
+        </form>
         <div class="slidecontainer"  style="margin-top: 10px;">
             <div>
                 <input type="range" min="1" max="100" value="50" class="slider" id="AILevel">
