@@ -200,7 +200,6 @@ function deal_all_cards(cards, dealerCards){
       var y=p.y*height;
       var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
       var cardValue = cardValues[cards[count][0][i]];
-      console.log("cardValue:",cardValue);
       const card = new Card(x, y, id, cardSuit, cardValue, p.angle);
       card.card_count = p.card_count;
       id+=1;
@@ -238,7 +237,6 @@ function deal_all_cards(cards, dealerCards){
 }
 
 function active_color_btn(){
-  console.log("active_color_btn", deal_active, bet_active, hit_active, stand_active, exit_active);
   document.getElementById("dealbtn").style.backgroundColor = (deal_active) ? btnColor2 : btnColor1;
   document.getElementById("plusbtn").style.backgroundColor = (bet_active) ? btnColor2 : btnColor1;
   document.getElementById("minusbtn").style.backgroundColor = (bet_active) ? btnColor2 : btnColor1;

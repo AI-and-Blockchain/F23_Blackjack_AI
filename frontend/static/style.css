@@ -34,51 +34,67 @@ code {
 
 #standbtn {
   position:absolute;
-  left:70%;
-  top:30%;
   border-radius: 15px;
   background-color: var(--btncolor);
+}
+#stand {
+  position: absolute;
+  left:70%;
+  top:30%;
 }
 
 #hitbtn {
   position:absolute;
-  left:70%;
-  top:35%;
   border-radius: 15px;
   background-color: var(--btncolor);
+}
+#hit {
+  position: absolute;
+  left:70%;
+  top:35%;
 }
 
 #betbtn {
   position:absolute;
-  left:70%;
-  top:25%;
   border-radius: 15px;
   background-color: var(--btncolor);
 }
-
+#bet {
+  position: absolute;
+  left:70%;
+  top:25%;
+}
 
 #plusbtn {
   position:absolute;
-  left:73%;
-  top:25%;
   border-radius: 15px;
   background-color: var(--btncolor);
+}
+#plus {
+  position: absolute;
+  left:73.5%;
+  top:25%;
 }
 
 #minusbtn {
   position:absolute;
-  left:74.5%;
-  top:25%;
   border-radius: 15px;
   background-color: var(--btncolor);
 }
-
+#minus {
+  position: absolute;
+  left:75.5%;
+  top:25%;
+}
 #dealbtn {
     position:absolute;
-    left:70%;
-    top:20%;
     border-radius: 15px;
     background-color: var(--btncolor);
+  }
+  #deal {
+    position: absolute;
+    left:70%;
+    top:20%;
   }
 
   #exitbtn {
@@ -89,18 +105,28 @@ code {
     background-color: var(--btncolor);
     border: solid rgb(195, 168, 100) 2px;
   }
+  #exit {
+    position: absolute;
+    left:2%;
+    top:2%;
+  }
   
   #balanceLabel {
     position: absolute;
-    left:70%;
-    top: 15%;
     color: gold;
     font-weight: bold;
     border: solid rgb(176, 169, 125) 4px;
     padding: 5px;
+    white-space: nowrap; 
   }
   #balanceLabel:before {
     content: "BALANCE: ";
+  }
+  #balance {
+    position: absolute;
+    left:70%;
+    top: 10%;
+    white-space: nowrap; 
   }
   
   #playerStatus {
@@ -124,3 +150,4 @@ code {
     background-color: var(--btncolor);
   }
   
+ 
