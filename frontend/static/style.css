@@ -6,7 +6,10 @@ canvas {
     width:100%;
     height: 100%;
     margin: 0; 
-    overflow: auto;
+    position: center;
+    /* overflow-x: scroll;
+    overflow-y: scroll; */
+    /* max-height:100%; */
     /* background-size: contain auto; */
 }
 
@@ -24,7 +27,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position:absolute;
-  overflow: hidden;
+  /* overflow: hidden; */
+  /* overflow-x: scroll; */
+  /* overflow-y: scroll;
+   */
+  
+
 
 }
 
