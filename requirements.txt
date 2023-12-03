@@ -1,10 +1,8 @@
 fastapi==0.104.1
 gym==0.26.2
 numpy==1.22.3
-pandas==1.4.1
 pydantic==2.5.2
 python-dotenv==1.0.0
-regex==2022.10.31
 tqdm==4.64.0
 uvicorn==0.24.0.post1
 web3==6.11.3
