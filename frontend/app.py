@@ -210,6 +210,11 @@ async def fileInput(item: fileContents):
     user.secondAiName = user.username + "'s" + " Agent"
     return playerCount(players=user.players)
 
+@app.post("/resetUpload")
+async def resetUpload():
+    user.players = 2
+    user.secondAiName = ''
+
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
     return FileResponse("frontend/static/assets/favicon.ico")

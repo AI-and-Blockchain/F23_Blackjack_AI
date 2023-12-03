@@ -1,3 +1,5 @@
+from random import randint
+
 class Agent: # Abstract Agent class
     def __init__(self):
         self.id = 0
@@ -28,7 +30,7 @@ class CustomAgent(Agent): # your implmentation goes here
         pass
     
     def decision(self):
-        return 'S'
+        return 'S' if randint(0,1) == 1 else 'H'
     
     def start_new(self):
         self.cards = []

@@ -143,6 +143,12 @@ window.onload = async function() {
     if (agentUpload.files.length != 0) {
         document.getElementById("agent-upload").value = "";
     }
+    fetch('/resetUpload', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
 
     try {
         await checkBalance();
