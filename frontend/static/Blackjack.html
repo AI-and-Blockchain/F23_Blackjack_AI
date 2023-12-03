@@ -16,19 +16,37 @@
   <script src="./utils.js"></script>
 
   <body>
-    <canvas class="myCanvas"></canvas>
-    <button id="dealbtn" onclick="deal()">DEAL</button>
-    <button id="standbtn" onclick="stand()">STAND</button>
-    <button id="hitbtn" onclick="hit()">HIT</button>
-    <button id="plusbtn" onclick="plus()">+</button>
-    <button id="minusbtn" onclick="minus()">-</button>
-    <button id="betbtn" onclick="bet()">BET</button>
-    <button id="exitbtn" onclick="exit()">EXIT</button>
 
-    <p id="balanceLabel"></p>
-    <p id="playerStatus"></p><br><br>
-    <p id="AI1Status"></p><br><br>
-    <p id="AI2Status"></p><br><br>
+    <canvas class="myCanvas"></canvas>
+    <div id =deal> 
+      <button id="dealbtn" onclick="deal()">DEAL</button> 
+    </div>  
+    <div id =stand> 
+      <button id="standbtn" onclick="stand()">STAND</button>
+    </div>
+    <div id =hit> 
+      <button id="hitbtn" onclick="hit()">HIT</button>
+    </div>
+    <div  id =plus>
+      <button id="plusbtn" onclick="plus()">+</button>
+    </div>
+    <div id =minus>
+      <button id="minusbtn" onclick="minus()">-</button>
+    </div>
+    <div id=bet>
+      <button id="betbtn" onclick="bet()">BET</button>
+    </div>
+    <div id=exit>
+      <button id="exitbtn" onclick="exit()">EXIT</button>
+    </div>
+    <div id="balance">
+      <p id="balanceLabel"></p>
+    </div>
+    <div id = status>
+      <p id="playerStatus"></p><br><br>
+      <p id="AI1Status"></p><br>
+      <p id="AI2Status"></p><br>
+    </div>
     <!-- <button id="betbtn" onclick="bet()">BET</button> -->
   </body>
 

@@ -34,51 +34,70 @@ code {
 
 #standbtn {
   position:absolute;
-  left:70%;
-  top:30%;
   border-radius: 15px;
   background-color: var(--btncolor);
+}
+#stand {
+  position: absolute;
+  left:70%;
+  top:30%;
 }
 
 #hitbtn {
   position:absolute;
-  left:70%;
-  top:35%;
   border-radius: 15px;
   background-color: var(--btncolor);
+  font-size: 100%;
+}
+#hit {
+  position: absolute;
+  left:70%;
+  top:35%;
 }
 
 #betbtn {
   position:absolute;
-  left:70%;
-  top:25%;
   border-radius: 15px;
   background-color: var(--btncolor);
+  font-size: 100%;
 }
-
+#bet {
+  position: absolute;
+  left:70%;
+  top:25%;
+}
 
 #plusbtn {
   position:absolute;
-  left:73%;
-  top:25%;
   border-radius: 15px;
   background-color: var(--btncolor);
+  font-size: 100%;
+}
+#plus {
+  position: absolute;
+  left:73.5%;
+  top:25%;
 }
 
 #minusbtn {
   position:absolute;
-  left:74.5%;
-  top:25%;
   border-radius: 15px;
   background-color: var(--btncolor);
 }
-
+#minus {
+  position: absolute;
+  left:75.5%;
+  top:25%;
+}
 #dealbtn {
     position:absolute;
-    left:70%;
-    top:20%;
     border-radius: 15px;
     background-color: var(--btncolor);
+  }
+  #deal {
+    position: absolute;
+    left:70%;
+    top:20%;
   }
 
   #exitbtn {
@@ -89,38 +108,79 @@ code {
     background-color: var(--btncolor);
     border: solid rgb(195, 168, 100) 2px;
   }
+  #exit {
+    position: absolute;
+    left:2%;
+    top:2%;
+  }
   
   #balanceLabel {
     position: absolute;
-    left:70%;
-    top: 15%;
     color: gold;
     font-weight: bold;
     border: solid rgb(176, 169, 125) 4px;
     padding: 5px;
+    white-space: nowrap; 
   }
   #balanceLabel:before {
     content: "BALANCE: ";
   }
+  #balance {
+    position: absolute;
+    left:70%;
+    top: 10%;
+    white-space: nowrap; 
+  }
   
-  #playerStatus {
+  /* #playerStatus {
     position: absolute;
     left:50%;
     top: 10%;
-    background-color: var(--btncolor);
+    color:rgb(176, 169, 125);
+    font-weight: 400;
   }
   
   #AI1Status {
     position: absolute;
     left:50%;
     top: 12%;
-    background-color: var(--btncolor);
+    color:rgb(176, 169, 125);
+    font-weight: 400;
   }
   
   #AI2Status {
     position: absolute;
     left:50%;
     top: 14%;
-    background-color: var(--btncolor);
+    color:rgb(176, 169, 125);
+    font-weight: 400;
+  } */
+  #playerStatus {
+    position: absolute;
+    color:gold;
+    font-weight: 400;
+    white-space: nowrap; 
   }
+
   
+  #AI1Status {
+    position: absolute;
+    color:gold;
+    font-weight: 400;
+    white-space: nowrap; 
+  }
+
+  
+  #AI2Status {
+    position: absolute;
+    color:gold;
+    font-weight: 400;
+    white-space: nowrap; 
+  }
+
+  #status {
+    position: absolute; 
+    left:20%;
+    top: 14%;
+    white-space: nowrap; 
+  }
