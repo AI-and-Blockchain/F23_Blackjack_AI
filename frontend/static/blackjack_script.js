@@ -96,13 +96,13 @@ class Player{
 }
 
 window.onload = function() {
-  // if (pageAccessedByReload) {
-  //   location.href = "Login.html";
-  // } else if (pageAccessedByButtons) {
-  //   location.href = "Login.html";
-  // } else {
+  if (pageAccessedByReload) {
+    location.href = "Login.html";
+  } else if (pageAccessedByButtons) {
+    location.href = "Login.html";
+  } else {
     init_game();
-  // }
+  }
   fetch('/byteCode', {
     method: 'POST',
     body: JSON.stringify({func: "changeBalance(address,uint256,bool)"}),
@@ -223,7 +223,7 @@ function deal_all_cards(cards, dealerCards){
       }
       card.fliplocked = 0;
       card.sideup = 1;
-      setTimeout(function(){paintcard(card)}, 200 * (count + (i*2) + 1));
+      setTimeout(function(){paintcard(card)}, 200 * (count + (i*2) + (count != 2 ? 1 : 0)));
       // paintcard(card);
       count++;
     }
@@ -574,32 +574,6 @@ async function changeBal(modifier) {
             }
           })
       })
-      .catch(async (_) => {
-        await checkBalance();
-        if (Number(document.getElementById("balanceLabel").innerHTML) < 10 && !bet_active) {
-          setTimeout(function(){alert("You do not have enough money to continue betting, please exit and deposit more.")}, 10);
-          hit_active = false;
-          stand_active = false;
-          bet_active = false;
-          deal_active = false;
-          exit_active = true;
-          active_color_btn();
-        } else {
-          if (bet_active) {
-            bet_active = false;
-            exit_active = false;
-            deal_active = true;
-            active_color_btn();
-          } else {
-            bet_active = true;
-            exit_active = true;
-            deal_active = false;
-            active_color_btn();
-            bet_amount = 0;
-            new_game();
-          }
-        }
-        // changeBal(modifier));
-      })
+      .catch(async (_) => changeBal(modifier))
     })
 }

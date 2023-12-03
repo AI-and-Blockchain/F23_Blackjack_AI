@@ -7,8 +7,14 @@ import sys
 
 from model.game import BlackjackGame
 from model.player import WebUser, QAgent, LocalPlayer
-import model.CustomAgent
 from blockchain.blockchain import BlockchainInterface
+try:
+    import model.CustomAgent
+except:
+    with open("model/CustomAgentExample.py", 'r') as f:
+        with open("model/CustomAgent.py", 'w') as f2:
+            f2.write(f.read())
+    import model.CustomAgent
 
 app = FastAPI()
 
