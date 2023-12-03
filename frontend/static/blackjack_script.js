@@ -192,6 +192,7 @@ function init_dealer_deck(){
 }
 
 function deal_all_cards(cards, dealerCards){
+  console.log(cards);
   for (let i = 0; i < 2; i++) {
     var count = 0;
     for(let p of playerObjects){
@@ -199,8 +200,8 @@ function deal_all_cards(cards, dealerCards){
       var x=p.x*width;
       var y=p.y*height;
       var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
-      console.log("cardValue", cardValue, "i", i, "count", count);
       var cardValue = cardValues[cards[count][0][i]];
+      console.log("cardValue", cardValue, "i", i, "count", count);
       const card = new Card(x, y, id, cardSuit, cardValue, p.angle);
       card.card_count = p.card_count;
       id+=1;
@@ -528,41 +529,41 @@ async function changeBal(modifier) {
           ],
       })
       .then((txHash) => {
-              console.log(txHash);
-              fetch('/trackTransaction', {
-                  method: 'POST',
-                  body: JSON.stringify({address: txHash}),
-                  headers: {
-                      'Content-Type': 'application/json'
-                  }
-              })
-              .then(async _ => {
-                await checkBalance();
-                if (Number(document.getElementById("balanceLabel").innerHTML) < 10 && !bet_active) {
-                  setTimeout(function(){alert("You do not have enough money to continue betting, please exit and deposit more.")}, 10);
-                  hit_active = false;
-                  stand_active = false;
-                  bet_active = false;
-                  deal_active = false;
-                  exit_active = true;
-                  active_color_btn();
-                } else {
-                  if (bet_active) {
-                    bet_active = false;
-                    exit_active = false;
-                    deal_active = true;
-                    active_color_btn();
-                  } else {
-                    bet_active = true;
-                    exit_active = true;
-                    deal_active = false;
-                    active_color_btn();
-                    bet_amount = 0;
-                    new_game();
-                  }
-                }
-              })
+          console.log(txHash);
+          fetch('/trackTransaction', {
+              method: 'POST',
+              body: JSON.stringify({address: txHash}),
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          })
+          .then(async _ => {
+            await checkBalance();
+            if (Number(document.getElementById("balanceLabel").innerHTML) < 10 && !bet_active) {
+              setTimeout(function(){alert("You do not have enough money to continue betting, please exit and deposit more.")}, 10);
+              hit_active = false;
+              stand_active = false;
+              bet_active = false;
+              deal_active = false;
+              exit_active = true;
+              active_color_btn();
+            } else {
+              if (bet_active) {
+                bet_active = false;
+                exit_active = false;
+                deal_active = true;
+                active_color_btn();
+              } else {
+                bet_active = true;
+                exit_active = true;
+                deal_active = false;
+                active_color_btn();
+                bet_amount = 0;
+                new_game();
+              }
+            }
+          })
       })
-      .catch((_) => changeBal(modifier));
-      })
+      .catch(async (_) => changeBal(modifier));
+    })
 }
