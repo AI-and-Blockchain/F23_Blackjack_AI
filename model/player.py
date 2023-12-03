@@ -4,7 +4,7 @@ import pandas as pd
 
 from collections import defaultdict
 from tqdm import tqdm
-from typing import List, Union, Type
+from typing import List, Union, Type, Tuple
 
 from model.utils import compute_total
 from model.q_table import Q_TABLE
@@ -67,7 +67,7 @@ class QAgent(Agent):
         
         self.id = name
         
-    def get_action(self, obs: tuple[int, int, bool], force: bool=True) -> int:
+    def get_action(self, obs: Tuple[int, int, bool], force: bool=True) -> int:
         """
         Returns the best action with probability (1 - epsilon)
         otherwise a random action with probability epsilon to ensure exploration.
@@ -80,8 +80,8 @@ class QAgent(Agent):
         else:
             return int(np.argmax(self.q_values[obs]))
         
-    def update(self, obs: tuple[int, int, bool], action: int, 
-               reward: float, terminated: bool, next_obs: tuple[int, int, bool]):
+    def update(self, obs: Tuple[int, int, bool], action: int, 
+               reward: float, terminated: bool, next_obs: Tuple[int, int, bool]):
         """Updates the Q-value of an action."""
         future_q_value = (not terminated) * np.max(self.q_values[next_obs])
         temporal_difference = (

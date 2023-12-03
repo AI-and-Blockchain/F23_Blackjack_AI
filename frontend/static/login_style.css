@@ -1,4 +1,8 @@
 
+:root {
+  --btncolor: rgb(203, 209, 180);
+  --btncolor2: rgb(108, 120, 106);
+}
 
 body {
   margin: 0 auto;
@@ -7,13 +11,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* position:absolute; */
   overflow: hidden;
 
-  background-image: url("./assets/casino2.png");
-  /*background-size: cover; */
-  background-size: 100% 100%; 
-  background-position: absolute;
+  background-image: url("./assets/Casino_Login.png");
+  background-size: cover;
+  /* background-size: 100% 100%;  */
+  background-position:  0% 20%;
   background-repeat: no-repeat;
 
   display: flex;
@@ -38,7 +41,6 @@ body {
 
 .slidecontainer {
   margin: 0;
-  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -62,11 +64,14 @@ code {
 }
 
 #inputs {
+    position: relative;
+    top: 100px;
     text-align: center;
-    font-size: 150%;
+    font-size: 100%;
 }
 
 label[for="name"] {
+  text-shadow: 0px 0px 5px white;
   font-size: 125%;
 }
 
@@ -74,8 +79,13 @@ label[for="name"] {
   font-size: 125%;
 }
 
+
+
 #name {
   font-size: 85%;
+  max-width: 50%;
+  margin-left: 25%;
+  text-align: center;
 }
 
 #amount{
@@ -84,11 +94,15 @@ label[for="name"] {
 
 #amount::placeholder {
   font-size: 85%;
+  text-align: center;
 }
 
-.deposit-btn{
+.deposit-btn {
+  box-shadow: none !important;
+  background-color: var(--btncolor2) !important;
   font-size: 95%;
-}
+} 
+
 
 #wamount{
   font-size: 85%;
@@ -96,12 +110,23 @@ label[for="name"] {
 
 #wamount::placeholder {
   font-size: 85%;
+  text-align: center;
 }
 
 .withdraw-btn{
+  box-shadow: none !important;
+  background-color: var(--btncolor2) !important;
   font-size: 95%;
 }
 
 #loginButton {
+  box-shadow: none !important;
+  background-color: var(--btncolor2) !important;
+  font-size: 95%;
+}
+
+#uploadButton {
+  box-shadow: none !important;
+  background-color: var(--btncolor2) !important;
   font-size: 95%;
 }
