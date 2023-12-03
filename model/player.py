@@ -1,10 +1,9 @@
 import gym
 import numpy as np
-import pandas as pd
 
 from collections import defaultdict
 from tqdm import tqdm
-from typing import List, Union, Type, Tuple
+from typing import Type, Tuple
 
 from model.utils import compute_total
 from model.q_table import Q_TABLE
@@ -17,16 +16,16 @@ class Agent: # Abstract Agent class
     def __str__(self):
         return f"{self.id}"
     def add_card(self, card):
-        pass
+        raise Exception("Not yet implemented")
     def add_dealer_card(self, card):
-        pass
+        raise Exception("Not yet implemented")
     def decision(self):
         """
         Returns "S" for stand and "H" for hit
         """
-        pass
+        raise Exception("Not yet implemented")
     def start_new(self):
-        pass
+        raise Exception("Not yet implemented")
 
 class QAgent(Agent):
     '''
@@ -175,6 +174,9 @@ class Dealer(Agent):
     def add_card(self, card, total):
         self.cards.append(card)
         self.total = total
+
+    def add_dealer_card(self, _):
+        pass
 
     def decision(self):
         return "H" if self.total < 17 else "S"

@@ -90,7 +90,7 @@ def web_test():
         port = int(argv[1])
     except:
         port = 8000
-    uvicorn.run("frontend.app:app",host="localhost", port = port,reload=True)
+    uvicorn.run("frontend.app:app",host="localhost", port = port,reload=True, reload_excludes="model\\CustomAgent.py")
 
 if __name__ == "__main__":
     game_test()

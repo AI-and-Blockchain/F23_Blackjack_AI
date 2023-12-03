@@ -58,9 +58,11 @@ var stand_active = false;
 var bet_active = true;
 var deal_active = false;
 var exit_active = false;
+var num_players = 2;
 var player_name;
 var player_address;
 var ai_name;
+var second_ai_name;
 var playerObjects = []
 
 var changeBalanceCode = ""
@@ -94,13 +96,13 @@ class Player{
 }
 
 window.onload = function() {
-  if (pageAccessedByReload) {
-    location.href = "Login.html";
-  } else if (pageAccessedByButtons) {
-    location.href = "Login.html";
-  } else {
+  // if (pageAccessedByReload) {
+  //   location.href = "Login.html";
+  // } else if (pageAccessedByButtons) {
+  //   location.href = "Login.html";
+  // } else {
     init_game();
-  }
+  // }
   fetch('/byteCode', {
     method: 'POST',
     body: JSON.stringify({func: "changeBalance(address,uint256,bool)"}),
@@ -130,6 +132,10 @@ function init_game(){
       player_name = data.username;
       player_address = data.address;
       ai_name = data.aiName;
+      if (data.players == 3) {
+        num_players = 3;
+        second_ai_name = data.secondAiName;
+      }
   init_players();
   init_dealer_deck();
   new_game();
@@ -143,6 +149,10 @@ function init_players(){
     console.log(main_player.name);
     ai_player = new Player(userlocation[0]+0.17, userlocation[1]-0.06, ai_name, 0, -5, 0);
     playerObjects.push(main_player, ai_player);
+    if (num_players == 3) {
+      second_ai_player = new Player(userlocation[0]-0.17, userlocation[1]-0.06, second_ai_name, 0, 5, 0);
+      playerObjects.push(second_ai_player);
+    }
 }
 
 function deal(){
@@ -198,7 +208,7 @@ function deal_all_cards(cards, dealerCards){
     for(let p of playerObjects){
       ctx.beginPath();
       var x=p.x*width;
-      var y=p.y*height;
+      var y=(p.y - (p.angle == 5 ? 0.09 : 0))*height;
       var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
       var cardValue = cardValues[cards[count][0][i]];
       console.log("cardValue", cardValue, "i", i, "count", count);
@@ -214,7 +224,7 @@ function deal_all_cards(cards, dealerCards){
       card.fliplocked = 0;
       card.sideup = 1;
       setTimeout(function(){paintcard(card)}, 200 * (count + (i*2) + 1));
-      paintcard(card);
+      // paintcard(card);
       count++;
     }
     ctx.beginPath();
@@ -564,6 +574,32 @@ async function changeBal(modifier) {
             }
           })
       })
-      .catch(async (_) => changeBal(modifier));
+      .catch(async (_) => {
+        await checkBalance();
+        if (Number(document.getElementById("balanceLabel").innerHTML) < 10 && !bet_active) {
+          setTimeout(function(){alert("You do not have enough money to continue betting, please exit and deposit more.")}, 10);
+          hit_active = false;
+          stand_active = false;
+          bet_active = false;
+          deal_active = false;
+          exit_active = true;
+          active_color_btn();
+        } else {
+          if (bet_active) {
+            bet_active = false;
+            exit_active = false;
+            deal_active = true;
+            active_color_btn();
+          } else {
+            bet_active = true;
+            exit_active = true;
+            deal_active = false;
+            active_color_btn();
+            bet_amount = 0;
+            new_game();
+          }
+        }
+        // changeBal(modifier));
+      })
     })
 }
