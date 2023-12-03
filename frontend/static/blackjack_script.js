@@ -159,7 +159,7 @@ function deal(){
       bet_active = false;
       hit_active = true;
       stand_active = true;
-      active_color_btn(deal_active, bet_active, hit_active, stand_active, exit_active);
+      active_color_btn();
     })
   }
 }
@@ -237,7 +237,7 @@ function deal_all_cards(cards, dealerCards){
   }
 }
 
-function active_color_btn(deal_active, bet_active, hit_active, stand_active, exit_active){
+function active_color_btn(){
   console.log("active_color_btn", deal_active, bet_active, hit_active, stand_active, exit_active);
   document.getElementById("dealbtn").style.backgroundColor = (deal_active) ? btnColor2 : btnColor1;
   document.getElementById("plusbtn").style.backgroundColor = (bet_active) ? btnColor2 : btnColor1;
@@ -246,6 +246,13 @@ function active_color_btn(deal_active, bet_active, hit_active, stand_active, exi
   document.getElementById("hitbtn").style.backgroundColor = (hit_active) ? btnColor2 : btnColor1;
   document.getElementById("standbtn").style.backgroundColor = (stand_active) ? btnColor2 : btnColor1;
   document.getElementById("exitbtn").style.backgroundColor = (exit_active) ? btnColor2 : btnColor1;
+  document.getElementById("dealbtn").disabled = (!deal_active);
+  document.getElementById("plusbtn").disabledr = (!bet_active);
+  document.getElementById("minusbtn").disabled = (!bet_active);
+  document.getElementById("betbtn").disabled = (!bet_active);
+  document.getElementById("hitbtn").disabled = (!hit_active);
+  document.getElementById("standbtn").disabled = (!stand_active);
+  document.getElementById("exitbtn").disabled = (!exit_active);
 }
 
 function deal_user_card(p, c){
@@ -379,7 +386,7 @@ function stand() {
             await changeBal(data.data[0][1]);
             stand_active = false;
             hit_active = false;
-            active_color_btn(deal_active, bet_active, hit_active, stand_active, exit_active);
+            active_color_btn();
           })
         })
       })
@@ -403,7 +410,7 @@ function new_game(){
   bet_active = true;
   deal_active = false;
   exit_active = true;
-  active_color_btn(deal_active, bet_active, hit_active, stand_active, exit_active);
+  active_color_btn();
   repaint_canvas();
 }
 
@@ -468,11 +475,11 @@ function bet(){
     if (data.message == "invalid") {
       alert("Invalid bet, please do not bet higher than your wallet balance")
       deal_active = false;
-      active_color_btn(deal_active, bet_active, hit_active, stand_active, exit_active);
+      active_color_btn();
     } else {
         document.getElementById("balanceLabel").innerHTML = "⟳ Loading...";
         await changeBal(-1);
-        active_color_btn(deal_active, false, hit_active, stand_active, exit_active);
+        active_color_btn();
     }
   })
   .catch(error => {
@@ -539,18 +546,18 @@ async function changeBal(modifier) {
                   bet_active = false;
                   deal_active = false;
                   exit_active = true;
-                  active_color_btn(deal_active, bet_active, hit_active, stand_active, exit_active);
+                  active_color_btn();
                 } else {
                   if (bet_active) {
                     bet_active = false;
                     exit_active = false;
                     deal_active = true;
-                    active_color_btn(deal_active, bet_active, hit_active, stand_active, exit_active);
+                    active_color_btn();
                   } else {
                     bet_active = true;
                     exit_active = true;
                     deal_active = false;
-                    active_color_btn(deal_active, bet_active, hit_active, stand_active, exit_active);
+                    active_color_btn();
                     bet_amount = 0;
                     new_game();
                   }
