@@ -150,7 +150,7 @@ function init_players(){
     ai_player = new Player(userlocation[0]+0.17, userlocation[1]-0.06, ai_name, 0, -5, 0);
     playerObjects.push(main_player, ai_player);
     if (num_players == 3) {
-      second_ai_player = new Player(userlocation[0]-0.17, userlocation[1]-0.06, second_ai_name, 0, 5, 0);
+      second_ai_player = new Player(userlocation[0]-0.17, userlocation[1]-0.15, second_ai_name, 0, 5, 0);
       playerObjects.push(second_ai_player);
     }
 }
@@ -208,7 +208,7 @@ function deal_all_cards(cards, dealerCards){
     for(let p of playerObjects){
       ctx.beginPath();
       var x=p.x*width;
-      var y=(p.y - (p.angle == 5 ? 0.09 : 0))*height;
+      var y=(p.y)*height;
       var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
       var cardValue = cardValues[cards[count][0][i]];
       console.log("cardValue", cardValue, "i", i, "count", count);
@@ -434,7 +434,7 @@ function repaint_canvas(){
 function paint_playername(){
   for(let p of playerObjects){
     ctx.save();
-    ctx.translate( (p.x+0.03) * width, (p.y+0.22) * height);
+    ctx.translate( (p.x+0.03) * width, (p.y+ (p.angle == 5 ? 0.31 : 0.22)) * height);
     ctx.rotate( Math.PI / p.angle );
     ctx.font = "bold 20px Arial";
     ctx.fillStyle = "black";
