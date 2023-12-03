@@ -199,6 +199,7 @@ function deal_all_cards(cards, dealerCards){
       var x=p.x*width;
       var y=p.y*height;
       var cardSuit = cardSuits[Math.ceil(Math.random()*100)%numSuits];
+      console.log("cardValue", cardValue, "i", i, "count", count);
       var cardValue = cardValues[cards[count][0][i]];
       const card = new Card(x, y, id, cardSuit, cardValue, p.angle);
       card.card_count = p.card_count;
@@ -211,7 +212,7 @@ function deal_all_cards(cards, dealerCards){
       }
       card.fliplocked = 0;
       card.sideup = 1;
-      // setTimeout(function(){paintcard(card)}, 200 * (count + (i*2) + 1));
+      setTimeout(function(){paintcard(card)}, 200 * (count + (i*2) + 1));
       paintcard(card);
       count++;
     }
@@ -231,7 +232,7 @@ function deal_all_cards(cards, dealerCards){
     id+=1;
     numDealerCards+=1;
     cardList.push(card);
-    // setTimeout(function(){paintcard(card)}, 250 * (playerObjects.length - count + (i*2) + 1));
+    setTimeout(function(){paintcard(card)}, 250 * (playerObjects.length - count + (i*2) + 1));
     paintcard(card);
   }
 }
@@ -441,7 +442,7 @@ function bet_helper(a){
     ctx.fillStyle = "gold";
     ctx.font = "20px Comic Sans";
     bet_amount = a;
-    ctx.fillText(`+${bet_amount} WEI...`, 0.77*width, 0.33*height);
+    ctx.fillText(`+${bet_amount} WEI...`, 0.79*width, 0.29*height);
   }
 }
 
