@@ -8,7 +8,7 @@ from model.utils import States
 # Uses states to correctly proceed through the steps of a game
 class BlackjackGame:
     # can accept players on initialization, as well as set how many decks to run through
-    def __init__(self, players: List[Type[Agent]] = [], decks: int = 8) -> None:
+    def __init__(self, players: List[Type[Agent]] = [], decks: int = 8):
         self.id = 3
         self.dealer = LocalPlayer(Dealer())
         self.deck = np.array([[x if x < 11 else 10] * decks * 4 for x in range(1,14)]).flatten()

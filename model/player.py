@@ -15,11 +15,11 @@ class Agent: # Abstract Agent class, also found in CustomAgentExample.py
         return f"{self.id}"
     def __str__(self):
         return f"{self.id}"
-    def add_card(self, card):
+    def add_card(self, card: int, total: int):
         raise Exception("Not yet implemented")
-    def add_dealer_card(self, card):
+    def add_dealer_card(self, card: int):
         raise Exception("Not yet implemented")
-    def decision(self):
+    def decision(self) -> str:
         raise Exception("Not yet implemented")
     def start_new(self):
         raise Exception("Not yet implemented")
@@ -169,14 +169,14 @@ class Dealer(Agent):
     def __repr__(self):
         return f"{self.id}"
     
-    def add_card(self, card, total):
+    def add_card(self, card: int, total: int):
         self.cards.append(card)
         self.total = total
 
     def add_dealer_card(self, _):
         pass
 
-    def decision(self):
+    def decision(self) -> str:
         return "H" if self.total < 17 else "S"
     
     def start_new(self):
@@ -197,10 +197,10 @@ class WebUser(Agent):
     def __str__(self):
         return f"{self.id}"
 
-    def add_card(self, card, total):
+    def add_card(self, card: int, total: int):
         pass
 
-    def add_dealer_card(self, card):
+    def add_dealer_card(self, card: int):
         pass
     
     def decision(self):
@@ -239,7 +239,7 @@ class LocalPlayer:
             self.done = 1
 
     # requests a decision from the player object and sets an internal state
-    def decision(self):
+    def decision(self) -> str:
         d = self.player.decision()
         self.done = 3 if d == "S" else 0
         return d
@@ -259,7 +259,7 @@ class LocalPlayer:
             self.done = 4
 
     # returns the status
-    def status(self):
+    def status(self) -> int:
         return self.done
     
     # resets the player object and its own variables
