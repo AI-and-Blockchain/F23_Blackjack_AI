@@ -75,14 +75,16 @@ def testAgent():
     agent = model.CustomAgent.CustomAgent("test")
     if not (agent.id == str(agent) == repr(agent) == "test"):
         raise Exception
-    agent.add_card(1, 1)
+    agent.add_card(1, 11)
+    agent.add_card(2, 13)
     agent.add_dealer_card(1)
     if agent.decision() == None:
         raise Exception
     localPlayer = LocalPlayer(model.CustomAgent.CustomAgent("test"))
     localPlayer.deal(1)
-    localPlayer.hit(1)
+    localPlayer.deal(2)
     localPlayer.add_dealer_card(1)
+    localPlayer.hit(1)
     localPlayer.decision()
     localPlayer.start_new()
 

@@ -8,21 +8,18 @@ from typing import Type, Tuple
 from model.utils import compute_total
 from model.q_table import Q_TABLE
 
-class Agent: # Abstract Agent class
+class Agent: # Abstract Agent class, also found in CustomAgentExample.py
     def __init__(self):
         self.id = 0
     def __repr__(self):
         return f"{self.id}"
     def __str__(self):
         return f"{self.id}"
-    def add_card(self, card):
+    def add_card(self, card: int, total: int):
         raise Exception("Not yet implemented")
-    def add_dealer_card(self, card):
+    def add_dealer_card(self, card: int):
         raise Exception("Not yet implemented")
-    def decision(self):
-        """
-        Returns "S" for stand and "H" for hit
-        """
+    def decision(self) -> str:
         raise Exception("Not yet implemented")
     def start_new(self):
         raise Exception("Not yet implemented")
@@ -161,7 +158,8 @@ class QAgent(Agent):
     
     def start_new(self):
         self.state = (0, 0, 0)
-      
+
+# dealer class that performs keeps track of its hand total and hits and stands in accordance with the rules
 class Dealer(Agent):
     def __init__(self):
         self.id = "Dealer"
@@ -171,20 +169,22 @@ class Dealer(Agent):
     def __repr__(self):
         return f"{self.id}"
     
-    def add_card(self, card, total):
+    def add_card(self, card: int, total: int):
         self.cards.append(card)
         self.total = total
 
     def add_dealer_card(self, _):
         pass
 
-    def decision(self):
+    def decision(self) -> str:
         return "H" if self.total < 17 else "S"
     
     def start_new(self):
         self.cards = []
         self.total = 0
 
+# the main agent that represents the frontend user
+# nothing is required of it because it is all controlled through the frontend
 class WebUser(Agent):
     def __init__(self, id, bet, address):
         self.id = id
@@ -197,20 +197,20 @@ class WebUser(Agent):
     def __str__(self):
         return f"{self.id}"
 
-    def add_card(self, card, total):
+    def add_card(self, card: int, total: int):
         pass
 
-    def add_dealer_card(self, card):
+    def add_dealer_card(self, card: int):
         pass
     
     def decision(self):
         pass
     
     def start_new(self):
-        self.cards = []
-        self.total = 0
+        pass
     
-
+# the class that wraps all Agent subclasses
+# as it is defined by us for any Agent, it controls the main logic to ensure that numbers are not manipulated by malicious agent uploads
 class LocalPlayer:
     def __init__(self, player: Type[Agent]):
         self.player = player
@@ -222,24 +222,15 @@ class LocalPlayer:
     def __str__(self):
         return str(self.player)
 
-    def blackjack(self, cards, total: int) -> bool:
-        for i, card in enumerate(cards):
-            if card == 1:
-                return self.blackjack(cards[i+1:], total + 1) or self.blackjack(cards[i+1:], total + 11)
-            else:
-                total += card
-        if total == 21:
-            return True
-        else:
-            return False
-
     def playing(self):
         return self.done == 0
     
+    # adds the dealer's card to the local store and the player object
     def add_dealer_card(self, card: int):
         self.dealer_card = card
         self.player.add_dealer_card(card)
 
+    # stores the dealt card and passes it to the player object
     def deal(self, card: int):
         self.cards.append(card)
         self.total = compute_total(self.cards)
@@ -247,14 +238,17 @@ class LocalPlayer:
         if len(self.cards) == 2 and self.total == 21:
             self.done = 1
 
-    def decision(self):
+    # requests a decision from the player object and sets an internal state
+    def decision(self) -> str:
         d = self.player.decision()
         self.done = 3 if d == "S" else 0
         return d
 
+    # sets the state
     def stand(self):
         self.done = 3
     
+    # similar to deal, but has more state logic
     def hit(self, card: int):
         self.cards.append(card)
         self.total = compute_total(self.cards)
@@ -264,15 +258,17 @@ class LocalPlayer:
         elif self.total > 21:
             self.done = 4
 
-    def status(self):
+    # returns the status
+    def status(self) -> int:
         return self.done
     
+    # resets the player object and its own variables
     def start_new(self):
         self.player.start_new()
         self.cards = []
         self.total = 0
         self.done = 0
 
+# relic of testing the QAgent
 if __name__ == "__main__":
-    
     pablo = QAgent(smartness=1, trainable=False)

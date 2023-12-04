@@ -1,11 +1,14 @@
-from typing import List, Type
+from typing import List, Type, Tuple, Union
 import numpy as np
 
 from model.player import Agent, Dealer, LocalPlayer
 from model.utils import States
 
+# Game class that runs the logic of a blackjack game
+# Uses states to correctly proceed through the steps of a game
 class BlackjackGame:
-    def __init__(self, players: List[Type[Agent]] = [], decks = 8):
+    # can accept players on initialization, as well as set how many decks to run through
+    def __init__(self, players: List[Type[Agent]] = [], decks: int = 8):
         self.id = 3
         self.dealer = LocalPlayer(Dealer())
         self.deck = np.array([[x if x < 11 else 10] * decks * 4 for x in range(1,14)]).flatten()
@@ -15,24 +18,26 @@ class BlackjackGame:
         else:
             self.players = [LocalPlayer(p) for p in players]
             self.state = States.BET
-        # print(self.players)
     
-    def revert(self):
+    # reset the game
+    def revert(self) -> None:
         self.__init__()
 
-    def add_players(self, players: List[Type[Agent]]):
+    # Accept a one-time list of players if they were not provided on initialization
+    def add_players(self, players: List[Type[Agent]]) -> None:
         if self.state != States.PLAYERS:
             return
         self.players = [LocalPlayer(p) for p in players]
         self.state = States.BET
 
-    def bet(self):
+    # a relic of old structure, no longer needed besides as a way to block until bets have been placed
+    def bet(self) -> None:
         if self.state != States.BET:
             return
         self.state = States.READY
 
-
-    def start(self):
+    # start the game by resetting all players to prepare for the deal
+    def start(self) -> None:
         if self.state != States.READY:
             return
         self.dealer.start_new()
@@ -40,8 +45,8 @@ class BlackjackGame:
             p.start_new()
         self.state = States.DEAL
         
-
-    def deal(self):
+    # loop across all players and the dealer to deal them cards from the shuffled deck
+    def deal(self) -> List[Union[List[int], List[Union[List[int], int]]]]:
         if self.state != States.DEAL:
             return ([], [])
         for i in range(2):
@@ -54,9 +59,11 @@ class BlackjackGame:
                 for p in self.players:
                     p.add_dealer_card(card)
         self.state = States.PLAY
+        # return the dealer's cards in a list, and the players' cards and hand totals in a list of lists
         return [int(card) for card in self.dealer.cards], [[[int(card) for card in p.cards], p.total] for p in self.players]
     
-    def play_user(self, decision):
+    # Accepts decisions from the frontend user on what to play
+    def play_user(self, decision: str) -> Tuple[int, bool]:
         if self.state != States.PLAY:
             return 0, True
         p = self.players[0]
@@ -72,10 +79,12 @@ class BlackjackGame:
         if p.playing():
             return int(card), True
         else:
+            # advance to the AI turns if the player is finished
             self.state = States.AI
             return int(card), False
     
-    def play_AI(self):
+    # instruct all AI agents to play their hands by polling moves until they stand or bust
+    def play_AI(self) -> List[int]:
         if self.state != States.AI:
             return []
         all_cards = []
@@ -91,8 +100,9 @@ class BlackjackGame:
             all_cards.append(cards)
         self.state = States.DEALER
         return all_cards
-        
-    def play_dealer(self):
+    
+    # instruct the dealer to play until it hits above 17 or busts
+    def play_dealer(self) -> List[int]:
         if self.state != States.DEALER:
             return []
         cards = []
@@ -106,7 +116,8 @@ class BlackjackGame:
         self.state = States.RESULTS
         return cards
 
-    def results(self):
+    # calculate the losses and wins of each player and return the results, as well as a bet modifier for payouts
+    def results(self) -> List[str]:
         if self.state != States.RESULTS:
             return ""
         dealer_status = self.dealer.status()
@@ -148,8 +159,3 @@ class BlackjackGame:
                 messages.append([f"{'Player ' * (i == 0)}{p} busted and lost.", -1])
         self.state = States.READY
         return messages
-
-
-        
-# dq = agent.DeepQAgent()
-# p = agent.ProbAgent()
