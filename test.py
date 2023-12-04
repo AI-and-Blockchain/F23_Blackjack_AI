@@ -4,7 +4,9 @@ from model.utils import compute_total
 import uvicorn
 from sys import argv
 
+# interface with the backend to pretend to be a full frontend
 class FrontendUser:
+    # intiializes agents and game
     def __init__(self):
         self.player = WebUser(input("Enter your name: ").strip(), 0, "wallet")
         self.game = BlackjackGame([self.player, QAgent()])
@@ -12,14 +14,17 @@ class FrontendUser:
         self.bet()
         self.cards = []
 
+    # tells the game that the bets are locked in
     def bet(self):
         self.game.bet()
     
+    # resets the user's cards and starts a new game
     def reset(self):
         self.cards = []
         self.playing = True
         self.game.start()
 
+    # requests a deal from the backend and reports the output
     def deal(self):
         dealer, players = self.game.deal()
         if players[0][1] == 21:
@@ -29,12 +34,14 @@ class FrontendUser:
         for i, p in enumerate(players):
             print(f"{self.player.id if i == 0 else 'Q Agent'} was dealt {' and '.join(map(str, p[0]))}. They have a hand total of {p[1]}")
     
+    # requests an input from the command line user
     def decision(self):
         dec = input("Choose H for hit, or S for stand: ").upper()
         while dec not in ["H","S"]:
             dec = input("Choose H for hit, or S for stand: ").upper()
         return dec
 
+    # takes input from the user until they are done, then plays the ai and the dealer
     def play(self):
         while self.playing:
             choice = self.decision()
@@ -60,6 +67,7 @@ class FrontendUser:
         else:
             print(f"The dealer hit {len(dealer)} time{'s'*(len(dealer) != 1)} and got {', '.join(map(str, dealer))}")
     
+    # prints the results from the backend game
     def results(self):
         print("\n".join([x[0] for x in self.game.results()]))
 
@@ -70,12 +78,8 @@ class FrontendUser:
         self.results()
 
 
-
+# tests the game from the perspective of a frontend without requiring any frontend code or interfacing
 def game_test():
-    # dq = QAgent()
-    # u1 = User()
-    # p = ProbAgent()
-
     f = FrontendUser()
     while True:
         in_ = input("Press enter to begin:")
@@ -83,8 +87,7 @@ def game_test():
             return
         f.run_game()
     
-
-
+# tests the current state of the frontend integration and overall completion
 def web_test():
     try:
         port = int(argv[1])

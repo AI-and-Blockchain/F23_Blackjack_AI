@@ -4,7 +4,10 @@ import numpy as np
 from model.player import Agent, Dealer, LocalPlayer
 from model.utils import States
 
+# Game class that runs the logic of a blackjack game
+# Uses states to correctly proceed through the steps of a game
 class BlackjackGame:
+    # can accept players on initialization, as well as set how many decks to run through
     def __init__(self, players: List[Type[Agent]] = [], decks = 8):
         self.id = 3
         self.dealer = LocalPlayer(Dealer())
@@ -15,23 +18,25 @@ class BlackjackGame:
         else:
             self.players = [LocalPlayer(p) for p in players]
             self.state = States.BET
-        # print(self.players)
     
+    # reset the game
     def revert(self):
         self.__init__()
 
+    # Accept a one-time list of players if they were not provided on initialization
     def add_players(self, players: List[Type[Agent]]):
         if self.state != States.PLAYERS:
             return
         self.players = [LocalPlayer(p) for p in players]
         self.state = States.BET
 
+    # a relic of old structure, no longer needed besides as a way to block until bets have been placed
     def bet(self):
         if self.state != States.BET:
             return
         self.state = States.READY
 
-
+    # start the game by resetting all players to prepare for the deal
     def start(self):
         if self.state != States.READY:
             return
@@ -40,7 +45,7 @@ class BlackjackGame:
             p.start_new()
         self.state = States.DEAL
         
-
+    # loop across all players and the dealer to deal them cards from the shuffled deck
     def deal(self):
         if self.state != States.DEAL:
             return ([], [])
@@ -54,8 +59,10 @@ class BlackjackGame:
                 for p in self.players:
                     p.add_dealer_card(card)
         self.state = States.PLAY
+        # return the dealer's cards in a list, and the players' cards and hand totals in a list of lists
         return [int(card) for card in self.dealer.cards], [[[int(card) for card in p.cards], p.total] for p in self.players]
     
+    # Accepts decisions from the frontend user on what to play
     def play_user(self, decision):
         if self.state != States.PLAY:
             return 0, True
@@ -72,9 +79,11 @@ class BlackjackGame:
         if p.playing():
             return int(card), True
         else:
+            # advance to the AI turns if the player is finished
             self.state = States.AI
             return int(card), False
     
+    # instruct all AI agents to play their hands by polling moves until they stand or bust
     def play_AI(self):
         if self.state != States.AI:
             return []
@@ -91,7 +100,8 @@ class BlackjackGame:
             all_cards.append(cards)
         self.state = States.DEALER
         return all_cards
-        
+    
+    # instruct the dealer to play until it hits above 17 or busts
     def play_dealer(self):
         if self.state != States.DEALER:
             return []
@@ -106,6 +116,7 @@ class BlackjackGame:
         self.state = States.RESULTS
         return cards
 
+    # calculate the losses and wins of each player and return the results, as well as a bet modifier for payouts
     def results(self):
         if self.state != States.RESULTS:
             return ""
@@ -148,8 +159,3 @@ class BlackjackGame:
                 messages.append([f"{'Player ' * (i == 0)}{p} busted and lost.", -1])
         self.state = States.READY
         return messages
-
-
-        
-# dq = agent.DeepQAgent()
-# p = agent.ProbAgent()

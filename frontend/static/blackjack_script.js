@@ -32,9 +32,6 @@ const pageAccessedByButtons = (
 const canvas = document.querySelector('.myCanvas');
 const width = canvas.width = window.innerWidth;
 const height = canvas.height = window.innerHeight;
-
-// const width = canvas.width = document.documentElement.clientWidth;
-// const height = canvas.height = document.documentElement.clientHeight
 const ctx = canvas.getContext('2d');
 ctx.background = backgroundimage;
 

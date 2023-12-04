@@ -1,9 +1,10 @@
 import numpy as np
 from enum import Enum
 
+# Converts deck numbers to point values
 convert = {1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, 11:10, 12:10, 13:10}
 
-
+# enumeration to have variable representations of states
 class States(Enum):
     PLAYERS = 0
     BET = 1
@@ -14,7 +15,7 @@ class States(Enum):
     DEALER = 6
     RESULTS = 7
 
-
+# computes the total of a deck of cards
 def compute_total(cards):
     total = 0
     for card in sorted(list(map(lambda x: convert[x], cards)), reverse=True):
