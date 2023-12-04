@@ -1,5 +1,5 @@
-import numpy as np
 from enum import Enum
+from typing import List
 
 # Converts deck numbers to point values
 convert = {1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, 11:10, 12:10, 13:10}
@@ -16,7 +16,7 @@ class States(Enum):
     RESULTS = 7
 
 # computes the total of a deck of cards
-def compute_total(cards):
+def compute_total(cards: List[int]) -> int:
     total = 0
     for card in sorted(list(map(lambda x: convert[x], cards)), reverse=True):
         if card == 1 and 21 - total >= 11:
