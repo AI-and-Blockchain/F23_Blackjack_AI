@@ -97,7 +97,7 @@ withdraw.addEventListener("click", async() => {
             })
             .then(_ => checkBalance())
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {console.error(error); checkBalance();});
 
   })
 
@@ -133,7 +133,7 @@ deposit.addEventListener('click', async() => {
             })
             .then(_ => checkBalance())
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {console.error(error); checkBalance();});
   });
   
   
