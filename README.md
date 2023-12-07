@@ -19,6 +19,7 @@ To run the final product follow these steps:
 - This page allows you to change the smartness level of the provided AI agent
 - You may also take this time to upload a custom agent to play alongside you (specifications for this will be detailed below).
 - Once you have at least 10 Wei in your account and have set your name you can click proceed to advance into the game itself
+- The game shows you playing in the middle, our agent playing on the right, and your uploaded agent (if you have one) on the left
 - To begin you must increase your bet and lock it in with the bet button
 - Then, hit the deal button to begin the game
 - Once your cards are dealt you can hit until you either bust or decide to stand
@@ -50,6 +51,7 @@ To run the final product follow these steps:
 - The final required function is `start_new`, which indicates to the agent that a new round will be started, and it should prepare accordingly.
 - The agent code is passed through a round of verification before it can be used on the site. This includes testing returns of functions, as well as ensuring that they do not fail.
 - It is imperative that the constructor only takes an id field, and assigns this value to `self.id` without manipulating the string. Any changes to this will cause the program to fail verification.
+- At the current time this verification does not protect agains a user's agent taking a long time to decide, whether this is a biproduct of the design or a malicious action, and this would be a feature to add in the future.
 
 ### Component Diagram
 ![image](assets/ComponentDiagram.png)
