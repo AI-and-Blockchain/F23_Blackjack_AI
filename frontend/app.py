@@ -82,7 +82,7 @@ def testAgent():
     agent.add_card(1, 11)
     agent.add_card(2, 13)
     agent.add_dealer_card(1)
-    if agent.decision() == None:
+    if agent.decision() == None or not isinstance(type(agent.decision()), str) or not agent.decision().upper() in ["S", "H"]:
         raise Exception
     localPlayer = LocalPlayer(model.CustomAgent.CustomAgent("test"))
     localPlayer.deal(1)
