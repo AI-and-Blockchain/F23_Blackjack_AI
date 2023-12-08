@@ -107,7 +107,7 @@ def submit_form(item: FormItem):
     game.revert()
     name = item.name
     smartness.smartness = item.smartness / 100
-    user.aiName = "Lord Blackjack" if item.smartness == 100 else "Master Mind AI" if item.smartness > 70 else "JokerPoker AI" if item.smartness == 69 else "Ninja AI" if item.smartness > 40 else "NPC AI" if item.smartness > 10 else "Fresh Off the Compiler AI"
+    user.aiName = "Lord Blackjack" if item.smartness == 100 else "Master Mind AI" if item.smartness > 70 else "Ninja AI" if item.smartness > 40 else "NPC AI" if item.smartness > 10 else "Fresh Off the Compiler AI"
 
     if name == '':
         item.name = "invalid"
